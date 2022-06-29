@@ -3,7 +3,7 @@ name: Deploy SportsHub API
 on:
   push:
     branches:
-      - dev
+      - topic/*
   workflow_dispatch:
 
 jobs:
