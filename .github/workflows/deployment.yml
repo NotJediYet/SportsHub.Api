@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - sports-hub-api
+name: Deploy SportsHub API
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Build with dotnet
+      - name: Build
         run: dotnet build --configuration Release
 
       - name: dotnet publish
