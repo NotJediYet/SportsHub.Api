@@ -24,7 +24,7 @@ jobs:
         run: dotnet build --configuration Release ./src
         
       - name: Test
-        run: dotnet test --configuration Release normal ./src
+        run: dotnet test --configuration Release ./src
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp ./src
