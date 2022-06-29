@@ -11,18 +11,18 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '6.0.x'
-        
-    - name: Restore dependencies
-      run: dotnet restore ./src
-      
-    - name: Build
-      run: dotnet build --no-restore ./src
-      
-    - name: Test
-      run: dotnet test --no-build --verbosity normal ./src
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore ./src
+
+      - name: Build
+        run: dotnet build --no-restore ./src
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal ./src
