@@ -9,7 +9,7 @@ namespace SportsHub.Web
             Configuration = configuration;
             Environment = environment;
         }
-
+        //Test
         public IConfiguration Configuration { get; }
 
         public IWebHostEnvironment Environment { get; }
