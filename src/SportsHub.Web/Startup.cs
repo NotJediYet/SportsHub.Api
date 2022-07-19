@@ -1,4 +1,7 @@
-﻿using SportsHub.Extensions;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
+using Okta.AspNetCore;
+using SportsHub.Extensions;
 
 namespace SportsHub.Web
 {
@@ -19,12 +22,43 @@ namespace SportsHub.Web
             services.AddBusiness();
             services.AddInfrastructure();
 
+            services.AddAuthentication(OktaDefaults.ApiAuthenticationScheme)
+                .AddOktaWebApi(new OktaWebApiOptions()
+                {
+                    OktaDomain = Configuration["Okta:Domain"],
+                    AuthorizationServerId = Configuration["Okta:AuthorizationServerId"]
+                });
+
+
+            services.AddAuthorization();
+
             services.AddControllers();
             services.AddEndpointsApiExplorer();
 
             if (Environment.IsDevelopment())
             {
-                services.AddSwaggerGen();
+                services.AddSwaggerGen(option =>
+                {
+                    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        In = ParameterLocation.Header,
+                        Scheme = JwtBearerDefaults.AuthenticationScheme
+                    });
+                    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type=ReferenceType.SecurityScheme,
+                                    Id=JwtBearerDefaults.AuthenticationScheme
+                                }
+                            },
+                            new List<string>()
+                        }
+                    });
+                });
                 services.AddCors();
             }
         }
@@ -51,6 +85,7 @@ namespace SportsHub.Web
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
