@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 using Okta.AspNetCore;
 using SportsHub.Extensions;
 
@@ -38,15 +39,10 @@ namespace SportsHub.Web
             {
                 services.AddSwaggerGen(option =>
                 {
-                    option.SwaggerDoc("v1", new OpenApiInfo { Title = "SportsHub API V1", Version = "v1" });
                     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                     {
                         In = ParameterLocation.Header,
-                        Description = "Please enter a valid token",
-                        Name = "Authorization",
-                        Type = SecuritySchemeType.Http,
-                        BearerFormat = "JWT",
-                        Scheme = "Bearer"
+                        Scheme = JwtBearerDefaults.AuthenticationScheme
                     });
                     option.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
@@ -56,10 +52,10 @@ namespace SportsHub.Web
                                 Reference = new OpenApiReference
                                 {
                                     Type=ReferenceType.SecurityScheme,
-                                    Id="Bearer"
+                                    Id=JwtBearerDefaults.AuthenticationScheme
                                 }
                             },
-                            new string[]{}
+                            new List<string>()
                         }
                     });
                 });
