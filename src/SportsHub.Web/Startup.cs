@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Okta.AspNetCore;
 using SportsHub.Extensions;
+using SportsHub.Web.AppData;
+using SportsHub.Web.Interfaces;
+using SportsHub.Web.Repositories;
+using SportsHub.Web.Services;
 
 namespace SportsHub.Web
 {
@@ -22,6 +27,13 @@ namespace SportsHub.Web
             services.AddBusiness();
             services.AddInfrastructure();
 
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISubcategoryService, SubcategoryService>();
+            services.AddScoped<ITeamService, TeamService>();
+
             services.AddAuthentication(OktaDefaults.ApiAuthenticationScheme)
                 .AddOktaWebApi(new OktaWebApiOptions()
                 {
@@ -30,7 +42,12 @@ namespace SportsHub.Web
                 });
 
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin"));
+
+            });
+
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();
