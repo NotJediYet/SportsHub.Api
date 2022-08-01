@@ -5,9 +5,9 @@ namespace SportsHub.Web.AppData
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Subcategory> Subcategories { get; set; }
-        public DbSet<Team> Teams { get; set; }
+        public DbSet<Category>? Categories { get; set; }
+        public DbSet<Subcategory>? Subcategories { get; set; }
+        public DbSet<Team>? Teams { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
