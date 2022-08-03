@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Okta.AspNetCore;
 using SportsHub.Extensions;
-using SportsHub.Web.AppData;
-using SportsHub.Web.Interfaces;
-using SportsHub.Web.Repositories;
-using SportsHub.Web.Services;
+using SportsHub.Web.Security;
+using System.Security.Claims;
 
 namespace SportsHub.Web
 {
@@ -25,14 +24,8 @@ namespace SportsHub.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddBusiness();
-            services.AddInfrastructure();
+            services.AddInfrastructure(Configuration.GetConnectionString("DefaultConnection"));
 
-            string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<ISubcategoryService, SubcategoryService>();
-            services.AddScoped<ITeamService, TeamService>();
 
             services.AddAuthentication(OktaDefaults.ApiAuthenticationScheme)
                 .AddOktaWebApi(new OktaWebApiOptions()
@@ -44,10 +37,17 @@ namespace SportsHub.Web
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin"));
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                                           .RequireAuthenticatedUser()
+                                           .Build();
+                options.AddPolicy(
+                    Policies.User,
+                    policy => policy.RequireClaim(ClaimTypes.Role, Roles.User, Roles.Admin));
+                options.AddPolicy(
+                    Policies.Admin,
+                    policy => policy.RequireClaim(ClaimTypes.Role, Roles.Admin));
 
             });
-
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();

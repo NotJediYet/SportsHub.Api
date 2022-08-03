@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SportsHub.Web.Interfaces;
-using SportsHub.Web.Models;
+using SportsHub.Business.Services.Abstraction;
+using SportsHub.Shared.Models;
+using SportsHub.Web.Security;
 
 namespace SportsHub.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamController : Controller
+    public class TeamController : ControllerBase
     {
         private readonly ITeamService _teamService;
 
@@ -16,40 +17,41 @@ namespace SportsHub.Web.Controllers
             _teamService = teamService;
         }
 
-        [HttpGet("get")]
+        [HttpGet]
         [AllowAnonymous]
-        public IEnumerable<Team> GetTeams()
+        public async Task<IActionResult> GetAsync()
         {
-            return _teamService.GetTeams();
+            return Ok(await _teamService.GetAllAsync());
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("{Id}")]
         [AllowAnonymous]
-        public IActionResult GetTeam(int id)
+        public async Task<IActionResult> GetCategoryAsync(Guid Id)
         {
-            try
-            {
-                return Ok(_teamService.GetTeamByID(id));
-            }
-            catch (ApplicationException appEx)
-            {
-                return NotFound(appEx.Message);
-            }
+            var Team = await _teamService.GetByIDAsync(Id);
+            return Team != null ? Ok(Team) : NotFound();
         }
 
-        [HttpPost("add")]
-        [Authorize(Policy = "AdminOnly")]
-        public IActionResult CreateTeam(string newName, int subcategoryId)
+        [HttpPost]
+        [Authorize(Policies.Admin)]
+        public async Task<IActionResult> CreateSubcategoryAsync(Team Team)
         {
-            try
+            if (await _teamService.CheckIfSubcategoryIdNotExists(
+                Team.SubcategoryId))
             {
-                _teamService.CreateTeam                                                                                                                                                                                                                                                                                                                                                         (newName, subcategoryId);
+                return BadRequest("Subcategory with that id doesn't exist!");
             }
-            catch (ApplicationException appEx)
+            if ((Team.Id != Guid.Empty) &&
+                (await _teamService.CheckIfNameNotUniqueAsync(Team.Name)))
             {
-                return BadRequest(new { appEx.Message });
+                return BadRequest("Team with that id already exists!");
             }
-            return RedirectToAction("GetTeams");
+            if (await _teamService.CheckIfNameNotUniqueAsync(Team.Name))
+            {
+                return BadRequest("Team with that name already exists!");
+            }
+            await _teamService.CreateAsync(Team);
+            return Ok();
         }
     }
 }

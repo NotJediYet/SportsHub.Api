@@ -1,19 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SportsHub.Web.Models
+namespace SportsHub.Shared.Models
 {
     [Index(nameof(Name), IsUnique = true)]
     public class Category
     {
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "Category name is required.")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public bool IsStatic { get; set; } = false;
 
-        public Category(string name)
-        {
-            Name = name;
-        }
     }
 }

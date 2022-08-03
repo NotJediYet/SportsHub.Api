@@ -1,57 +1,51 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SportsHub.Web.Interfaces;
-using SportsHub.Web.Models;
-using SportsHub.Web.Repositories;
-using System.Data;
+using SportsHub.Business.Services.Abstraction;
+using SportsHub.Shared.Models;
+using SportsHub.Web.Security;
 
 namespace SportsHub.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : Controller
+    public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService CategoryService)
         {
-            _categoryService = categoryService; 
+            _categoryService = CategoryService;
         }
 
-        [HttpGet("get")]
+        [HttpGet]
         [AllowAnonymous]
-        public IEnumerable<Category> GetCategories()
+        public async Task<IActionResult> GetAsync()
         {
-            return _categoryService.GetCategories();
+            return Ok(await _categoryService.GetAllAsync());
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("{Id}")]
         [AllowAnonymous]
-        public IActionResult GetCategory(int id)
+        public async Task<IActionResult> GetCategoryAsync(Guid Id)
         {
-            try
-            {
-                return Ok(_categoryService.GetCategoryByID(id));
-            }
-            catch (ApplicationException appEx)
-            {
-                return NotFound(appEx.Message);
-            }
+            var Category = await _categoryService.GetByIDAsync(Id);
+            return Category != null ? Ok(Category) : NotFound();
         }
 
-        [HttpPost("add")]
-        [Authorize(Policy = "AdminOnly")]
-        public IActionResult CreateCategory(string newName)
+        [HttpPost]
+        [Authorize(Policies.Admin)]
+        public async Task<IActionResult> CreateCategoryAsync(Category Category)
         {
-            try
+            if ((Category.Id != Guid.Empty) && (await _categoryService.CheckIfNameNotUniqueAsync(Category.Name)))
             {
-                _categoryService.CreateCategory(newName);
+                return BadRequest("Category with that id already exists!");
             }
-            catch (ApplicationException appEx)
+            if (await _categoryService.CheckIfNameNotUniqueAsync(Category.Name))
             {
-                return BadRequest(new { appEx.Message });
+                return BadRequest("Category with that name already exists!");
             }
-            return RedirectToAction("GetCategories");
+            await _categoryService.CreateAsync(Category);
+            return Ok();
         }
     }
 }

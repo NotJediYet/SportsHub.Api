@@ -1,55 +1,57 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SportsHub.Web.Interfaces;
-using SportsHub.Web.Models;
+using SportsHub.Business.Services.Abstraction;
+using SportsHub.Shared.Models;
+using SportsHub.Web.Security;
 
 namespace SportsHub.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SubcategoryController : Controller
+    public class SubcategoryController : ControllerBase
     {
         private readonly ISubcategoryService _subcategoryService;
 
-        public SubcategoryController(ISubcategoryService subcategoryService)
+        public SubcategoryController(ISubcategoryService SubcategoryService)
         {
-            _subcategoryService = subcategoryService;
+            _subcategoryService = SubcategoryService;
         }
 
-        [HttpGet("get")]
+        [HttpGet]
         [AllowAnonymous]
-        public IEnumerable<Subcategory> GetSubcategories()
+        public async Task<IActionResult> GetAsync()
         {
-            return _subcategoryService.GetSubcategories();
+            return Ok(await _subcategoryService.GetAllAsync());
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("{Id}")]
         [AllowAnonymous]
-        public IActionResult GetSubcategory(int id)
+        public async Task<IActionResult> GetSubcategoryAsync(Guid Id)
         {
-            try
-            {
-                return Ok(_subcategoryService.GetSubcategoryByID(id));
-            }
-            catch (ApplicationException appEx)
-            {
-                return NotFound(appEx.Message);
-            }
+            var Subcategory = await _subcategoryService.GetByIDAsync(Id);
+            return Subcategory != null ? Ok(Subcategory) : NotFound();
         }
 
-        [HttpPost("add")]
-        [Authorize(Policy = "AdminOnly")]
-        public IActionResult CreateSubcategory(string newName, int categoryId)
+        [HttpPost]
+        [Authorize(Policies.Admin)]
+        public async Task<IActionResult> CreateSubcategoryAsync(Subcategory Subcategory)
         {
-            try
+            if (await _subcategoryService.CheckIfCategoryIdNotExists(
+                Subcategory.CategoryId))
             {
-                _subcategoryService.CreateSubcategory(newName, categoryId);
+                return BadRequest("Category with that id doesn't exist!");
             }
-            catch (ApplicationException appEx)
+            if ((Subcategory.Id != Guid.Empty) && 
+                (await _subcategoryService.CheckIfNameNotUniqueAsync(Subcategory.Name)))
             {
-                return BadRequest(new { appEx.Message });
+                return BadRequest("Subcategory with that id already exists!");
             }
-            return RedirectToAction("GetSubcategories");
+            if (await _subcategoryService.CheckIfNameNotUniqueAsync(Subcategory.Name))
+            {
+                return BadRequest("Subcategory with that name already exists!");
+            }
+            await _subcategoryService.CreateAsync(Subcategory);
+            return Ok();
         }
     }
 }

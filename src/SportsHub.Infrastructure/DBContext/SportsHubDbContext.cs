@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SportsHub.Web.Models;
+using SportsHub.Shared.Models;
 
-namespace SportsHub.Web.AppData 
+namespace SportsHub.Infrastructure.DBContext
 {
-    public class AppDbContext : DbContext
+    public class SportsHubDbContext : DbContext
     {
-        public DbSet<Category>? Categories { get; set; }
-        public DbSet<Subcategory>? Subcategories { get; set; }
-        public DbSet<Team>? Teams { get; set; }
+        public DbSet<Category> Categories => Set<Category>();
+        public DbSet<Subcategory> Subcategories => Set<Subcategory>();
+        public DbSet<Team> Teams => Set<Team>();
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public SportsHubDbContext(DbContextOptions<SportsHubDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

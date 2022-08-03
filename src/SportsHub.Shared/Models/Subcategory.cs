@@ -1,21 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SportsHub.Web.Models
+namespace SportsHub.Shared.Models
 {
     [Index(nameof(Name), IsUnique = true)]
     public class Subcategory
     {
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "Subcategory name is required.")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         [Required(ErrorMessage = "Category id is required.")]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
-        public Subcategory(string name, int categoryId)
-        {
-            Name = name;
-            CategoryId = categoryId;
-        }
     }
 }
