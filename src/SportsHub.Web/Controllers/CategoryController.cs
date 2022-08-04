@@ -36,16 +36,16 @@ namespace SportsHub.Web.Controllers
         [HttpPost]
         [Authorize(Policies.Admin)]
         public async Task<IActionResult> CreateCategoryAsync(
-            CreateCategoryModel newCategory)
+            CreateCategoryModel сreateCategoryModel)
         {
             if (
-                await _categoryService.CheckIfNameNotUniqueAsync(
-                    newCategory.Name))
+                await _categoryService.DoesCategoryAlreadyExistByNameAsync(
+                    сreateCategoryModel.Name))
             {
                 return BadRequest("Category with that name already exists!");
             }
 
-            await _categoryService.CreateAsync(newCategory.Name);
+            await _categoryService.CreateAsync(сreateCategoryModel.Name);
 
             return Ok();
         }

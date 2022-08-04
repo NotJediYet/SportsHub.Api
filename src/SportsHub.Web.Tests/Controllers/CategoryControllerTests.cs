@@ -29,9 +29,6 @@ namespace SportsHub.Web.Tests.Controllers
                 Name = "Name",
             };
 
-            // _service.Setup(service => service.CreateAsync(category))
-            //     .Returns(Task.CompletedTask);
-
             // Act
             var result = await _controller.CreateCategoryAsync(category);
 

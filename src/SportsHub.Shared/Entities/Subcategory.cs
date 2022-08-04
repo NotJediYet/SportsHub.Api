@@ -7,8 +7,8 @@ namespace SportsHub.Shared.Entities
     [Index(nameof(Name), IsUnique = true)]
     public class Subcategory
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Subcategory name is required.")]

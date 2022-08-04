@@ -27,21 +27,22 @@ namespace SportsHub.Business.Services.Implementation
             return subcategory;
         }
 
-        public async Task CreateAsync(string newName, Guid categoryId)
+        public async Task CreateAsync(string subcategoryName, Guid categoryId)
         {
             await _context.Subcategories.AddAsync(
-                new Subcategory(newName, categoryId));
+                new Subcategory(subcategoryName, categoryId));
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> CheckIfNameNotUniqueAsync(string newName)
+        public async Task<bool> DoesSubcategoryAlreadyExistByNameAsync(
+            string subcategoryName)
         {
             return await _context.Subcategories.AnyAsync(
-                subcategory => subcategory.Name == newName);
+                subcategory => subcategory.Name == subcategoryName);
         }
 
-        public async Task<bool> CheckIfCategoryIdNotExists(Guid id)
+        public async Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id)
         {
             return (await _context.Categories.FirstOrDefaultAsync(
                 category => category.Id == id) == null);

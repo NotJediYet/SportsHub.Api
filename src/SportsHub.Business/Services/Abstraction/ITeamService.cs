@@ -8,10 +8,10 @@ namespace SportsHub.Business.Services.Abstraction
         
         Task<Team> GetByIdAsync(Guid id);
         
-        Task CreateAsync(string newName, Guid subcategoryId);
+        Task CreateAsync(string teamName, Guid subcategoryId);
         
-        Task<bool> CheckIfNameNotUniqueAsync(string newName);
+        Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
         
-        Task<bool> CheckIfSubcategoryIdNotExists(Guid id);
+        Task<bool> DoesTeamAlredyExistByIdAsync(Guid id);
     }
 }

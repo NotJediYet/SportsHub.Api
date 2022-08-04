@@ -35,20 +35,20 @@ namespace SportsHub.Web.Controllers
         [HttpPost]
         [Authorize(Policies.Admin)]
         public async Task<IActionResult> CreateSubcategoryAsync(
-            CreateTeamModel newTeam)
+            CreateTeamModel сreateTeamModel)
         {
-            if (await _teamService.CheckIfSubcategoryIdNotExists(
-                    newTeam.SubcategoryId))
+            if (await _teamService.DoesTeamAlredyExistByIdAsync(
+                    сreateTeamModel.SubcategoryId))
             {
                 return BadRequest("Subcategory with that id doesn't exist!");
             }
-            if (await _teamService.CheckIfNameNotUniqueAsync(newTeam.Name))
+            if (await _teamService.DoesTeamAlreadyExistByNameAsync(сreateTeamModel.Name))
             {
                 return BadRequest("Team with that name already exists!");
             }
 
             await _teamService.CreateAsync(
-                newTeam.Name, newTeam.SubcategoryId);
+                сreateTeamModel.Name, сreateTeamModel.SubcategoryId);
 
             return Ok();
         }
