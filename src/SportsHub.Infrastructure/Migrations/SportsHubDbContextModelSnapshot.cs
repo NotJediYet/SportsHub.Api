@@ -22,7 +22,7 @@ namespace SportsHub.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("SportsHub.Shared.Models.Category", b =>
+            modelBuilder.Entity("SportsHub.Shared.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace SportsHub.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("SportsHub.Shared.Models.Subcategory", b =>
+            modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace SportsHub.Infrastructure.Migrations
                     b.ToTable("Subcategories");
                 });
 
-            modelBuilder.Entity("SportsHub.Shared.Models.Team", b =>
+            modelBuilder.Entity("SportsHub.Shared.Entities.Team", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -91,18 +91,18 @@ namespace SportsHub.Infrastructure.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("SportsHub.Shared.Models.Subcategory", b =>
+            modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
                 {
-                    b.HasOne("SportsHub.Shared.Models.Category", null)
+                    b.HasOne("SportsHub.Shared.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SportsHub.Shared.Models.Team", b =>
+            modelBuilder.Entity("SportsHub.Shared.Entities.Team", b =>
                 {
-                    b.HasOne("SportsHub.Shared.Models.Subcategory", null)
+                    b.HasOne("SportsHub.Shared.Entities.Subcategory", null)
                         .WithMany()
                         .HasForeignKey("SubcategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
