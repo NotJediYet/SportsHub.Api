@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services.Abstraction;
 using SportsHub.Shared.Models;
-using SportsHub.Shared.Entities;
 using SportsHub.Web.Security;
 
 namespace SportsHub.Web.Controllers
