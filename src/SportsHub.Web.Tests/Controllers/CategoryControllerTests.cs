@@ -24,7 +24,7 @@ namespace SportsHub.Web.Tests.Controllers
         public async Task CreateCategoryAsync_HasValidValues_ReturnsOkResult()
         {
             // Arrange
-            var category = new Category
+            var category = new CreateCategoryModel
             {
                 Name = "Name",
             };
