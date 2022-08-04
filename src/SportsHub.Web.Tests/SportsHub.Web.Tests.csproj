@@ -20,4 +20,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SportsHub.Web\SportsHub.Web.csproj" />
+  </ItemGroup>
+
 </Project>

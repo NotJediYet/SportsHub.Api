@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SportsHub.Shared.Models;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Infrastructure.DBContext
 {

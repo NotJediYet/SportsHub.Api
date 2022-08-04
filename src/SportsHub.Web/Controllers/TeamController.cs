@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services.Abstraction;
 using SportsHub.Shared.Models;
+using SportsHub.Shared.Entities;
 using SportsHub.Web.Security;
 
 namespace SportsHub.Web.Controllers
@@ -18,39 +19,38 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policies.User)]
         public async Task<IActionResult> GetAsync()
         {
             return Ok(await _teamService.GetAllAsync());
         }
 
-        [HttpGet("{Id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetCategoryAsync(Guid Id)
+        [HttpGet("{id}")]
+        [Authorize(Policies.User)]
+        public async Task<IActionResult> GetCategoryAsync(Guid id)
         {
-            var Team = await _teamService.GetByIDAsync(Id);
-            return Team != null ? Ok(Team) : NotFound();
+            var team = await _teamService.GetByIdAsync(id);
+            return team != null ? Ok(team) : NotFound();
         }
 
         [HttpPost]
         [Authorize(Policies.Admin)]
-        public async Task<IActionResult> CreateSubcategoryAsync(Team Team)
+        public async Task<IActionResult> CreateSubcategoryAsync(
+            CreateTeamModel newTeam)
         {
             if (await _teamService.CheckIfSubcategoryIdNotExists(
-                Team.SubcategoryId))
+                    newTeam.SubcategoryId))
             {
                 return BadRequest("Subcategory with that id doesn't exist!");
             }
-            if ((Team.Id != Guid.Empty) &&
-                (await _teamService.CheckIfNameNotUniqueAsync(Team.Name)))
-            {
-                return BadRequest("Team with that id already exists!");
-            }
-            if (await _teamService.CheckIfNameNotUniqueAsync(Team.Name))
+            if (await _teamService.CheckIfNameNotUniqueAsync(newTeam.Name))
             {
                 return BadRequest("Team with that name already exists!");
             }
-            await _teamService.CreateAsync(Team);
+
+            await _teamService.CreateAsync(
+                newTeam.Name, newTeam.SubcategoryId);
+
             return Ok();
         }
     }

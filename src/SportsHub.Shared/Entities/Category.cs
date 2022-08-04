@@ -2,18 +2,23 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SportsHub.Shared.Models
+namespace SportsHub.Shared.Entities
 {
     [Index(nameof(Name), IsUnique = true)]
-    public class Team
+    public class Category
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid Id { get; set; }
-        [Required(ErrorMessage = "Team name is required.")]
+
+        [Required(ErrorMessage = "Category name is required.")]
         public string Name { get; set; } = string.Empty;
-        [Required(ErrorMessage = "Subcategory id is required.")]
-        public Guid SubcategoryId { get; set; }
-        
+
+        public bool IsStatic { get; set; } = false;
+
+        public Category(string name)
+        {
+            Name = name;
+        }
     }
 }

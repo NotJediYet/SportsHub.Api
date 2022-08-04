@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportsHub.Business.Services.Abstraction;
 using SportsHub.Infrastructure.DBContext;
-using SportsHub.Shared.Models;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Business.Services.Implementation
 {
@@ -9,9 +9,9 @@ namespace SportsHub.Business.Services.Implementation
     {
         private readonly SportsHubDbContext _context;
 
-        public CategoryService(SportsHubDbContext Context)
+        public CategoryService(SportsHubDbContext context)
         {
-            _context = Context;
+            _context = context;
         }
 
         public async Task<List<Category>> GetAllAsync()
@@ -19,25 +19,26 @@ namespace SportsHub.Business.Services.Implementation
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<Category?> GetByIDAsync(Guid Id)
+        public async Task<Category> GetByIdAsync(Guid id)
         {
-            return await _context.Categories.Where(c => c.Id.Equals(Id)).FirstOrDefaultAsync();
+            var category = await _context.Categories.FirstOrDefaultAsync(
+                category => category.Id == id);
+
+            return category;
         }
 
-        public async Task CreateAsync(Category Category)
+        public async Task CreateAsync(string newName)
         {
-            await _context.Categories.AddAsync(Category);
+            await _context.Categories.AddAsync(
+                new Category(newName));
+
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> CheckIfNameNotUniqueAsync(string NewName)
+        public async Task<bool> CheckIfNameNotUniqueAsync(string newName)
         {
-            return await _context.Categories.AnyAsync(item => item.Name == NewName);
-        }
-
-        public async Task<bool> CheckIfIdNotUniqueAsync(Guid Id)
-        {
-            return await _context.Categories.AnyAsync(item => item.Id == Id);
+            return await _context.Categories.AnyAsync(
+                category => category.Name == newName);
         }
     }
 }

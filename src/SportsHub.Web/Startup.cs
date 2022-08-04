@@ -24,7 +24,7 @@ namespace SportsHub.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddBusiness();
-            services.AddInfrastructure(Configuration.GetConnectionString("DefaultConnection"));
+            services.AddInfrastructure(Configuration);
 
 
             services.AddAuthentication(OktaDefaults.ApiAuthenticationScheme)

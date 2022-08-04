@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services.Abstraction;
 using SportsHub.Shared.Models;
+using SportsHub.Shared.Entities;
 using SportsHub.Web.Security;
 
 namespace SportsHub.Web.Controllers
@@ -12,39 +13,41 @@ namespace SportsHub.Web.Controllers
     {
         private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService CategoryService)
+        public CategoryController(ICategoryService categoryService)
         {
-            _categoryService = CategoryService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policies.User)]
         public async Task<IActionResult> GetAsync()
         {
             return Ok(await _categoryService.GetAllAsync());
         }
 
-        [HttpGet("{Id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetCategoryAsync(Guid Id)
+        [HttpGet("{id}")]
+        [Authorize(Policies.User)]
+        public async Task<IActionResult> GetCategoryAsync(Guid id)
         {
-            var Category = await _categoryService.GetByIDAsync(Id);
-            return Category != null ? Ok(Category) : NotFound();
+            var category = await _categoryService.GetByIdAsync(id);
+
+            return category != null ? Ok(category) : NotFound();
         }
 
         [HttpPost]
         [Authorize(Policies.Admin)]
-        public async Task<IActionResult> CreateCategoryAsync(Category Category)
+        public async Task<IActionResult> CreateCategoryAsync(
+            CreateCategoryModel newCategory)
         {
-            if ((Category.Id != Guid.Empty) && (await _categoryService.CheckIfNameNotUniqueAsync(Category.Name)))
-            {
-                return BadRequest("Category with that id already exists!");
-            }
-            if (await _categoryService.CheckIfNameNotUniqueAsync(Category.Name))
+            if (
+                await _categoryService.CheckIfNameNotUniqueAsync(
+                    newCategory.Name))
             {
                 return BadRequest("Category with that name already exists!");
             }
-            await _categoryService.CreateAsync(Category);
+
+            await _categoryService.CreateAsync(newCategory.Name);
+
             return Ok();
         }
     }

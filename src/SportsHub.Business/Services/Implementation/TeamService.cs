@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportsHub.Business.Services.Abstraction;
 using SportsHub.Infrastructure.DBContext;
-using SportsHub.Shared.Models;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Business.Services.Implementation
 {
@@ -9,9 +9,9 @@ namespace SportsHub.Business.Services.Implementation
     {
         private readonly SportsHubDbContext _context;
 
-        public TeamService(SportsHubDbContext Context)
+        public TeamService(SportsHubDbContext context)
         {
-            _context = Context;
+            _context = context;
         }
        
         public async Task<List<Team>> GetAllAsync()
@@ -19,30 +19,31 @@ namespace SportsHub.Business.Services.Implementation
             return await _context.Teams.ToListAsync();
         }
 
-        public async Task<Team?> GetByIDAsync(Guid Id)
+        public async Task<Team> GetByIdAsync(Guid id)
         {
-            return await _context.Teams.Where(c => c.Id.Equals(Id)).FirstOrDefaultAsync();
+            var team = await _context.Teams.FirstOrDefaultAsync(
+                team => team.Id == id);
+
+            return team;
         }
 
-        public async Task CreateAsync(Team Team)
+        public async Task CreateAsync(string newName, Guid subcategoryId)
         {
-            await _context.Teams.AddAsync(Team);
+            await _context.Teams.AddAsync(
+                new Team(newName, subcategoryId));
+
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> CheckIfIdNotUniqueAsync(Guid Id)
+        public async Task<bool> CheckIfNameNotUniqueAsync(string newName)
         {
-            return await _context.Teams.AnyAsync(item => item.Id == Id);
+            return await _context.Teams.AnyAsync(team => team.Name == newName);
         }
 
-        public async Task<bool> CheckIfNameNotUniqueAsync(string NewName)
+        public async Task<bool> CheckIfSubcategoryIdNotExists(Guid id)
         {
-            return await _context.Teams.AnyAsync(item => item.Name == NewName);
-        }
-
-        public async Task<bool> CheckIfSubcategoryIdNotExists(Guid Id)
-        {
-            return (await _context.Subcategories.Where(c => c.Id.Equals(Id)).FirstOrDefaultAsync() == null);
+            return (await _context.Subcategories.FirstOrDefaultAsync(
+                subcategory => subcategory.Id == id) == null);
         }
     }
 }
