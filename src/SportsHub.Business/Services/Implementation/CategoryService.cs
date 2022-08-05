@@ -40,5 +40,13 @@ namespace SportsHub.Business.Services.Implementation
             return await _context.Categories.AnyAsync(
                 category => category.Name == categoryName);
         }
+
+        public async Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id)
+        {
+            var result = await _context.Categories.AnyAsync(
+                category => category.Id == id);
+
+            return result;
+        }
     }
 }

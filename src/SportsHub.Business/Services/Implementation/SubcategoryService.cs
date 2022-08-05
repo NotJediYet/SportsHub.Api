@@ -42,10 +42,12 @@ namespace SportsHub.Business.Services.Implementation
                 subcategory => subcategory.Name == subcategoryName);
         }
 
-        public async Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id)
+        public async Task<bool> DoesSubcategoryAlredyExistByIdAsync(Guid id)
         {
-            return (await _context.Categories.FirstOrDefaultAsync(
-                category => category.Id == id) == null);
+            var result = await _context.Subcategories.AnyAsync(
+                subcategory => subcategory.Id == id);
+
+            return result;
         }
     }
 }

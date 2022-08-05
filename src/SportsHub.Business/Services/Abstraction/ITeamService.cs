@@ -11,7 +11,5 @@ namespace SportsHub.Business.Services.Abstraction
         Task CreateAsync(string teamName, Guid subcategoryId);
         
         Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
-        
-        Task<bool> DoesTeamAlredyExistByIdAsync(Guid id);
     }
 }

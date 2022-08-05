@@ -11,10 +11,13 @@ namespace SportsHub.Web.Controllers
     public class SubcategoryController : ControllerBase
     {
         private readonly ISubcategoryService _subcategoryService;
+        private readonly ICategoryService _categoryService;
 
-        public SubcategoryController(ISubcategoryService subcategoryService)
+        public SubcategoryController(ISubcategoryService subcategoryService, 
+            ICategoryService categoryService)
         {
             _subcategoryService = subcategoryService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
@@ -38,8 +41,10 @@ namespace SportsHub.Web.Controllers
         public async Task<IActionResult> CreateSubcategoryAsync(
             CreateSubcategoryModel сreateSubcategoryModel)
         {
-            if (await _subcategoryService.DoesCategoryAlredyExistByIdAsync(
-                    сreateSubcategoryModel.CategoryId))
+            var doesCategoryExist = await _categoryService
+                .DoesCategoryAlredyExistByIdAsync(сreateSubcategoryModel.CategoryId);
+
+            if (!doesCategoryExist)
             {
                 return BadRequest("Category with that id doesn't exist!");
             }

@@ -38,8 +38,7 @@ namespace SportsHub.Web.Controllers
         public async Task<IActionResult> CreateCategoryAsync(
             CreateCategoryModel сreateCategoryModel)
         {
-            if (
-                await _categoryService.DoesCategoryAlreadyExistByNameAsync(
+            if (await _categoryService.DoesCategoryAlreadyExistByNameAsync(
                     сreateCategoryModel.Name))
             {
                 return BadRequest("Category with that name already exists!");
