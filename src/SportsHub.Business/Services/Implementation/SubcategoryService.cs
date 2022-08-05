@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SportsHub.Business.Services.Abstraction;
 using SportsHub.Infrastructure.DBContext;
 using SportsHub.Shared.Entities;
 
-namespace SportsHub.Business.Services.Implementation
+namespace SportsHub.Business.Services
 {
-    public class SubcategoryService : ISubcategoryService
+    internal class SubcategoryService : ISubcategoryService
     {
         private readonly SportsHubDbContext _context;
 
@@ -14,23 +13,21 @@ namespace SportsHub.Business.Services.Implementation
             _context = context;
         }
 
-        public async Task<List<Subcategory>> GetAllAsync()
+        public async Task<IEnumerable<Subcategory>> GetAllAsync()
         {
             return await _context.Subcategories.ToListAsync();
         }
 
         public async Task<Subcategory> GetByIdAsync(Guid id)
         {
-            var subcategory = await _context.Subcategories.FirstOrDefaultAsync(
-                subcategory => subcategory.Id == id);
+            var subcategory = await _context.Subcategories.FirstOrDefaultAsync(subcategory => subcategory.Id == id);
 
             return subcategory;
         }
 
         public async Task CreateAsync(string subcategoryName, Guid categoryId)
         {
-            await _context.Subcategories.AddAsync(
-                new Subcategory(subcategoryName, categoryId));
+            await _context.Subcategories.AddAsync(new Subcategory(subcategoryName, categoryId));
 
             await _context.SaveChangesAsync();
         }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SportsHub.Business.Services.Abstraction;
+using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
-using SportsHub.Web.Security;
+using SportsHub.Security;
 
 namespace SportsHub.Web.Controllers
 {

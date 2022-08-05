@@ -1,10 +1,10 @@
 ﻿using SportsHub.Shared.Entities;
 
-namespace SportsHub.Business.Services.Abstraction
+namespace SportsHub.Business.Services
 {
     public interface ISubcategoryService
     {
-        Task<List<Subcategory>> GetAllAsync();
+        Task<IEnumerable<Subcategory>> GetAllAsync();
         
         Task<Subcategory> GetByIdAsync(Guid id);
         

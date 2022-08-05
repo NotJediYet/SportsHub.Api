@@ -1,10 +1,10 @@
 ﻿using SportsHub.Shared.Entities;
 
-namespace SportsHub.Business.Services.Abstraction
+namespace SportsHub.Business.Services
 {
     public interface ITeamService
     {
-        Task<List<Team>> GetAllAsync();
+        Task<IEnumerable<Team>> GetAllAsync();
         
         Task<Team> GetByIdAsync(Guid id);
         

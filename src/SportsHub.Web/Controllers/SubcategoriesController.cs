@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SportsHub.Business.Services.Abstraction;
+using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
-using SportsHub.Web.Security;
+using SportsHub.Security;
 
 namespace SportsHub.Web.Controllers
 {
@@ -13,18 +13,21 @@ namespace SportsHub.Web.Controllers
         private readonly ISubcategoryService _subcategoryService;
         private readonly ICategoryService _categoryService;
 
-        public SubcategoriesController(ISubcategoryService subcategoryService, 
+        public SubcategoriesController(
+            ISubcategoryService subcategoryService,
             ICategoryService categoryService)
         {
-            _subcategoryService = subcategoryService;
-            _categoryService = categoryService;
+            _subcategoryService = subcategoryService ?? throw new ArgumentNullException(nameof(subcategoryService));
+            _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
         }
 
         [HttpGet]
         [Authorize(Policies.User)]
-        public async Task<IActionResult> GetAllSubcategories()
+        public async Task<IActionResult> GetSubcategories()
         {
-            return Ok(await _subcategoryService.GetAllAsync());
+            var subcategories = await _subcategoryService.GetAllAsync();
+
+            return Ok(subcategories);
         }
 
         [HttpGet("{id}")]
@@ -33,29 +36,28 @@ namespace SportsHub.Web.Controllers
         {
             var subcategory = await _subcategoryService.GetByIdAsync(id);
 
-            return subcategory != null ? Ok(subcategory) : NotFound();
+            return subcategory != null
+                ? Ok(subcategory)
+                : NotFound();
         }
 
         [HttpPost]
         [Authorize(Policies.Admin)]
         public async Task<IActionResult> CreateSubcategory(CreateSubcategoryModel сreateSubcategoryModel)
         {
-            var doesCategoryExist = await _categoryService
-                .DoesCategoryAlredyExistByIdAsync(сreateSubcategoryModel.CategoryId);
+            var doesCategoryExist = await _categoryService.DoesCategoryAlredyExistByIdAsync(сreateSubcategoryModel.CategoryId);
             if (!doesCategoryExist)
             {
                 return BadRequest("Category with that id doesn't exist!");
             }
 
-            var doesSubcategoryExist = await _subcategoryService
-                .DoesSubcategoryAlreadyExistByNameAsync(сreateSubcategoryModel.Name);
+            var doesSubcategoryExist = await _subcategoryService.DoesSubcategoryAlreadyExistByNameAsync(сreateSubcategoryModel.Name);
             if (doesSubcategoryExist)
             {
                 return BadRequest("Subcategory with that name already exists!");
             }
 
-            await _subcategoryService.CreateAsync(сreateSubcategoryModel.Name,
-                сreateSubcategoryModel.CategoryId);
+            await _subcategoryService.CreateAsync(сreateSubcategoryModel.Name, сreateSubcategoryModel.CategoryId);
 
             return Ok();
         }

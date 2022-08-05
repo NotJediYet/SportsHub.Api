@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using SportsHub.Business.Services.Abstraction;
+using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Web.Controllers;
 using System.Threading.Tasks;
@@ -8,12 +8,12 @@ using Xunit;
 
 namespace SportsHub.Web.Tests.Controllers
 {
-    public class CategoryControllerTests
+    public class CategoriesControllerTests
     {
         private readonly Mock<ICategoryService> _service;
         private readonly CategoriesController _controller;
 
-        public CategoryControllerTests()
+        public CategoriesControllerTests()
         {
             _service = new Mock<ICategoryService>();
 

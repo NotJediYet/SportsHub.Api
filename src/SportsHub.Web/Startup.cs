@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Okta.AspNetCore;
-using SportsHub.Extensions;
-using SportsHub.Web.Security;
-using System.Security.Claims;
+﻿using SportsHub.Extensions;
 
 namespace SportsHub.Web
 {
@@ -26,56 +19,15 @@ namespace SportsHub.Web
             services.AddBusiness();
             services.AddInfrastructure(Configuration);
 
-
-            services.AddAuthentication(OktaDefaults.ApiAuthenticationScheme)
-                .AddOktaWebApi(new OktaWebApiOptions()
-                {
-                    OktaDomain = Configuration["Okta:Domain"],
-                    AuthorizationServerId = Configuration["Okta:AuthorizationServerId"]
-                });
-
-
-            services.AddAuthorization(options =>
-            {
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                                           .RequireAuthenticatedUser()
-                                           .Build();
-                options.AddPolicy(
-                    Policies.User,
-                    policy => policy.RequireClaim(ClaimTypes.Role, Roles.User, Roles.Admin));
-                options.AddPolicy(
-                    Policies.Admin,
-                    policy => policy.RequireClaim(ClaimTypes.Role, Roles.Admin));
-
-            });
+            services.AddAuthentication(Configuration);
+            services.AddAuthorizationWithPolicies();
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();
 
             if (Environment.IsDevelopment())
             {
-                services.AddSwaggerGen(option =>
-                {
-                    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                    {
-                        In = ParameterLocation.Header,
-                        Scheme = JwtBearerDefaults.AuthenticationScheme
-                    });
-                    option.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type=ReferenceType.SecurityScheme,
-                                    Id=JwtBearerDefaults.AuthenticationScheme
-                                }
-                            },
-                            new List<string>()
-                        }
-                    });
-                });
+                services.AddSwagger();
                 services.AddCors();
             }
         }

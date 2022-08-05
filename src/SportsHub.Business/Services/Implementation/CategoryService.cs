@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SportsHub.Business.Services.Abstraction;
 using SportsHub.Infrastructure.DBContext;
 using SportsHub.Shared.Entities;
 
-namespace SportsHub.Business.Services.Implementation
+namespace SportsHub.Business.Services
 {
-    public class CategoryService : ICategoryService
+    internal class CategoryService : ICategoryService
     {
         private readonly SportsHubDbContext _context;
 
@@ -14,7 +13,7 @@ namespace SportsHub.Business.Services.Implementation
             _context = context;
         }
 
-        public async Task<List<Category>> GetAllAsync()
+        public async Task<IEnumerable<Category>> GetAllAsync()
         {
             return await _context.Categories.ToListAsync();
         }

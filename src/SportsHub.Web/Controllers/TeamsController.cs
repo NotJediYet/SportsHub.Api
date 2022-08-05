@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SportsHub.Business.Services.Abstraction;
+using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
-using SportsHub.Web.Security;
+using SportsHub.Security;
 
 namespace SportsHub.Web.Controllers
 {
@@ -13,16 +13,17 @@ namespace SportsHub.Web.Controllers
         private readonly ITeamService _teamService;
         private readonly ISubcategoryService _subcategoryService;
 
-        public TeamsController(ITeamService teamService,
+        public TeamsController(
+            ITeamService teamService,
             ISubcategoryService subcategoryService)
         {
-            _teamService = teamService;
-            _subcategoryService = subcategoryService;
+            _teamService = teamService ?? throw new ArgumentNullException(nameof(teamService));
+            _subcategoryService = subcategoryService ?? throw new ArgumentNullException(nameof(subcategoryService));
         }
 
         [HttpGet]
         [Authorize(Policies.User)]
-        public async Task<IActionResult> GetAllTeams()
+        public async Task<IActionResult> GetTeams()
         {
             return Ok(await _teamService.GetAllAsync());
         }
@@ -37,18 +38,19 @@ namespace SportsHub.Web.Controllers
 
         [HttpPost]
         [Authorize(Policies.Admin)]
-        public async Task<IActionResult> CreateTeam(
-            CreateTeamModel сreateTeamModel)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> CreateTeam([FromForm] CreateTeamModel сreateTeamModel)
         {
-            var doesSubcategoryExist = await _subcategoryService
-                .DoesSubcategoryAlredyExistByIdAsync(сreateTeamModel.SubcategoryId);
+            var doesSubcategoryExist = await _subcategoryService.DoesSubcategoryAlredyExistByIdAsync(сreateTeamModel.SubcategoryId);
             if (!doesSubcategoryExist)
             {
                 return BadRequest("Subcategory with that id doesn't exist!");
             }
 
-            var doesTeamExist = await _teamService
-                .DoesTeamAlreadyExistByNameAsync(сreateTeamModel.Name);
+            var doesTeamExist = await _teamService.DoesTeamAlreadyExistByNameAsync(сreateTeamModel.Name);
             if (doesTeamExist)
             {
                 return BadRequest("Team with that name already exists!");

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SportsHub.Business.Services.Abstraction;
-using SportsHub.Business.Services.Implementation;
+using SportsHub.Business.Services;
 
 namespace SportsHub.Extensions
 {

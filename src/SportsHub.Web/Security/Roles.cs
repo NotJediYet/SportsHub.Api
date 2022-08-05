@@ -1,4 +1,4 @@
-﻿namespace SportsHub.Web.Security
+﻿namespace SportsHub.Security
 {
     public static class Roles
     {
