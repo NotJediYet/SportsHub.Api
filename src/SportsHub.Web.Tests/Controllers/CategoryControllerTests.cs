@@ -11,13 +11,13 @@ namespace SportsHub.Web.Tests.Controllers
     public class CategoryControllerTests
     {
         private readonly Mock<ICategoryService> _service;
-        private readonly CategoryController _controller;
+        private readonly CategoriesController _controller;
 
         public CategoryControllerTests()
         {
             _service = new Mock<ICategoryService>();
 
-            _controller = new CategoryController(_service.Object);
+            _controller = new CategoriesController(_service.Object);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace SportsHub.Web.Tests.Controllers
             };
 
             // Act
-            var result = await _controller.CreateCategoryAsync(category);
+            var result = await _controller.CreateCategory(category);
 
             // Assert
             var objectResult = Assert.IsType<OkResult>(result);
