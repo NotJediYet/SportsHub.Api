@@ -37,8 +37,10 @@ namespace SportsHub.Business.Services.Implementation
 
         public async Task<bool> DoesCategoryAlreadyExistByNameAsync(string categoryName)
         {
-            return await _context.Categories.AnyAsync(
+            var result = await _context.Categories.AnyAsync(
                 category => category.Name == categoryName);
+
+            return result;
         }
 
         public async Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id)

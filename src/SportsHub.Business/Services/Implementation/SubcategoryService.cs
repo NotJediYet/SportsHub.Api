@@ -38,8 +38,10 @@ namespace SportsHub.Business.Services.Implementation
         public async Task<bool> DoesSubcategoryAlreadyExistByNameAsync(
             string subcategoryName)
         {
-            return await _context.Subcategories.AnyAsync(
+            var result = await _context.Subcategories.AnyAsync(
                 subcategory => subcategory.Name == subcategoryName);
+
+            return result;
         }
 
         public async Task<bool> DoesSubcategoryAlredyExistByIdAsync(Guid id)

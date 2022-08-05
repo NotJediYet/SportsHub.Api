@@ -37,7 +37,10 @@ namespace SportsHub.Business.Services.Implementation
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
         {
-            return await _context.Teams.AnyAsync(team => team.Name == teamName);
+            var result = await _context.Teams.AnyAsync(
+                team => team.Name == teamName);
+
+            return result;
         }
     }
 }

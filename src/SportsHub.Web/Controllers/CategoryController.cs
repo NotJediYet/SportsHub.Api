@@ -8,25 +8,25 @@ namespace SportsHub.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoriesController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
 
         [HttpGet]
         [Authorize(Policies.User)]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> GetAllCategories()
         {
             return Ok(await _categoryService.GetAllAsync());
         }
 
         [HttpGet("{id}")]
         [Authorize(Policies.User)]
-        public async Task<IActionResult> GetCategoryAsync(Guid id)
+        public async Task<IActionResult> GetCategory(Guid id)
         {
             var category = await _categoryService.GetByIdAsync(id);
 
@@ -35,11 +35,12 @@ namespace SportsHub.Web.Controllers
 
         [HttpPost]
         [Authorize(Policies.Admin)]
-        public async Task<IActionResult> CreateCategoryAsync(
+        public async Task<IActionResult> CreateCategory(
             CreateCategoryModel сreateCategoryModel)
         {
-            if (await _categoryService.DoesCategoryAlreadyExistByNameAsync(
-                    сreateCategoryModel.Name))
+            var doesCategoryExist = await _categoryService
+                .DoesCategoryAlreadyExistByNameAsync(сreateCategoryModel.Name);
+            if (doesCategoryExist)
             {
                 return BadRequest("Category with that name already exists!");
             }

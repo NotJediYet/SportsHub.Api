@@ -8,12 +8,12 @@ namespace SportsHub.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamController : ControllerBase
+    public class TeamsController : ControllerBase
     {
         private readonly ITeamService _teamService;
         private readonly ISubcategoryService _subcategoryService;
 
-        public TeamController(ITeamService teamService,
+        public TeamsController(ITeamService teamService,
             ISubcategoryService subcategoryService)
         {
             _teamService = teamService;
@@ -22,14 +22,14 @@ namespace SportsHub.Web.Controllers
 
         [HttpGet]
         [Authorize(Policies.User)]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> GetAllTeams()
         {
             return Ok(await _teamService.GetAllAsync());
         }
 
         [HttpGet("{id}")]
         [Authorize(Policies.User)]
-        public async Task<IActionResult> GetCategoryAsync(Guid id)
+        public async Task<IActionResult> GetTeam(Guid id)
         {
             var team = await _teamService.GetByIdAsync(id);
             return team != null ? Ok(team) : NotFound();
@@ -37,17 +37,19 @@ namespace SportsHub.Web.Controllers
 
         [HttpPost]
         [Authorize(Policies.Admin)]
-        public async Task<IActionResult> CreateSubcategoryAsync(
+        public async Task<IActionResult> CreateTeam(
             CreateTeamModel сreateTeamModel)
         {
-            var doesCategoryExist = await _subcategoryService
+            var doesSubcategoryExist = await _subcategoryService
                 .DoesSubcategoryAlredyExistByIdAsync(сreateTeamModel.SubcategoryId);
-
-            if (!doesCategoryExist)
+            if (!doesSubcategoryExist)
             {
                 return BadRequest("Subcategory with that id doesn't exist!");
             }
-            if (await _teamService.DoesTeamAlreadyExistByNameAsync(сreateTeamModel.Name))
+
+            var doesTeamExist = await _teamService
+                .DoesTeamAlreadyExistByNameAsync(сreateTeamModel.Name);
+            if (doesTeamExist)
             {
                 return BadRequest("Team with that name already exists!");
             }
