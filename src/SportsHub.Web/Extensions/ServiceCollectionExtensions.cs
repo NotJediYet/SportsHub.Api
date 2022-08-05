@@ -7,7 +7,7 @@ namespace SportsHub.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAuthenticationWithJwtBearer(this IServiceCollection services, IConfiguration configuration)
         {
             services
                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

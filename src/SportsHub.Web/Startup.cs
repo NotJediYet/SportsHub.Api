@@ -19,7 +19,7 @@ namespace SportsHub.Web
             services.AddBusiness();
             services.AddInfrastructure(Configuration);
 
-            services.AddAuthentication(Configuration);
+            services.AddAuthenticationWithJwtBearer(Configuration);
             services.AddAuthorizationWithPolicies();
 
             services.AddControllers();
