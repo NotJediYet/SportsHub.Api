@@ -1,45 +1,41 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SportsHub.Infrastructure.DBContext;
+﻿using SportsHub.Business.Repositories;
 using SportsHub.Shared.Entities;
 
 namespace SportsHub.Business.Services
 {
     internal class TeamService : ITeamService
     {
-        private readonly SportsHubDbContext _context;
+        private readonly ITeamRepository _teamRepository;
 
-        public TeamService(SportsHubDbContext context)
+        public TeamService(ITeamRepository teamRepositor)
         {
-            _context = context;
+            _teamRepository = teamRepositor ?? throw new ArgumentNullException(nameof(teamRepositor));
         }
        
-        public async Task<IEnumerable<Team>> GetAllAsync()
+        public async Task<IEnumerable<Team>> GetTeamsAsync()
         {
-            return await _context.Teams.ToListAsync();
+            return await _teamRepository.GetAllAsync();
         }
 
-        public async Task<Team> GetByIdAsync(Guid id)
+        public async Task<Team> GetTeamByIdAsync(Guid id)
         {
-            var team = await _context.Teams.FirstOrDefaultAsync(
-                team => team.Id == id);
+            var team = await _teamRepository.GetByIdAsync(id);
 
             return team;
         }
 
-        public async Task CreateAsync(string teamName, Guid subcategoryId)
+        public async Task CreateTeamAsync(string teamName, Guid subcategoryId)
         {
-            await _context.Teams.AddAsync(
-                new Team(teamName, subcategoryId));
+            await _teamRepository.AddAsync(new Team(teamName, subcategoryId));
 
-            await _context.SaveChangesAsync();
+            await _teamRepository.SaveAsync();
         }
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
         {
-            var result = await _context.Teams.AnyAsync(
-                team => team.Name == teamName);
+            var teams = await _teamRepository.GetAllAsync();
 
-            return result;
+            return teams.Any(team => team.Name == teamName);
         }
     }
 }

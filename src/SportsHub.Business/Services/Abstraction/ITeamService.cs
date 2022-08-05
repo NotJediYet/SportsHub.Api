@@ -4,11 +4,11 @@ namespace SportsHub.Business.Services
 {
     public interface ITeamService
     {
-        Task<IEnumerable<Team>> GetAllAsync();
+        Task<IEnumerable<Team>> GetTeamsAsync();
         
-        Task<Team> GetByIdAsync(Guid id);
+        Task<Team> GetTeamByIdAsync(Guid id);
         
-        Task CreateAsync(string teamName, Guid subcategoryId);
+        Task CreateTeamAsync(string teamName, Guid subcategoryId);
         
         Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
     }

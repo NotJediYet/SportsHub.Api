@@ -1,52 +1,48 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SportsHub.Infrastructure.DBContext;
+﻿using SportsHub.Business.Repositories;
 using SportsHub.Shared.Entities;
 
 namespace SportsHub.Business.Services
 {
     internal class SubcategoryService : ISubcategoryService
     {
-        private readonly SportsHubDbContext _context;
+        private readonly ISubcategoryRepository _subcategoryRepository;
 
-        public SubcategoryService(SportsHubDbContext context)
+        public SubcategoryService(ISubcategoryRepository subcategoryRepository)
         {
-            _context = context;
+            _subcategoryRepository = subcategoryRepository ?? throw new ArgumentNullException(nameof(subcategoryRepository));
         }
 
-        public async Task<IEnumerable<Subcategory>> GetAllAsync()
+        public async Task<IEnumerable<Subcategory>> GetSubcategoriesAsync()
         {
-            return await _context.Subcategories.ToListAsync();
+            return await _subcategoryRepository.GetAllAsync();
         }
 
-        public async Task<Subcategory> GetByIdAsync(Guid id)
+        public async Task<Subcategory> GetSubcategoryByIdAsync(Guid id)
         {
-            var subcategory = await _context.Subcategories.FirstOrDefaultAsync(subcategory => subcategory.Id == id);
+            var subcategory = await _subcategoryRepository.GetByIdAsync(id);
 
             return subcategory;
         }
 
-        public async Task CreateAsync(string subcategoryName, Guid categoryId)
+        public async Task CreateSubcategoryAsync(string subcategoryName, Guid categoryId)
         {
-            await _context.Subcategories.AddAsync(new Subcategory(subcategoryName, categoryId));
+            await _subcategoryRepository.AddAsync(new Subcategory(subcategoryName, categoryId));
 
-            await _context.SaveChangesAsync();
+            await _subcategoryRepository.SaveAsync();
         }
 
-        public async Task<bool> DoesSubcategoryAlreadyExistByNameAsync(
-            string subcategoryName)
+        public async Task<bool> DoesSubcategoryAlreadyExistByNameAsync(string subcategoryName)
         {
-            var result = await _context.Subcategories.AnyAsync(
-                subcategory => subcategory.Name == subcategoryName);
+            var subcategories = await _subcategoryRepository.GetAllAsync();
 
-            return result;
+            return subcategories.Any(subcategory => subcategory.Name == subcategoryName);
         }
 
         public async Task<bool> DoesSubcategoryAlredyExistByIdAsync(Guid id)
         {
-            var result = await _context.Subcategories.AnyAsync(
-                subcategory => subcategory.Id == id);
+            var subcategories = await _subcategoryRepository.GetAllAsync();
 
-            return result;
+            return subcategories.Any(subcategory => subcategory.Id == id);
         }
     }
 }

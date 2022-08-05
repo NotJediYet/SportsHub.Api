@@ -25,7 +25,7 @@ namespace SportsHub.Web.Controllers
         [Authorize(Policies.User)]
         public async Task<IActionResult> GetSubcategories()
         {
-            var subcategories = await _subcategoryService.GetAllAsync();
+            var subcategories = await _subcategoryService.GetSubcategoriesAsync();
 
             return Ok(subcategories);
         }
@@ -34,7 +34,7 @@ namespace SportsHub.Web.Controllers
         [Authorize(Policies.User)]
         public async Task<IActionResult> GetSubcategory(Guid id)
         {
-            var subcategory = await _subcategoryService.GetByIdAsync(id);
+            var subcategory = await _subcategoryService.GetSubcategoryByIdAsync(id);
 
             return subcategory != null
                 ? Ok(subcategory)
@@ -43,6 +43,10 @@ namespace SportsHub.Web.Controllers
 
         [HttpPost]
         [Authorize(Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateSubcategory(CreateSubcategoryModel сreateSubcategoryModel)
         {
             var doesCategoryExist = await _categoryService.DoesCategoryAlredyExistByIdAsync(сreateSubcategoryModel.CategoryId);
@@ -57,7 +61,7 @@ namespace SportsHub.Web.Controllers
                 return BadRequest("Subcategory with that name already exists!");
             }
 
-            await _subcategoryService.CreateAsync(сreateSubcategoryModel.Name, сreateSubcategoryModel.CategoryId);
+            await _subcategoryService.CreateSubcategoryAsync(сreateSubcategoryModel.Name, сreateSubcategoryModel.CategoryId);
 
             return Ok();
         }

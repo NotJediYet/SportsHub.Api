@@ -1,53 +1,48 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SportsHub.Infrastructure.DBContext;
+﻿using SportsHub.Business.Repositories;
 using SportsHub.Shared.Entities;
 
 namespace SportsHub.Business.Services
 {
     internal class CategoryService : ICategoryService
     {
-        private readonly SportsHubDbContext _context;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryService(SportsHubDbContext context)
+        public CategoryService(ICategoryRepository categoryRepository)
         {
-            _context = context;
+            _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
-        public async Task<IEnumerable<Category>> GetAllAsync()
+        public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
-            return await _context.Categories.ToListAsync();
+            return await _categoryRepository.GetAllAsync();
         }
 
-        public async Task<Category> GetByIdAsync(Guid id)
+        public async Task<Category> GetCategoryByIdAsync(Guid id)
         {
-            var category = await _context.Categories.FirstOrDefaultAsync(
-                category => category.Id == id);
+            var category = await _categoryRepository.GetByIdAsync(id);
 
             return category;
         }
 
-        public async Task CreateAsync(string categoryName)
+        public async Task CreateCategoryAsync(string categoryName)
         {
-            await _context.Categories.AddAsync(
-                new Category(categoryName));
+            await _categoryRepository.AddAsync(new Category(categoryName));
 
-            await _context.SaveChangesAsync();
+            await _categoryRepository.SaveAsync();
         }
 
         public async Task<bool> DoesCategoryAlreadyExistByNameAsync(string categoryName)
         {
-            var result = await _context.Categories.AnyAsync(
-                category => category.Name == categoryName);
-
-            return result;
+            var categories = await _categoryRepository.GetAllAsync();
+            
+            return categories.Any(category => category.Name == categoryName);
         }
 
         public async Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id)
         {
-            var result = await _context.Categories.AnyAsync(
-                category => category.Id == id);
+            var categories = await _categoryRepository.GetAllAsync();
 
-            return result;
+            return categories.Any(category => category.Id == id);
         }
     }
 }

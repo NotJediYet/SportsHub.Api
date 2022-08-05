@@ -25,15 +25,17 @@ namespace SportsHub.Web.Controllers
         [Authorize(Policies.User)]
         public async Task<IActionResult> GetTeams()
         {
-            return Ok(await _teamService.GetAllAsync());
+            return Ok(await _teamService.GetTeamsAsync());
         }
 
         [HttpGet("{id}")]
         [Authorize(Policies.User)]
         public async Task<IActionResult> GetTeam(Guid id)
         {
-            var team = await _teamService.GetByIdAsync(id);
-            return team != null ? Ok(team) : NotFound();
+            var team = await _teamService.GetTeamByIdAsync(id);
+            return team != null 
+                ? Ok(team) 
+                : NotFound();
         }
 
         [HttpPost]
@@ -56,8 +58,7 @@ namespace SportsHub.Web.Controllers
                 return BadRequest("Team with that name already exists!");
             }
 
-            await _teamService.CreateAsync(
-                сreateTeamModel.Name, сreateTeamModel.SubcategoryId);
+            await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId);
 
             return Ok();
         }

@@ -4,11 +4,11 @@ namespace SportsHub.Business.Services
 {
     public interface ISubcategoryService
     {
-        Task<IEnumerable<Subcategory>> GetAllAsync();
+        Task<IEnumerable<Subcategory>> GetSubcategoriesAsync();
         
-        Task<Subcategory> GetByIdAsync(Guid id);
+        Task<Subcategory> GetSubcategoryByIdAsync(Guid id);
         
-        Task CreateAsync(string subcategoryName, Guid categoryId);
+        Task CreateSubcategoryAsync(string subcategoryName, Guid categoryId);
         
         Task<bool> DoesSubcategoryAlreadyExistByNameAsync(string subcategoryName);
 
