@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Web.Controllers;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -19,6 +21,7 @@ namespace SportsHub.Web.Tests.Controllers
         {
             _service = new Mock<ICategoryService>();
             _validator = new Mock<IValidator<CreateCategoryModel>>();
+            
 
             _controller = new CategoriesController(_service.Object, _validator.Object);
         }
@@ -31,6 +34,9 @@ namespace SportsHub.Web.Tests.Controllers
             {
                 Name = "Name",
             };
+
+            _validator.Setup(validator => validator.ValidateAsync(It.IsAny<CreateCategoryModel>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.Run(() => new ValidationResult()));
 
             // Act
             var result = await _controller.CreateCategory(category);

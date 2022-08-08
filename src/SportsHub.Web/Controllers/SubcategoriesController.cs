@@ -55,7 +55,7 @@ namespace SportsHub.Web.Controllers
             ValidationResult result = await _createSubcategoryModelValidator.ValidateAsync(сreateSubcategoryModel);
             if (!result.IsValid)
             {
-                return BadRequest(result.Errors.FirstOrDefault().ErrorMessage);
+                return BadRequest(result.Errors.Select(e => e.ErrorMessage));
             }
 
             await _subcategoryService.CreateSubcategoryAsync(сreateSubcategoryModel.Name, сreateSubcategoryModel.CategoryId);
