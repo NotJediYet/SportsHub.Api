@@ -14,35 +14,33 @@ namespace SportsHub.Business.Services
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
-            return await _categoryRepository.GetAllAsync();
+            return await _categoryRepository.GetCategoriesAsync();
         }
 
         public async Task<Category> GetCategoryByIdAsync(Guid id)
         {
-            var category = await _categoryRepository.GetByIdAsync(id);
+            var category = await _categoryRepository.GetCategoryByIdAsync(id);
 
             return category;
         }
 
         public async Task CreateCategoryAsync(string categoryName)
         {
-            await _categoryRepository.AddAsync(new Category(categoryName));
-
-            await _categoryRepository.SaveAsync();
+            await _categoryRepository.AddCategoryAsync(new Category(categoryName));
         }
 
         public async Task<bool> DoesCategoryAlreadyExistByNameAsync(string categoryName)
         {
-            var categories = await _categoryRepository.GetAllAsync();
-            
-            return categories.Any(category => category.Name == categoryName);
+            var result = await _categoryRepository.DoesCategoryAlreadyExistByNameAsync(categoryName);
+
+            return result;
         }
 
         public async Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id)
         {
-            var categories = await _categoryRepository.GetAllAsync();
+            var result = await _categoryRepository.DoesCategoryAlredyExistByIdAsync(id);
 
-            return categories.Any(category => category.Id == id);
+            return result;
         }
     }
 }

@@ -14,35 +14,33 @@ namespace SportsHub.Business.Services
 
         public async Task<IEnumerable<Subcategory>> GetSubcategoriesAsync()
         {
-            return await _subcategoryRepository.GetAllAsync();
+            return await _subcategoryRepository.GetSubcategoriesAsync();
         }
 
         public async Task<Subcategory> GetSubcategoryByIdAsync(Guid id)
         {
-            var subcategory = await _subcategoryRepository.GetByIdAsync(id);
+            var subcategory = await _subcategoryRepository.GetSubcategoryByIdAsync(id);
 
             return subcategory;
         }
 
         public async Task CreateSubcategoryAsync(string subcategoryName, Guid categoryId)
         {
-            await _subcategoryRepository.AddAsync(new Subcategory(subcategoryName, categoryId));
-
-            await _subcategoryRepository.SaveAsync();
+            await _subcategoryRepository.AddSubcategoryAsync(new Subcategory(subcategoryName, categoryId));
         }
 
         public async Task<bool> DoesSubcategoryAlreadyExistByNameAsync(string subcategoryName)
         {
-            var subcategories = await _subcategoryRepository.GetAllAsync();
+            var result = await _subcategoryRepository.DoesSubcategoryAlreadyExistByNameAsync(subcategoryName);
 
-            return subcategories.Any(subcategory => subcategory.Name == subcategoryName);
+            return result;
         }
 
         public async Task<bool> DoesSubcategoryAlredyExistByIdAsync(Guid id)
         {
-            var subcategories = await _subcategoryRepository.GetAllAsync();
+            var result = await _subcategoryRepository.DoesSubcategoryAlredyExistByIdAsync(id);
 
-            return subcategories.Any(subcategory => subcategory.Id == id);
+            return result;
         }
     }
 }
