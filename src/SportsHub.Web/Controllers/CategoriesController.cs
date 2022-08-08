@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Security;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace SportsHub.Web.Controllers
 {
@@ -11,10 +13,15 @@ namespace SportsHub.Web.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private IValidator<CreateCategoryModel> _createCategoryModelValidator;
 
-        public CategoriesController(ICategoryService categoryService)
+        public CategoriesController(
+            ICategoryService categoryService,
+            IValidator<CreateCategoryModel> createCategoryModelValidator)
         {
             _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
+            _createCategoryModelValidator = createCategoryModelValidator 
+                ?? throw new ArgumentNullException(nameof(createCategoryModelValidator));
         }
 
         [HttpGet]
@@ -41,13 +48,12 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> CreateCategory(
-            CreateCategoryModel сreateCategoryModel)
+        public async Task<IActionResult> CreateCategory(CreateCategoryModel сreateCategoryModel)
         {
-            var doesCategoryExist = await _categoryService.DoesCategoryAlreadyExistByNameAsync(сreateCategoryModel.Name);
-            if (doesCategoryExist)
+            ValidationResult result = await _createCategoryModelValidator.ValidateAsync(сreateCategoryModel);
+            if (!result.IsValid)
             {
-                return BadRequest("Category with that name already exists!");
+                return BadRequest(result.Errors.FirstOrDefault().ErrorMessage);
             }
 
             await _categoryService.CreateCategoryAsync(сreateCategoryModel.Name);

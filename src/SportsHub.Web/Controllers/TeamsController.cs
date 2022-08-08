@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Security;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace SportsHub.Web.Controllers
 {
@@ -11,14 +13,14 @@ namespace SportsHub.Web.Controllers
     public class TeamsController : ControllerBase
     {
         private readonly ITeamService _teamService;
-        private readonly ISubcategoryService _subcategoryService;
+        private IValidator<CreateTeamModel> _createTeamModelValidator;
 
         public TeamsController(
             ITeamService teamService,
-            ISubcategoryService subcategoryService)
+            IValidator<CreateTeamModel> createTeamModelValidator)
         {
             _teamService = teamService ?? throw new ArgumentNullException(nameof(teamService));
-            _subcategoryService = subcategoryService ?? throw new ArgumentNullException(nameof(subcategoryService));
+            _createTeamModelValidator = createTeamModelValidator ?? throw new ArgumentNullException(nameof(createTeamModelValidator));
         }
 
         [HttpGet]
@@ -46,16 +48,10 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateTeam([FromForm] CreateTeamModel сreateTeamModel)
         {
-            var doesSubcategoryExist = await _subcategoryService.DoesSubcategoryAlredyExistByIdAsync(сreateTeamModel.SubcategoryId);
-            if (!doesSubcategoryExist)
+            ValidationResult result = await _createTeamModelValidator.ValidateAsync(сreateTeamModel);
+            if (!result.IsValid)
             {
-                return BadRequest("Subcategory with that id doesn't exist!");
-            }
-
-            var doesTeamExist = await _teamService.DoesTeamAlreadyExistByNameAsync(сreateTeamModel.Name);
-            if (doesTeamExist)
-            {
-                return BadRequest("Team with that name already exists!");
+                return BadRequest(result.Errors.FirstOrDefault().ErrorMessage);
             }
 
             await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId);

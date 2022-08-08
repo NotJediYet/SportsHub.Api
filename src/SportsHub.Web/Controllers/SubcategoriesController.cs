@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Security;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace SportsHub.Web.Controllers
 {
@@ -11,14 +13,15 @@ namespace SportsHub.Web.Controllers
     public class SubcategoriesController : ControllerBase
     {
         private readonly ISubcategoryService _subcategoryService;
-        private readonly ICategoryService _categoryService;
+        private IValidator<CreateSubcategoryModel> _createSubcategoryModelValidator;
 
         public SubcategoriesController(
             ISubcategoryService subcategoryService,
-            ICategoryService categoryService)
+            IValidator<CreateSubcategoryModel> createSubcategoryModelValidator)
         {
             _subcategoryService = subcategoryService ?? throw new ArgumentNullException(nameof(subcategoryService));
-            _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
+            _createSubcategoryModelValidator = createSubcategoryModelValidator
+                ?? throw new ArgumentNullException(nameof(createSubcategoryModelValidator));
         }
 
         [HttpGet]
@@ -49,16 +52,10 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateSubcategory(CreateSubcategoryModel сreateSubcategoryModel)
         {
-            var doesCategoryExist = await _categoryService.DoesCategoryAlredyExistByIdAsync(сreateSubcategoryModel.CategoryId);
-            if (!doesCategoryExist)
+            ValidationResult result = await _createSubcategoryModelValidator.ValidateAsync(сreateSubcategoryModel);
+            if (!result.IsValid)
             {
-                return BadRequest("Category with that id doesn't exist!");
-            }
-
-            var doesSubcategoryExist = await _subcategoryService.DoesSubcategoryAlreadyExistByNameAsync(сreateSubcategoryModel.Name);
-            if (doesSubcategoryExist)
-            {
-                return BadRequest("Subcategory with that name already exists!");
+                return BadRequest(result.Errors.FirstOrDefault().ErrorMessage);
             }
 
             await _subcategoryService.CreateSubcategoryAsync(сreateSubcategoryModel.Name, сreateSubcategoryModel.CategoryId);

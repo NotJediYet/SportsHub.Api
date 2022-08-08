@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using SportsHub.Security;
+using SportsHub.Shared.Models;
+using SportsHub.Web.Validators;
 
 namespace SportsHub.Extensions
 {
@@ -66,6 +69,15 @@ namespace SportsHub.Extensions
                         },
                     });
             });
+
+            return services;
+        }
+
+        public static IServiceCollection AddValidators(this IServiceCollection services)
+        {
+            services.AddScoped<IValidator<CreateCategoryModel>, CreateCategoryModelValidator>();
+            services.AddScoped<IValidator<CreateSubcategoryModel>, CreateSubcategoryModelValidator>();
+            services.AddScoped<IValidator<CreateTeamModel>, CreateTeamModelValidator>();
 
             return services;
         }
