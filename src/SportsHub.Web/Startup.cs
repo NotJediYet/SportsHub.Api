@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
-using Okta.AspNetCore;
-using SportsHub.Extensions;
+﻿using SportsHub.Extensions;
 
 namespace SportsHub.Web
 {
@@ -20,45 +17,18 @@ namespace SportsHub.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddBusiness();
-            services.AddInfrastructure();
+            services.AddInfrastructure(Configuration);
 
-            services.AddAuthentication(OktaDefaults.ApiAuthenticationScheme)
-                .AddOktaWebApi(new OktaWebApiOptions()
-                {
-                    OktaDomain = Configuration["Okta:Domain"],
-                    AuthorizationServerId = Configuration["Okta:AuthorizationServerId"]
-                });
-
-
-            services.AddAuthorization();
+            services.AddAuthenticationWithJwtBearer(Configuration);
+            services.AddAuthorizationWithPolicies();
 
             services.AddControllers();
+            services.AddValidators();
             services.AddEndpointsApiExplorer();
 
             if (Environment.IsDevelopment())
             {
-                services.AddSwaggerGen(option =>
-                {
-                    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                    {
-                        In = ParameterLocation.Header,
-                        Scheme = JwtBearerDefaults.AuthenticationScheme
-                    });
-                    option.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type=ReferenceType.SecurityScheme,
-                                    Id=JwtBearerDefaults.AuthenticationScheme
-                                }
-                            },
-                            new List<string>()
-                        }
-                    });
-                });
+                services.AddSwagger();
                 services.AddCors();
             }
         }
