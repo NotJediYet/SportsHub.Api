@@ -1,6 +1,6 @@
 ﻿using SportsHub.Shared.Entities;
 
-namespace SportsHub.Business.Repositories
+namespace SportsHub.Repositories
 {
     public interface ITeamRepository
     {
@@ -11,7 +11,5 @@ namespace SportsHub.Business.Repositories
         Task AddTeamAsync(Team team);
 
         Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
-
-        Task<int> SaveAsync();
     }
 }

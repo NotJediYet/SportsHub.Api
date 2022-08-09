@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using SportsHub.Security;
 using SportsHub.Shared.Models;
-using SportsHub.Web.Validators;
+using SportsHub.Validators;
 
 namespace SportsHub.Extensions
 {

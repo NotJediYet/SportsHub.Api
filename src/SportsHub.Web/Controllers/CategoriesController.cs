@@ -4,7 +4,6 @@ using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Security;
 using FluentValidation;
-using FluentValidation.Results;
 
 namespace SportsHub.Web.Controllers
 {
@@ -20,13 +19,12 @@ namespace SportsHub.Web.Controllers
             IValidator<CreateCategoryModel> createCategoryModelValidator)
         {
             _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
-            _createCategoryModelValidator = createCategoryModelValidator 
-                ?? throw new ArgumentNullException(nameof(createCategoryModelValidator));
+            _createCategoryModelValidator = createCategoryModelValidator ?? throw new ArgumentNullException(nameof(createCategoryModelValidator));
         }
 
         [HttpGet]
         [Authorize(Policies.User)]
-        public async Task<IActionResult> GetAllCategories()
+        public async Task<IActionResult> GetCategories()
         {
             return Ok(await _categoryService.GetCategoriesAsync());
         }
@@ -50,7 +48,7 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateCategory(CreateCategoryModel сreateCategoryModel)
         {
-            ValidationResult result = await _createCategoryModelValidator.ValidateAsync(сreateCategoryModel);
+            var result = await _createCategoryModelValidator.ValidateAsync(сreateCategoryModel);
             if (!result.IsValid)
             {
                 return BadRequest(result.Errors.Select(e => e.ErrorMessage));

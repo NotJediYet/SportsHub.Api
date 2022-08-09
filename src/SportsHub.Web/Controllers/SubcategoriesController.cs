@@ -4,7 +4,6 @@ using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Security;
 using FluentValidation;
-using FluentValidation.Results;
 
 namespace SportsHub.Web.Controllers
 {
@@ -20,8 +19,7 @@ namespace SportsHub.Web.Controllers
             IValidator<CreateSubcategoryModel> createSubcategoryModelValidator)
         {
             _subcategoryService = subcategoryService ?? throw new ArgumentNullException(nameof(subcategoryService));
-            _createSubcategoryModelValidator = createSubcategoryModelValidator
-                ?? throw new ArgumentNullException(nameof(createSubcategoryModelValidator));
+            _createSubcategoryModelValidator = createSubcategoryModelValidator ?? throw new ArgumentNullException(nameof(createSubcategoryModelValidator));
         }
 
         [HttpGet]
@@ -52,7 +50,7 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateSubcategory(CreateSubcategoryModel сreateSubcategoryModel)
         {
-            ValidationResult result = await _createSubcategoryModelValidator.ValidateAsync(сreateSubcategoryModel);
+            var result = await _createSubcategoryModelValidator.ValidateAsync(сreateSubcategoryModel);
             if (!result.IsValid)
             {
                 return BadRequest(result.Errors.Select(e => e.ErrorMessage));

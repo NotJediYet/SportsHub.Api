@@ -1,9 +1,8 @@
-﻿using SportsHub.Business.Repositories;
-using SportsHub.Infrastructure.DBContext;
+﻿using SportsHub.Infrastructure.DBContext;
 using SportsHub.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace SportsHub.Infrastructure.Repositories
+namespace SportsHub.Repositories
 {
     internal class CategoryRepository : ICategoryRepository
     {
@@ -43,11 +42,6 @@ namespace SportsHub.Infrastructure.Repositories
             var categories = await _context.Set<Category>().ToListAsync();
 
             return categories.Any(category => category.Id == id);
-        }
-
-        public async Task<int> SaveAsync()
-        {
-            return await _context.SaveChangesAsync();
         }
     }
 }

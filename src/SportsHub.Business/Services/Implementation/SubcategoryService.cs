@@ -1,4 +1,4 @@
-﻿using SportsHub.Business.Repositories;
+﻿using SportsHub.Repositories;
 using SportsHub.Shared.Entities;
 
 namespace SportsHub.Business.Services

@@ -1,9 +1,8 @@
-﻿using SportsHub.Business.Repositories;
-using SportsHub.Infrastructure.DBContext;
+﻿using SportsHub.Infrastructure.DBContext;
 using SportsHub.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace SportsHub.Infrastructure.Repositories
+namespace SportsHub.Repositories
 {
     internal class TeamRepository : ITeamRepository
     {
@@ -36,11 +35,6 @@ namespace SportsHub.Infrastructure.Repositories
             var teams = await _context.Set<Team>().ToListAsync();
 
             return teams.Any(team => team.Name == teamName);
-        }
-
-        public async Task<int> SaveAsync()
-        {
-            return await _context.SaveChangesAsync();
         }
     }
 }

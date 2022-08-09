@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SportsHub.Business.Repositories;
 using SportsHub.Infrastructure.DBContext;
-using SportsHub.Infrastructure.Repositories;
+using SportsHub.Repositories;
 
 namespace SportsHub.Extensions
 {
@@ -13,9 +12,10 @@ namespace SportsHub.Extensions
         {
             services.AddDbContext<SportsHubDbContext>(options =>
                 options.UseSqlServer(сonfiguration.GetConnectionString("DefaultConnection")));
-            services.AddTransient<ICategoryRepository, CategoryRepository>();
-            services.AddTransient<ISubcategoryRepository, SubcategoryRepository>();
-            services.AddTransient<ITeamRepository, TeamRepository>();
+
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ISubcategoryRepository, SubcategoryRepository>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
 
             return services;
         }

@@ -2,7 +2,7 @@
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 
-namespace SportsHub.Web.Validators
+namespace SportsHub.Validators
 {
     internal class CreateCategoryModelValidator : AbstractValidator<CreateCategoryModel>
     {

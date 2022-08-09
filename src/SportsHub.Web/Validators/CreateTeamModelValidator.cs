@@ -2,7 +2,7 @@
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 
-namespace SportsHub.Web.Validators
+namespace SportsHub.Validators
 {
     internal class CreateTeamModelValidator : AbstractValidator<CreateTeamModel>
     {
@@ -22,7 +22,8 @@ namespace SportsHub.Web.Validators
 
             RuleFor(team => team.SubcategoryId)
                 .NotEmpty().WithMessage("Subcategory id can not be empty!")
-                .MustAsync((id, cancellation) => DoesSubcategoryExistByIdAsync(id)).WithMessage("Subcategory with that id does not exist!");
+                .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlredyExistByIdAsync(id))
+                .WithMessage("Subcategory with that id does not exist!");
         }
 
         private async Task<bool> DoesTeamNameIsUniqueAsync(string teamName)
@@ -30,13 +31,6 @@ namespace SportsHub.Web.Validators
             var result = await _teamService.DoesTeamAlreadyExistByNameAsync(teamName);
 
             return !result;
-        }
-
-        private async Task<bool> DoesSubcategoryExistByIdAsync(Guid id)
-        {
-            var result = await _subcategoryService.DoesSubcategoryAlredyExistByIdAsync(id);
-
-            return result;
         }
     }
 }

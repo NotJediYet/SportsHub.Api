@@ -1,6 +1,6 @@
 ﻿using SportsHub.Shared.Entities;
 
-namespace SportsHub.Business.Repositories
+namespace SportsHub.Repositories
 {
     public interface ICategoryRepository 
     {
@@ -13,7 +13,5 @@ namespace SportsHub.Business.Repositories
         Task<bool> DoesCategoryAlreadyExistByNameAsync(string categoryName);
 
         Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id);
-
-        Task<int> SaveAsync();
     }
 }

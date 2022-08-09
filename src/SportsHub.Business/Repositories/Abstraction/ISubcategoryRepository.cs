@@ -1,6 +1,6 @@
 ﻿using SportsHub.Shared.Entities;
 
-namespace SportsHub.Business.Repositories
+namespace SportsHub.Repositories
 {
     public interface ISubcategoryRepository
     {
@@ -13,7 +13,5 @@ namespace SportsHub.Business.Repositories
         Task<bool> DoesSubcategoryAlreadyExistByNameAsync(string subcategoryName);
 
         Task<bool> DoesSubcategoryAlredyExistByIdAsync(Guid id);
-
-        Task<int> SaveAsync();
     }
 }

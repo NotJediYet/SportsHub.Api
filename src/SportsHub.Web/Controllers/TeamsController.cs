@@ -4,7 +4,6 @@ using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Security;
 using FluentValidation;
-using FluentValidation.Results;
 
 namespace SportsHub.Web.Controllers
 {
@@ -48,7 +47,7 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateTeam([FromForm] CreateTeamModel сreateTeamModel)
         {
-            ValidationResult result = await _createTeamModelValidator.ValidateAsync(сreateTeamModel);
+            var result = await _createTeamModelValidator.ValidateAsync(сreateTeamModel);
             if (!result.IsValid)
             {
                 return BadRequest(result.Errors.Select(e => e.ErrorMessage));

@@ -22,12 +22,11 @@ namespace SportsHub.Web.Tests.Controllers
             _service = new Mock<ICategoryService>();
             _validator = new Mock<IValidator<CreateCategoryModel>>();
             
-
             _controller = new CategoriesController(_service.Object, _validator.Object);
         }
 
         [Fact]
-        public async Task CreateCategoryAsync_HasValidValues_ReturnsOkResult()
+        public async Task CreateCategory_HasValidValues_ReturnsOkResult()
         {
             // Arrange
             var category = new CreateCategoryModel
@@ -36,7 +35,7 @@ namespace SportsHub.Web.Tests.Controllers
             };
 
             _validator.Setup(validator => validator.ValidateAsync(It.IsAny<CreateCategoryModel>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.Run(() => new ValidationResult()));
+                .ReturnsAsync(new ValidationResult());
 
             // Act
             var result = await _controller.CreateCategory(category);
@@ -45,6 +44,5 @@ namespace SportsHub.Web.Tests.Controllers
             var objectResult = Assert.IsType<OkResult>(result);
             Assert.Equal(200, objectResult.StatusCode);
         }
-
     }
 }
