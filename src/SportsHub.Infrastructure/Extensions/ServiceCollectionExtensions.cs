@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SportsHub.Business.Repositories;
 using SportsHub.Infrastructure.DBContext;
-using SportsHub.Repositories;
+using SportsHub.Infrastructure.Repositories;
 
 namespace SportsHub.Extensions
 {

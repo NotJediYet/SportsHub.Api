@@ -1,6 +1,6 @@
 ﻿using SportsHub.Shared.Entities;
 
-namespace SportsHub.Repositories
+namespace SportsHub.Business.Repositories
 {
     public interface ICategoryRepository 
     {

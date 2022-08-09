@@ -1,8 +1,9 @@
 ﻿using SportsHub.Infrastructure.DBContext;
 using SportsHub.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
+using SportsHub.Business.Repositories;
 
-namespace SportsHub.Repositories
+namespace SportsHub.Infrastructure.Repositories
 {
     internal class SubcategoryRepository : ISubcategoryRepository
     {
