@@ -13,14 +13,14 @@ namespace SportsHub.Web.Validators
 
         public CreateArticleModelValidator(
             ITeamService teamService,
-            IArticleService articleService)
+           IArticleService articleService)
         {
             _teamService = teamService ?? throw new ArgumentNullException(nameof(teamService));
             _articleService = articleService ?? throw new ArgumentNullException(nameof(articleService));
 
             RuleFor(article => article.Headline)
                 .NotEmpty().WithMessage(Errors.ArticleHeadlineCannotBeEmpty)
-                .MustAsync((headline, cancellation) => DoesArticleNameIsUniqueAsync(headline))
+               .MustAsync((headline, cancellation) => DoesArticleNameIsUniqueAsync(headline))
                 .WithMessage(Errors.ArticleHeadlineIsNotUnique);
 
             RuleFor(article => article.ArticleImage)

@@ -57,7 +57,7 @@ namespace SportsHub.Infrastructure.Repositories
                 articles = articles.Where(articles => articles.IsPublished == true).ToList();
             }
             else
-            {
+        {
                 articles = articles.Where(articles => articles.IsPublished == false).ToList();
             }
 
@@ -69,7 +69,7 @@ namespace SportsHub.Infrastructure.Repositories
             var articles = await _context.Articles
                 .OrderBy(articles => articles.Headline)
                 .ToListAsync();
-
+       
             return articles;
         }
     }

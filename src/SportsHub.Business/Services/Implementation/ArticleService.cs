@@ -46,7 +46,7 @@ namespace SportsHub.Business.Services
             {
                 await _articleImageRepository.AddImageAsync(articleModel.Image, articleModel.Id);
             }
-            
+
             
         }
 
