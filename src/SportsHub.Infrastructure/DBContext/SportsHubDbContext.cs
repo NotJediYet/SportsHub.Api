@@ -21,13 +21,13 @@ namespace SportsHub.Infrastructure.DBContext
                 .WithMany()
                 .HasForeignKey(s => s.CategoryId);
             modelBuilder.Entity<Team>()
-               .HasOne<Subcategory>()
-               .WithMany()
-               .HasForeignKey(t => t.SubcategoryId);
+                .HasOne<Subcategory>()
+                .WithMany()
+                .HasForeignKey(t => t.SubcategoryId);
             modelBuilder.Entity<Article>()
-            .HasOne<Team>()
-            .WithMany()
-            .HasForeignKey(a => a.TeamId);
+                .HasOne<Team>()
+                .WithMany()
+                .HasForeignKey(a => a.TeamId);
             modelBuilder.Entity<Article>()
                 .Property(a => a.IsPublished)
                 .HasDefaultValue(false);

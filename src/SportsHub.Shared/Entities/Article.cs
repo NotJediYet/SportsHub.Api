@@ -26,7 +26,6 @@ namespace SportsHub.Shared.Entities
 
         public Article(string picture, Guid teamId, string location, string altPicture, string headline, string caption, string context)
         {
-
             Picture = picture;
             TeamId = teamId;
             Location = location;

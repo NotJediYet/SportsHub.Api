@@ -1,6 +1,6 @@
 ﻿using SportsHub.Business.Repositories;
 using SportsHub.Shared.Entities;
-
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Services
 {
@@ -25,22 +25,32 @@ namespace SportsHub.Business.Services
             return article;
         }
 
-        public async Task CreateArticleAsync(string picture, Guid teamId, string location, string altPicture, string headline, string caption, string context)
+        public async Task CreateArticleAsync(CreateArticleModel createArticleModel)
         {
-            await _articleRepository.AddArticleAsync(new Article(picture, teamId, location, altPicture, headline, caption, context));
+            Article article = new Article
+            (
+               createArticleModel.Picture,
+               createArticleModel.TeamId,
+               createArticleModel.Location,
+               createArticleModel.AltPicture,
+               createArticleModel.Headline,
+               createArticleModel.Caption,
+               createArticleModel.Context
+            );
 
+            await _articleRepository.AddArticleAsync(article);
         }
 
-        public async Task<bool> DoesArticleAlreadyExistByNameAsync(string headline)
+        public async Task<bool> DoesArticleAlreadyExistByNameAsync(string articleName)
         {
-            var result = await _articleRepository.DoesArticleAlreadyExistByNameAsync(headline);
+            var result = await _articleRepository.DoesArticleAlreadyExistByNameAsync(articleName);
 
             return result;
         }
 
-        public async Task<bool> DoesArticleAlredyExistByIdAsync(Guid id)
+        public async Task<bool> DoesArticleAlreadyExistByIdAsync(Guid id)
         {
-            var result = await _articleRepository.DoesArticleAlredyExistByIdAsync(id);
+            var result = await _articleRepository.DoesArticleAlreadyExistByIdAsync(id);
 
             return result;
         }

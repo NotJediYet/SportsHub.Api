@@ -11,19 +11,19 @@ namespace SportsHub.Web.Validators
 
         public CreateArticleModelValidator(
             ITeamService teamService,
-           IArticleService articleService)
+            IArticleService articleService)
         {
             _teamService = teamService ?? throw new ArgumentNullException(nameof(teamService));
             _articleService = articleService ?? throw new ArgumentNullException(nameof(articleService));
 
             RuleFor(article => article.Headline)
-               .NotEmpty().WithMessage("Article headline can not be empty!")
+               .NotEmpty().WithMessage("Article headline cannot be empty!")
                .MustAsync((headline, cancellation) => DoesArticleNameIsUniqueAsync(headline))
                .WithMessage("Article with that headline already exists!");
 
             RuleFor(article => article.TeamId)
-                .NotEmpty().WithMessage("Team id can not be empty!")
-                .MustAsync((id, cancellation) => _teamService.DoesTeamAlredyExistByIdAsync(id))
+                .NotEmpty().WithMessage("Team id cannot be empty!")
+                .MustAsync((id, cancellation) => _teamService.DoesTeamAlreadyExistByIdAsync(id))
                 .WithMessage("Team with that id does not exist!");
         }
 
@@ -33,7 +33,6 @@ namespace SportsHub.Web.Validators
 
             return !result;
         }
-
     }
 }
 
