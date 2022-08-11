@@ -3,7 +3,7 @@ using SportsHub.Shared.Entities;
 
 namespace SportsHub.Business.Services
 {
-    internal class TeamService : ITeamService
+    public class TeamService : ITeamService
     {
         private readonly ITeamRepository _teamRepository;
 

@@ -4,7 +4,7 @@ using SportsHub.Shared.Models;
 
 namespace SportsHub.Web.Validators
 {
-    internal class CreateSubcategoryModelValidator : AbstractValidator<CreateSubcategoryModel>
+    public class CreateSubcategoryModelValidator : AbstractValidator<CreateSubcategoryModel>
     {
         private readonly ICategoryService _categoryService;
         private readonly ISubcategoryService _subcategoryService;
