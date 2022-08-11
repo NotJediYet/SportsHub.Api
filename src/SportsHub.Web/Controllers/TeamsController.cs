@@ -53,7 +53,7 @@ namespace SportsHub.Web.Controllers
                 return BadRequest(result.Errors.Select(e => e.ErrorMessage));
             }
 
-            await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId);
+            await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);
 
             return Ok();
         }

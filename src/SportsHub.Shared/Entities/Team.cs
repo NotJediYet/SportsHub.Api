@@ -14,13 +14,17 @@ namespace SportsHub.Shared.Entities
         [Required(ErrorMessage = "Team name is required.")]
         public string Name { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Team location is required.")]
+        public string Location { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "Subcategory id is required.")]
         public Guid SubcategoryId { get; set; }
 
-        public Team(string name, Guid subcategoryId)
+        public Team(string name, Guid subcategoryId, string location)
         {
             Name = name;
             SubcategoryId = subcategoryId;
+            Location = location;
         }
     }
 }

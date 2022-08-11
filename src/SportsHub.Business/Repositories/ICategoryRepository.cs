@@ -12,6 +12,6 @@ namespace SportsHub.Business.Repositories
 
         Task<bool> DoesCategoryAlreadyExistByNameAsync(string categoryName);
 
-        Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id);
+        Task<bool> DoesCategoryAlreadyExistByIdAsync(Guid id);
     }
 }

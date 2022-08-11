@@ -24,14 +24,21 @@ namespace SportsHub.Business.Services
             return team;
         }
 
-        public async Task CreateTeamAsync(string teamName, Guid subcategoryId)
+        public async Task CreateTeamAsync(string teamName, Guid subcategoryId, string location)
         {
-            await _teamRepository.AddTeamAsync(new Team(teamName, subcategoryId));
+            await _teamRepository.AddTeamAsync(new Team(teamName, subcategoryId, location));
         }
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
         {
             var result = await _teamRepository.DoesTeamAlreadyExistByNameAsync(teamName);
+
+            return result;
+        }
+
+        public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)
+        {
+            var result = await _teamRepository.DoesTeamAlreadyExistByIdAsync(id);
 
             return result;
         }

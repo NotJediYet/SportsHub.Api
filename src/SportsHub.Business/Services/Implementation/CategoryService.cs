@@ -36,9 +36,9 @@ namespace SportsHub.Business.Services
             return result;
         }
 
-        public async Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id)
+        public async Task<bool> DoesCategoryAlreadyExistByIdAsync(Guid id)
         {
-            var result = await _categoryRepository.DoesCategoryAlredyExistByIdAsync(id);
+            var result = await _categoryRepository.DoesCategoryAlreadyExistByIdAsync(id);
 
             return result;
         }
