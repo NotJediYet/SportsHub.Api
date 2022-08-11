@@ -17,11 +17,11 @@ namespace SportsHub.Web.Validators
             _teamService = teamService ?? throw new ArgumentNullException(nameof(teamService));
 
             RuleFor(team => team.Name)
-                .NotEmpty().WithMessage("Team name can not be empty!")
+                .NotEmpty().WithMessage("Team name cannot be empty!")
                 .MustAsync((name, cancellation) => DoesTeamNameIsUniqueAsync(name)).WithMessage("Team with that name already exists!");
 
             RuleFor(team => team.SubcategoryId)
-                .NotEmpty().WithMessage("Subcategory id can not be empty!")
+                .NotEmpty().WithMessage("Subcategory id cannot be empty!")
                 .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlredyExistByIdAsync(id))
                 .WithMessage("Subcategory with that id does not exist!");
         }

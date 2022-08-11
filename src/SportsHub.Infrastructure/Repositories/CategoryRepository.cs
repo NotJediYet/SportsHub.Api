@@ -16,33 +16,33 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
-            return await _context.Set<Category>().ToListAsync();
+            return await _context.Categories.ToListAsync();
         }
 
         public async Task<Category> GetCategoryByIdAsync(Guid id)
         {
-            return await _context.Set<Category>().FindAsync(id);
+            return await _context.Categories.FindAsync(id);
         }
 
         public async Task AddCategoryAsync(Category category)
         {
-            await _context.Set<Category>().AddAsync(category);
+            await _context.Categories.AddAsync(category);
 
             await _context.SaveChangesAsync();
         }
 
         public async Task<bool> DoesCategoryAlreadyExistByNameAsync(string categoryName)
         {
-            var categories = await _context.Set<Category>().ToListAsync();
+            var categories = await _context.Categories.AnyAsync(category => category.Name == categoryName);
 
-            return categories.Any(category => category.Name == categoryName);
+            return categories;
         }
 
         public async Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id)
         {
-            var categories = await _context.Set<Category>().ToListAsync();
+            var categories = await _context.Categories.AnyAsync(category => category.Id == id);
 
-            return categories.Any(category => category.Id == id);
+            return categories;
         }
     }
 }

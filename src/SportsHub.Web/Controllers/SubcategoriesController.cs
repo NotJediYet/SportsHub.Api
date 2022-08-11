@@ -24,6 +24,10 @@ namespace SportsHub.Web.Controllers
 
         [HttpGet]
         [Authorize(Policies.User)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetSubcategories()
         {
             var subcategories = await _subcategoryService.GetSubcategoriesAsync();
@@ -33,6 +37,10 @@ namespace SportsHub.Web.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Policies.User)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetSubcategory(Guid id)
         {
             var subcategory = await _subcategoryService.GetSubcategoryByIdAsync(id);

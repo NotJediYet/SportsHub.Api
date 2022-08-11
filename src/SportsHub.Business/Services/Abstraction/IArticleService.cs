@@ -1,4 +1,5 @@
 ﻿using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Services
 {
@@ -8,11 +9,10 @@ namespace SportsHub.Business.Services
 
         Task<Article> GetArticleByIdAsync(Guid id);
 
-        Task CreateArticleAsync(string articlePicture, Guid teamId, string location, string articleAltPicture, string articleHeadline, string articleCaption, string articleContext);
+        Task CreateArticleAsync(CreateArticleModel createArticleModel);
 
-        Task<bool> DoesArticleAlreadyExistByNameAsync(string headline);
+        Task<bool> DoesArticleAlreadyExistByNameAsync(string articleName);
 
-        Task<bool> DoesArticleAlredyExistByIdAsync(Guid id);
-
+        Task<bool> DoesArticleAlreadyExistByIdAsync(Guid id);
     }
 }

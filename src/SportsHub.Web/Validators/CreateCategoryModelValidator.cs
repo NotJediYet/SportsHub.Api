@@ -13,7 +13,7 @@ namespace SportsHub.Web.Validators
             _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
 
             RuleFor(category => category.Name)
-                .NotEmpty().WithMessage("Category name can not be empty!")
+                .NotEmpty().WithMessage("Category name cannot be empty!")
                 .MustAsync((name, cancellation) => DoesCategoryNameIsUniqueAsync(name))
                 .WithMessage("Category with that name already exists!");
         }

@@ -12,7 +12,6 @@ namespace SportsHub.Web.Controllers
     public class ArticlesController : ControllerBase
     {
         private readonly IArticleService _articleService;
-
         private IValidator<CreateArticleModel> _createArticleModelValidator;
 
         public ArticlesController(
@@ -25,6 +24,10 @@ namespace SportsHub.Web.Controllers
 
         [HttpGet]
         [Authorize(Policies.User)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetArticles()
         {
             var articles = await _articleService.GetArticlesAsync();
@@ -34,6 +37,10 @@ namespace SportsHub.Web.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Policies.User)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetArticle(Guid id)
         {
             var article = await _articleService.GetArticleByIdAsync(id);
@@ -57,8 +64,7 @@ namespace SportsHub.Web.Controllers
                 return BadRequest(result.Errors.Select(e => e.ErrorMessage));
             }
 
-
-            await _articleService.CreateArticleAsync(сreateArticleModel.Picture, сreateArticleModel.TeamId, сreateArticleModel.Location, сreateArticleModel.AltPicture, сreateArticleModel.Headline, сreateArticleModel.Caption, сreateArticleModel.Context);
+            await _articleService.CreateArticleAsync(сreateArticleModel);
 
             return Ok();
         }
