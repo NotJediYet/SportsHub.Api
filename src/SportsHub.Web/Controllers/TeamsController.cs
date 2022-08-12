@@ -50,7 +50,7 @@ namespace SportsHub.Web.Controllers
             var result = await _createTeamModelValidator.ValidateAsync(сreateTeamModel);
             if (!result.IsValid)
             {
-                return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+                return BadRequest(result.Errors.Select(error => error.ErrorMessage));
             }
 
             await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId);

@@ -51,7 +51,7 @@ namespace SportsHub.Web.Controllers
             var result = await _createCategoryModelValidator.ValidateAsync(сreateCategoryModel);
             if (!result.IsValid)
             {
-                return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+                return BadRequest(result.Errors.Select(error => error.ErrorMessage));
             }
 
             await _categoryService.CreateCategoryAsync(сreateCategoryModel.Name);
