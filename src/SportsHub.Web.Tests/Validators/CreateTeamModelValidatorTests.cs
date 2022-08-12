@@ -1,7 +1,7 @@
-﻿using FluentValidation.Results;
-using Moq;
+﻿using Moq;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
+using SportsHub.Shared.Resources;
 using SportsHub.Web.Validators;
 using System;
 using Xunit;
@@ -18,12 +18,11 @@ namespace SportsHub.Web.Tests.Validators
         {
             _subcategoryService = new Mock<ISubcategoryService>();
             _teamService = new Mock<ITeamService>();
-
             _validator = new CreateTeamModelValidator(_subcategoryService.Object, _teamService.Object);
         }
 
         [Fact]
-        public async void CreateTeamModel_HasEmptyName_ReturnsValidationResultWithError()
+        public async void CreateTeamModel_WhenNameIsEmpty_ReturnsValidationResultWithError()
         {
             // Arrange
             var team = new CreateTeamModel
@@ -31,73 +30,100 @@ namespace SportsHub.Web.Tests.Validators
                 Name = string.Empty,
                 SubcategoryId = Guid.NewGuid()
             };
+            var expectedErrorMessage = Errors.TeamNameCannotBeEmpty;
 
             // Act
             var result = await _validator.ValidateAsync(team);
 
             // Assert
-            Assert.IsType<ValidationResult>(result);
             Assert.False(result.IsValid);
+            Assert.Contains(result.Errors, error => error.ErrorMessage == expectedErrorMessage);
         }
 
         [Fact]
-        public async void CreateTeamModel_HasExistingName_ReturnsValidationResultWithError()
+        public async void CreateTeamModel_WhenNameIsNotUnique_ReturnsValidationResultWithError()
         {
             // Arrange
             var team = new CreateTeamModel
             {
-                Name = "Test name",
+                Name = "Name",
                 SubcategoryId = Guid.NewGuid()
             };
+            var expectedErrorMessage = Errors.TeamNameIsNotUnique;
 
-            _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(It.IsAny<string>()))
+            _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
                 .ReturnsAsync(true);
 
             // Act
             var result = await _validator.ValidateAsync(team);
 
             // Assert
-            Assert.IsType<ValidationResult>(result);
             Assert.False(result.IsValid);
+            Assert.Contains(result.Errors, error => error.ErrorMessage == expectedErrorMessage);
         }
 
         [Fact]
-        public async void CreateTeamModel_HasEmptyCategoryId_ReturnsValidationResultWithError()
+        public async void CreateTeamModel_WhenSubcategoryIdIsEmpty_ReturnsValidationResultWithError()
         {
             // Arrange
             var team = new CreateTeamModel
             {
-                Name = "Test name",
+                Name = "Name",
                 SubcategoryId = Guid.Empty
             };
+            var expectedErrorMessage = Errors.SubcategoryIdCannotBeEmpty;
 
             // Act
             var result = await _validator.ValidateAsync(team);
 
             // Assert
-            Assert.IsType<ValidationResult>(result);
             Assert.False(result.IsValid);
+            Assert.Contains(result.Errors, error => error.ErrorMessage == expectedErrorMessage);
         }
 
         [Fact]
-        public async void CreateTeamModel_HasNotExistingCategoryId_ReturnsValidationResultWithError()
+        public async void CreateTeamModel_WhenSubcategoryDoesNotExist_ReturnsValidationResultWithError()
         {
             // Arrange
             var team = new CreateTeamModel
             {
-                Name = "Test name",
+                Name = "Name",
                 SubcategoryId = Guid.NewGuid()
             };
+            var expectedErrorMessage = Errors.SubcategoryDoesNotExist;
 
-            _subcategoryService.Setup(service => service.DoesSubcategoryAlredyExistByIdAsync(It.IsAny<Guid>()))
+            _subcategoryService.Setup(service => service.DoesSubcategoryAlredyExistByIdAsync(team.SubcategoryId))
                 .ReturnsAsync(false);
 
             // Act
             var result = await _validator.ValidateAsync(team);
 
             // Assert
-            Assert.IsType<ValidationResult>(result);
             Assert.False(result.IsValid);
+            Assert.Contains(result.Errors, error => error.ErrorMessage == expectedErrorMessage);
+        }
+
+        [Fact]
+        public async void CreateTeamModel_WhenModelIsValid_ReturnsSuccessValidationResult()
+        {
+            // Arrange
+            var team = new CreateTeamModel
+            {
+                Name = "Name",
+                SubcategoryId = Guid.NewGuid()
+            };
+
+            _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
+                .ReturnsAsync(false);
+            _subcategoryService.Setup(service => service.DoesSubcategoryAlredyExistByIdAsync(team.SubcategoryId))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _validator.ValidateAsync(team);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Empty(result.Errors);
         }
     }
 }
