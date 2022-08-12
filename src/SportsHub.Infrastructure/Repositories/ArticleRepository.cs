@@ -43,7 +43,23 @@ namespace SportsHub.Infrastructure.Repositories
             var articles = await _context.Articles.AnyAsync(article => article.Id == id);
 
             return articles;
-        }   
-    }
+        }
+
+        public IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId)
+        {
+           IQueryable<Article> articles = _context.Articles;
+
+           articles = (from t in articles
+                       where t.TeamId == teamId
+                       select t);
+        
+           return  articles;
+       }
+     }
 }
+
+
+
+
+
 

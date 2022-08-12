@@ -42,5 +42,10 @@ namespace SportsHub.Business.Services
 
             return result;
         }
+
+        public Guid FindTeamIdByTeamName(string teamName)
+        {
+            return _teamRepository.FindTeamIdByTeamName(teamName); ;
+        }
     }
 }

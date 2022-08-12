@@ -54,6 +54,10 @@ namespace SportsHub.Business.Services
 
             return result;
         }
+
+        public  IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId)
+        {
+            return _articleRepository.GetArticlesFilteredByTeamId(teamId);
+        }
     }
 }
-

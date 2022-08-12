@@ -13,6 +13,8 @@ namespace SportsHub.Business.Repositories
         Task<bool> DoesArticleAlreadyExistByNameAsync(string headline);
 
         Task<bool> DoesArticleAlreadyExistByIdAsync(Guid id);
+
+        IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId);
     }
 }
 

@@ -43,5 +43,16 @@ namespace SportsHub.Infrastructure.Repositories
   
             return teams;
         }
+
+        public Guid FindTeamIdByTeamName(string teamName)
+        {
+            IQueryable<Team> teams = _context.Teams;
+
+            Guid teamId = (from t in teams
+                          where t.Name == teamName
+                          select t.Id).FirstOrDefault();
+
+            return teamId;
+        }
     }
 }

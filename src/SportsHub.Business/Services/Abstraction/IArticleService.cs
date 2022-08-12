@@ -14,5 +14,8 @@ namespace SportsHub.Business.Services
         Task<bool> DoesArticleAlreadyExistByNameAsync(string articleName);
 
         Task<bool> DoesArticleAlreadyExistByIdAsync(Guid id);
+
+        IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId);
     }
 }
+
