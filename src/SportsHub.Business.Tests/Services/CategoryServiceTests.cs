@@ -4,18 +4,17 @@ using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace SportsHub.Business.Tests.Services
 {
-    public class CategoryServiceTest
+    public class CategoryServiceTests
     {
         private readonly Mock<ICategoryRepository> _repository;
         private readonly ICategoryService _service;
 
-        public CategoryServiceTest()
+        public CategoryServiceTests()
         {
             _repository = new Mock<ICategoryRepository>();
             _service = new CategoryService(_repository.Object);
@@ -25,56 +24,59 @@ namespace SportsHub.Business.Tests.Services
         public async Task GetCategoriesAsync_ReturnsCollectionOfCategories()
         {
             // Arrange
-            _repository.Setup(repo => repo.GetCategoriesAsync())
-                .ReturnsAsync(GetTestCategories());
+            var expectedCategories = GetCategories();
+
+            _repository.Setup(repository => repository.GetCategoriesAsync())
+                .ReturnsAsync(expectedCategories);
 
             // Act
-            var result = await _service.GetCategoriesAsync();
+            var actualCategories = await _service.GetCategoriesAsync();
 
             // Assert
-            Assert.IsAssignableFrom<IEnumerable<Category>>(result);
-            Assert.Equal(GetTestCategories().Count(), result.Count());
+            Assert.Equal(expectedCategories, actualCategories);
         }
 
         [Fact]
         public async Task GetCategoryByIdAsync_HasValidId_ReturnsCategory()
         {
             // Arrange
-            var testCategory = GetTestCategories().FirstOrDefault();
+            var expectedCategoryId = Guid.NewGuid();
 
-            _repository.Setup(repo => repo.GetCategoryByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(testCategory);
+            var expectedCategory = new Category(name: "Name");
+            expectedCategory.Id = expectedCategoryId;
+
+            _repository.Setup(repo => repo.GetCategoryByIdAsync(expectedCategoryId))
+                .ReturnsAsync(expectedCategory);
 
             // Act
-            var result = await _service.GetCategoryByIdAsync(Guid.NewGuid());
+            var actualCategory = await _service.GetCategoryByIdAsync(expectedCategoryId);
 
             // Assert
-            var category = Assert.IsType<Category>(result);
-            Assert.Equal(testCategory.Name, category.Name);
-            Assert.Equal(testCategory.Id, category.Id);
+            Assert.Equal(expectedCategory.Name, actualCategory.Name);
+            Assert.Equal(expectedCategory.Id, actualCategory.Id);
         }
 
         [Fact]
-        public async Task CreateCategoryAsync_HasValidValues()
+        public async Task CreateCategoryAsync_HasValidValues_SuccesfullyCreatesCategory()
         {
             // Arrange
-            var categoryName = "Name";
+            var expectedCategoryName = "Name";
 
             // Act
-            await _service.CreateCategoryAsync(categoryName);
+            await _service.CreateCategoryAsync(expectedCategoryName);
 
             // Assert
-            _repository.Verify(repo => repo.AddCategoryAsync(It.IsAny<Category>()));
+            _repository.Verify(repository => repository.AddCategoryAsync(It.Is<Category>(category => category.Name == expectedCategoryName)));
         }
         
         [Fact]
         public async Task DoesCategoryAlreadyExistByNameAsync_HasExistedName_ReturnsTrue()
         {
             // Arrange
-            var categoryName = GetTestCategories().FirstOrDefault().Name;
+            var categoryName = "Name";
 
-            _repository.Setup(repo => repo.DoesCategoryAlreadyExistByNameAsync(categoryName))
-                .ReturnsAsync(GetTestCategories().Any(category => category.Name == categoryName));
+            _repository.Setup(repository => repository.DoesCategoryAlreadyExistByNameAsync(categoryName))
+                .ReturnsAsync(true);
 
             // Act
             var result = await _service.DoesCategoryAlreadyExistByNameAsync(categoryName);
@@ -87,10 +89,10 @@ namespace SportsHub.Business.Tests.Services
         public async Task DoesCategoryAlreadyExistByNameAsync_HasNotExistedName_ReturnsFalse()
         {
             // Arrange
-            var categoryName = "Test unique name";
+            var categoryName = "Name";
 
-            _repository.Setup(repo => repo.DoesCategoryAlreadyExistByNameAsync(categoryName))
-                .ReturnsAsync(GetTestCategories().Any(category => category.Name == categoryName));
+            _repository.Setup(repository => repository.DoesCategoryAlreadyExistByNameAsync(categoryName))
+                .ReturnsAsync(false);
 
             // Act
             var result = await _service.DoesCategoryAlreadyExistByNameAsync(categoryName);
@@ -103,10 +105,10 @@ namespace SportsHub.Business.Tests.Services
         public async Task DoesCategoryAlredyExistByIdAsync_HasExistedId_ReturnsTrue()
         {
             // Arrange
-            var categoryId = GetTestCategories().FirstOrDefault().Id;
+            var categoryId = Guid.NewGuid();
 
             _repository.Setup(repo => repo.DoesCategoryAlredyExistByIdAsync(categoryId))
-                .ReturnsAsync(GetTestCategories().Any(category => category.Id == categoryId));
+                .ReturnsAsync(true);
 
             // Act
             var result = await _service.DoesCategoryAlredyExistByIdAsync(categoryId);
@@ -119,15 +121,10 @@ namespace SportsHub.Business.Tests.Services
         public async Task DoesCategoryAlredyExistByIdAsync_HasNotExistedId_ReturnsFalse()
         {
             // Arrange
-            Guid categoryId;
-
-            do
-            {
-                categoryId = Guid.NewGuid();
-            } while (GetTestCategories().Any(category => category.Id == categoryId));
+            var categoryId = Guid.NewGuid();
 
             _repository.Setup(repo => repo.DoesCategoryAlredyExistByIdAsync(categoryId))
-                .ReturnsAsync(GetTestCategories().Any(category => category.Id == categoryId));
+                .ReturnsAsync(false);
 
             // Act
             var result = await _service.DoesCategoryAlredyExistByIdAsync(categoryId);
@@ -136,7 +133,7 @@ namespace SportsHub.Business.Tests.Services
             Assert.False(result);
         }
 
-        private IEnumerable<Category> GetTestCategories()
+        private IEnumerable<Category> GetCategories()
         {
             IEnumerable<Category> categories = new List<Category>
             {
@@ -144,6 +141,7 @@ namespace SportsHub.Business.Tests.Services
                 new Category("Name2"),
                 new Category("Name3")
             };
+
             return categories;
         }
     }
