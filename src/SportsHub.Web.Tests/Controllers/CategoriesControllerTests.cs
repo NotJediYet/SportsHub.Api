@@ -31,7 +31,7 @@ namespace SportsHub.Web.Tests.Controllers
         }
 
         [Fact]
-        public async Task CreateCategory_HasValidValues_ReturnsOkResult()
+        public async Task CreateCategory_WhenModelIsValid_ReturnsOkResult()
         {
             // Arrange
             var model = new CreateCategoryModel
@@ -52,7 +52,7 @@ namespace SportsHub.Web.Tests.Controllers
         }
 
         [Fact]
-        public async Task CreateCategory_HasInvalidValues_ReturnsBadRequestResult()
+        public async Task CreateCategory_WhenModelIsInvalid_ReturnsBadRequestResult()
         {
             // Arrange
             var model = new CreateCategoryModel
@@ -96,7 +96,7 @@ namespace SportsHub.Web.Tests.Controllers
         }
 
         [Fact]
-        public async Task GetCategory_HasInvalidId_ReturnsNotFoundResult()
+        public async Task GetCategory_WhenCategoryDoesNotExist_ReturnsNotFoundResult()
         {
             // Arrange
             var categoryId = Guid.NewGuid();
@@ -113,7 +113,7 @@ namespace SportsHub.Web.Tests.Controllers
         }
 
         [Fact]
-        public async Task GetCategory_HasValidId_ReturnsOkObjectResultWithCategory()
+        public async Task GetCategory_WhenCategoryExists_ReturnsOkObjectResultWithCategory()
         {
             // Arrange
             var expectedCategoryId = Guid.NewGuid();
