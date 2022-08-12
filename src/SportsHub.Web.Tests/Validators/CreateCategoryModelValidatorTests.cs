@@ -7,12 +7,12 @@ using Xunit;
 
 namespace SportsHub.Web.Tests.Validators
 {
-    public class CreateCategoryModelValidatorTest
+    public class CreateCategoryModelValidatorTests
     {
         private readonly Mock<ICategoryService> _service;
         private readonly CreateCategoryModelValidator _validator;
 
-        public CreateCategoryModelValidatorTest()
+        public CreateCategoryModelValidatorTests()
         {
             _service = new Mock<ICategoryService>();
             _validator = new CreateCategoryModelValidator(_service.Object);

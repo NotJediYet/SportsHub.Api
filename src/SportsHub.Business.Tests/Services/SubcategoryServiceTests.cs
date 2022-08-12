@@ -10,12 +10,12 @@ using Xunit;
 
 namespace SportsHub.Business.Tests.Services
 {
-    public class SubcategoryServiceTest
+    public class SubcategoryServiceTests
     {
         private readonly Mock<ISubcategoryRepository> _repository;
         private readonly ISubcategoryService _service;
 
-        public SubcategoryServiceTest()
+        public SubcategoryServiceTests()
         {
             _repository = new Mock<ISubcategoryRepository>();
             _service = new SubcategoryService(_repository.Object);
