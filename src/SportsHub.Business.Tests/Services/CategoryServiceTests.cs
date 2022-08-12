@@ -21,7 +21,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task GetCategoriesAsync_ReturnsCollectionOfCategories()
+        public async Task GetCategoriesAsync_ReturnsExpectedCategories()
         {
             // Arrange
             var expectedCategories = GetCategories();
@@ -37,7 +37,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task GetCategoryByIdAsync_HasValidId_ReturnsCategory()
+        public async Task GetCategoryByIdAsync_WhenIdIsValid_ReturnsExpectedCategory()
         {
             // Arrange
             var expectedCategoryId = Guid.NewGuid();
@@ -57,7 +57,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task CreateCategoryAsync_HasValidValues_SuccesfullyCreatesCategory()
+        public async Task CreateCategoryAsync_CallsAppropriateRepositoryMethodWithParameters()
         {
             // Arrange
             var expectedCategoryName = "Name";
@@ -70,7 +70,7 @@ namespace SportsHub.Business.Tests.Services
         }
         
         [Fact]
-        public async Task DoesCategoryAlreadyExistByNameAsync_HasExistedName_ReturnsTrue()
+        public async Task DoesCategoryAlreadyExistByNameAsync_WhenCategoryExists_ReturnsTrue()
         {
             // Arrange
             var categoryName = "Name";
@@ -86,7 +86,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesCategoryAlreadyExistByNameAsync_HasNotExistedName_ReturnsFalse()
+        public async Task DoesCategoryAlreadyExistByNameAsync_WhenCategoryDoesNotExist_ReturnsFalse()
         {
             // Arrange
             var categoryName = "Name";
@@ -102,7 +102,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesCategoryAlredyExistByIdAsync_HasExistedId_ReturnsTrue()
+        public async Task DoesCategoryAlredyExistByIdAsync_WhenCategoryExists_ReturnsTrue()
         {
             // Arrange
             var categoryId = Guid.NewGuid();
@@ -118,7 +118,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesCategoryAlredyExistByIdAsync_HasNotExistedId_ReturnsFalse()
+        public async Task DoesCategoryAlredyExistByIdAsync_WhenCategoryDoesNotExists_ReturnsFalse()
         {
             // Arrange
             var categoryId = Guid.NewGuid();

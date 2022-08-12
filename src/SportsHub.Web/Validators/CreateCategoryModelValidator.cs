@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
+using SportsHub.Shared.Resources;
 
 namespace SportsHub.Web.Validators
 {
@@ -13,9 +14,9 @@ namespace SportsHub.Web.Validators
             _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
 
             RuleFor(category => category.Name)
-                .NotEmpty().WithMessage("Category name can not be empty!")
+                .NotEmpty().WithMessage(Errors.CategoryNameCannotBeEmpty)
                 .MustAsync((name, cancellation) => DoesCategoryNameIsUniqueAsync(name))
-                .WithMessage("Category with that name already exists!");
+                .WithMessage(Errors.CategoryNameIsNotUnique);
         }
 
         private async Task<bool> DoesCategoryNameIsUniqueAsync(string categoryName)
