@@ -21,7 +21,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task GetSubcategoryAsync_ReturnsCollectionOfSubcategory()
+        public async Task GetSubcategoriesAsync_ReturnsExpectedSubcategories()
         {
             // Arrange
             var expectedSubcategories = GetSubcategories();
@@ -37,7 +37,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task GetSubcategoryByIdAsync_HasValidId_ReturnsSubcategory()
+        public async Task GetSubcategoryByIdAsync_WhenIdIsValid_ReturnsExpectedSubcategory()
         {
             // Arrange
             var expectedSubcategoryId = Guid.NewGuid();
@@ -58,7 +58,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task CreateSubcategoryAsync_HasValidValues_SuccesfullyCreatesSubcategory()
+        public async Task CreateSubcategoryAsync_CallsAppropriateRepositoryMethodWithParameters()
         {
             // Arrange
             var expectedSubcategoryName = "Name";
@@ -73,7 +73,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesSubcategoryAlreadyExistByNameAsync_HasExistedName_ReturnsTrue()
+        public async Task DoesSubcategoryAlreadyExistByNameAsync_WhenSubcategoryExists_ReturnsTrue()
         {
             // Arrange
             var subcategoryName = "Name";
@@ -89,7 +89,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesSubcategoryAlreadyExistByNameAsync_HasNotExistedName_ReturnsFalse()
+        public async Task DoesSubcategoryAlreadyExistByNameAsync_WhenSubcategoryDoesNotExist_ReturnsFalse()
         {
             // Arrange
             var subcategoryName = "Name";
@@ -105,7 +105,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesSubcategoryAlredyExistByIdAsync_HasExistedId_ReturnsTrue()
+        public async Task DoesSubcategoryAlredyExistByIdAsync_WhenSubcategoryExists_ReturnsTrue()
         {
             // Arrange
             var subcategoryId = Guid.NewGuid();
@@ -121,7 +121,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesSubcategoryAlredyExistByIdAsync_HasNotExistedId_ReturnsFalse()
+        public async Task DoesSubcategoryAlredyExistByIdAsync_WhenSubcategoryDoesNotExists_ReturnsFalse()
         {
             // Arrange
             var subcategoryId = Guid.NewGuid();

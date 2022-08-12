@@ -21,7 +21,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task GetTeamAsync_ReturnsCollectionOfTeam()
+        public async Task GetTeamsAsync_ReturnsExpectedTeams()
         {
             // Arrange
             var expectedTeams = GetTeams();
@@ -37,7 +37,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task GetTeamByIdAsync_HasValidId_ReturnsTeam()
+        public async Task GetTeamByIdAsync_WhenIdIsValid_ReturnsExpectedTeam()
         {
             // Arrange
             var expectedTeamId = Guid.NewGuid();
@@ -58,7 +58,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task CreateTeamAsync_HasValidValues_SuccesfullyCreatesTeam()
+        public async Task CreateTeamAsync_CallsAppropriateRepositoryMethodWithParameters()
         {
             // Arrange
             var expectedTeamName = "Name";
@@ -73,7 +73,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesTeamAlreadyExistByNameAsync_HasExistedName_ReturnsTrue()
+        public async Task DoesTeamAlreadyExistByNameAsync_WhenTeamExists_ReturnsTrue()
         {
             // Arrange
             var teamName = "Name";
@@ -89,7 +89,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesTeamAlreadyExistByNameAsync_HasNotExistedName_ReturnsFalse()
+        public async Task DoesTeamAlreadyExistByNameAsync_WhenTeamDoesNotExist_ReturnsFalse()
         {
             // Arrange
             var teamName = "Name";
