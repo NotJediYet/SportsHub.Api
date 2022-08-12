@@ -47,10 +47,10 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateTeam([FromForm] CreateTeamModel сreateTeamModel)
         {
-            var result = await _createTeamModelValidator.ValidateAsync(сreateTeamModel);
-            if (!result.IsValid)
+            var validationResult = await _createTeamModelValidator.ValidateAsync(сreateTeamModel);
+            if (!validationResult.IsValid)
             {
-                return BadRequest(result.Errors.Select(error => error.ErrorMessage));
+                return BadRequest(validationResult.ToString());
             }
 
             await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId);

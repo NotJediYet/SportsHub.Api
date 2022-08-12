@@ -48,10 +48,10 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateCategory(CreateCategoryModel сreateCategoryModel)
         {
-            var result = await _createCategoryModelValidator.ValidateAsync(сreateCategoryModel);
-            if (!result.IsValid)
+            var validationResult = await _createCategoryModelValidator.ValidateAsync(сreateCategoryModel);
+            if (!validationResult.IsValid)
             {
-                return BadRequest(result.Errors.Select(error => error.ErrorMessage));
+                return BadRequest(validationResult.ToString());
             }
 
             await _categoryService.CreateCategoryAsync(сreateCategoryModel.Name);
