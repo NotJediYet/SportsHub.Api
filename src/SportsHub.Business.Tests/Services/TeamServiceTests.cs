@@ -4,7 +4,6 @@ using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -20,62 +19,67 @@ namespace SportsHub.Business.Tests.Services
             _repository = new Mock<ITeamRepository>();
             _service = new TeamService(_repository.Object);
         }
-            
+
         [Fact]
-        public async Task GetTeamsAsync_ReturnsCollectionOfTeams()
+        public async Task GetTeamAsync_ReturnsCollectionOfTeam()
         {
             // Arrange
-            _repository.Setup(repo => repo.GetTeamsAsync())
-                .ReturnsAsync(GetTestTeams());
+            var expectedTeams = GetTeams();
+
+            _repository.Setup(repository => repository.GetTeamsAsync())
+                .ReturnsAsync(expectedTeams);
 
             // Act
-            var result = await _service.GetTeamsAsync();
+            var actualTeams = await _service.GetTeamsAsync();
 
             // Assert
-            Assert.IsAssignableFrom<IEnumerable<Team>>(result);
-            Assert.Equal(GetTestTeams().Count(), result.Count());
+            Assert.Equal(expectedTeams, actualTeams);
         }
-            
+
         [Fact]
         public async Task GetTeamByIdAsync_HasValidId_ReturnsTeam()
         {
             // Arrange
-            var testTeam = GetTestTeams().FirstOrDefault();
+            var expectedTeamId = Guid.NewGuid();
 
-            _repository.Setup(repo => repo.GetTeamByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(testTeam);
+            var expectedTeam = new Team(name: "Name", Guid.NewGuid());
+            expectedTeam.Id = expectedTeamId;
+
+            _repository.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
+                .ReturnsAsync(expectedTeam);
 
             // Act
-            var result = await _service.GetTeamByIdAsync(Guid.NewGuid());
+            var actualTeam = await _service.GetTeamByIdAsync(expectedTeamId);
 
             // Assert
-            var team = Assert.IsType<Team>(result);
-            Assert.Equal(testTeam.Name, team.Name);
-            Assert.Equal(testTeam.SubcategoryId, team.SubcategoryId);
-            Assert.Equal(testTeam.Id, team.Id);
+            Assert.Equal(expectedTeam.Name, actualTeam.Name);
+            Assert.Equal(expectedTeam.Id, actualTeam.Id);
+            Assert.Equal(expectedTeam.SubcategoryId, actualTeam.SubcategoryId);
         }
 
         [Fact]
-        public async Task CreateTeamAsync_HasValidValues()
+        public async Task CreateTeamAsync_HasValidValues_SuccesfullyCreatesTeam()
         {
             // Arrange
-            var teamName = "Name";
+            var expectedTeamName = "Name";
+            var expectedSubcategoryId = Guid.NewGuid();
 
             // Act
-            await _service.CreateTeamAsync(teamName, Guid.NewGuid());
+            await _service.CreateTeamAsync(expectedTeamName, expectedSubcategoryId);
 
             // Assert
-            _repository.Verify(repo => repo.AddTeamAsync(It.IsAny<Team>()));
+            _repository.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
+                (team.Name == expectedTeamName) && (team.SubcategoryId == expectedSubcategoryId))));
         }
 
         [Fact]
         public async Task DoesTeamAlreadyExistByNameAsync_HasExistedName_ReturnsTrue()
         {
             // Arrange
-            var teamName = GetTestTeams().FirstOrDefault().Name;
+            var teamName = "Name";
 
-            _repository.Setup(repo => repo.DoesTeamAlreadyExistByNameAsync(teamName))
-                .ReturnsAsync(GetTestTeams().Any(team => team.Name == teamName));
+            _repository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
+                .ReturnsAsync(true);
 
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
@@ -88,10 +92,10 @@ namespace SportsHub.Business.Tests.Services
         public async Task DoesTeamAlreadyExistByNameAsync_HasNotExistedName_ReturnsFalse()
         {
             // Arrange
-            var teamName = "Test unique name";
+            var teamName = "Name";
 
-            _repository.Setup(repo => repo.DoesTeamAlreadyExistByNameAsync(teamName))
-                .ReturnsAsync(GetTestTeams().Any(team => team.Name == teamName));
+            _repository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
+                .ReturnsAsync(false);
 
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
@@ -100,7 +104,7 @@ namespace SportsHub.Business.Tests.Services
             Assert.False(result);
         }
 
-        private IEnumerable<Team> GetTestTeams()
+        private IEnumerable<Team> GetTeams()
         {
             IEnumerable<Team> teams = new List<Team>
             {
@@ -108,6 +112,7 @@ namespace SportsHub.Business.Tests.Services
                 new Team("Name2", Guid.NewGuid()),
                 new Team("Name3", Guid.NewGuid())
             };
+
             return teams;
         }
     }
