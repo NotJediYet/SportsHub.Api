@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services;
-using SportsHub.Shared.Models;
 using SportsHub.Security;
-using FluentValidation;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Web.Controllers
 {
