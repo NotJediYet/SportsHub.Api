@@ -33,9 +33,9 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task<bool> DoesImageAlreadyExistByBytesAsync(byte[] bytes)
         {
-            var logos = await _context.Set<Image>().ToListAsync();
+            var images = await _context.Set<Image>().ToListAsync();
 
-            return logos.Any(image => image.Bytes == bytes);
+            return images.Any(image => image.Bytes == bytes);
         }
 
         public async Task<bool> DoesImageAlreadyExistByIdAsync(Guid id)
