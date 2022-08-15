@@ -31,11 +31,9 @@ namespace SportsHub.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> DoesArticleAlreadyExistByNameAsync(string headline)
+        public async Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline)
         {
-            var articles = await _context.Articles.AnyAsync(article => article.Headline == headline);
-
-            return articles;
+            return await _context.Articles.AnyAsync(article => article.Headline == headline);
         }
 
         public async Task<bool> DoesArticleAlreadyExistByIdAsync(Guid id)
@@ -43,7 +41,6 @@ namespace SportsHub.Infrastructure.Repositories
             var articles = await _context.Articles.AnyAsync(article => article.Id == id);
 
             return articles;
-        }   
+        }
     }
 }
-
