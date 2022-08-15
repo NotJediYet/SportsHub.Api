@@ -55,9 +55,19 @@ namespace SportsHub.Business.Services
             return result;
         }
 
-        public  IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId)
+        public IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId, IEnumerable<Article> articles)
         {
-            return _articleRepository.GetArticlesFilteredByTeamId(teamId);
+            return _articleRepository.GetArticlesFilteredByTeamId(teamId, articles);
+        }
+
+        public IEnumerable<Article> GetArticlesFilteredByPublished(string isPublished, IEnumerable<Article> articles)
+        {
+            return  _articleRepository.GetArticlesFilteredByPublished(isPublished, articles);
+        }
+
+        public async Task<IEnumerable<Article>> GetSortedArticles()
+        {
+            return await _articleRepository.GetSortedArticles();
         }
     }
 }

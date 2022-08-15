@@ -44,13 +44,24 @@ namespace SportsHub.Infrastructure.Repositories
             return teams;
         }
 
-        public Guid FindTeamIdByTeamName(string teamName)
+        public async Task<Guid> FindTeamIdByTeamName(string teamName)
         {
-            IQueryable<Team> teams = _context.Teams;
+            var teams = await _context.Teams.ToListAsync();
 
             Guid teamId = (from t in teams
                           where t.Name == teamName
                           select t.Id).FirstOrDefault();
+
+            return teamId;
+        }
+
+        public async Task<Guid> FindTeamIdBySubcategoryId(Guid subcategoryId)
+        {
+            var teams = await _context.Teams.ToListAsync();
+
+            Guid teamId = (from t in teams
+                           where t.SubcategoryId == subcategoryId
+                           select t.Id).FirstOrDefault();
 
             return teamId;
         }

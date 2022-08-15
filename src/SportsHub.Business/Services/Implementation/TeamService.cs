@@ -43,9 +43,14 @@ namespace SportsHub.Business.Services
             return result;
         }
 
-        public Guid FindTeamIdByTeamName(string teamName)
+        public async Task<Guid> FindTeamIdByTeamName(string teamName)
         {
-            return _teamRepository.FindTeamIdByTeamName(teamName); ;
+            return  await _teamRepository.FindTeamIdByTeamName(teamName); 
+        }
+
+        public async Task<Guid> FindTeamIdBySubcategoryId(Guid subcategoryId)
+        {
+            return await _teamRepository.FindTeamIdBySubcategoryId(subcategoryId);
         }
     }
 }
