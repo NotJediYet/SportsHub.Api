@@ -29,10 +29,9 @@ namespace SportsHub.Web.Validators
 
         private async Task<bool> DoesArticleNameIsUniqueAsync(string headline)
         {
-            var result = await _articleService.DoesArticleAlreadyExistByNameAsync(headline);
+            var result = await _articleService.DoesArticleAlreadyExistByHeadlineAsync(headline);
 
             return !result;
         }
     }
 }
-

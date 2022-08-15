@@ -4,7 +4,7 @@ using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Services
 {
-    internal class ArticleService : IArticleService
+    public class ArticleService : IArticleService
     {
         private readonly IArticleRepository _articleRepository;
 
@@ -20,40 +20,39 @@ namespace SportsHub.Business.Services
 
         public async Task<Article> GetArticleByIdAsync(Guid id)
         {
-            var article = await _articleRepository.GetArticleByIdAsync(id);
-
-            return article;
+            return  await _articleRepository.GetArticleByIdAsync(id);
         }
 
-        public async Task CreateArticleAsync(CreateArticleModel createArticleModel)
+        public async Task CreateArticleAsync(CreateArticleModel createArticleModel, CreateImageModel createImageModel)
         {
-            Article article = new Article
-            (
-               createArticleModel.Picture,
+            var article = new Article(
                createArticleModel.TeamId,
                createArticleModel.Location,
-               createArticleModel.AltPicture,
                createArticleModel.Headline,
                createArticleModel.Caption,
-               createArticleModel.Context
-            );
+               createArticleModel.Context);
+
+           var image = new Image(
+               createImageModel.Bytes,
+               createImageModel.ImageName,
+               createImageModel.FileExtension,
+               createImageModel.ImageSize,
+               createImageModel.ArticleId);
+
+            article.Image = image;
 
             await _articleRepository.AddArticleAsync(article);
         }
 
-        public async Task<bool> DoesArticleAlreadyExistByNameAsync(string articleName)
-        {
-            var result = await _articleRepository.DoesArticleAlreadyExistByNameAsync(articleName);
 
-            return result;
+        public async Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline)
+        {
+            return await _articleRepository.DoesArticleAlreadyExistByHeadlineAsync(headline);
         }
 
         public async Task<bool> DoesArticleAlreadyExistByIdAsync(Guid id)
         {
-            var result = await _articleRepository.DoesArticleAlreadyExistByIdAsync(id);
-
-            return result;
+            return await _articleRepository.DoesArticleAlreadyExistByIdAsync(id);
         }
     }
 }
-

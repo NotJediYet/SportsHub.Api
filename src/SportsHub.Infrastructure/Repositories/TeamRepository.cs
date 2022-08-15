@@ -33,15 +33,11 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
         {
-            var teams = await _context.Teams.AnyAsync(team => team.Name == teamName);
-               
-            return teams;
+            return await _context.Teams.AnyAsync(team => team.Name == teamName);
         }
         public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)
         {
-            var teams = await _context.Teams.AnyAsync(team => team.Id == id);
-  
-            return teams;
+            return await _context.Teams.AnyAsync(team => team.Id == id);
         }
     }
 }
