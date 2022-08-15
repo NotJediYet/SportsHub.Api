@@ -3,7 +3,7 @@ using SportsHub.Shared.Entities;
 
 namespace SportsHub.Business.Services
 {
-    internal class SubcategoryService : ISubcategoryService
+    public class SubcategoryService : ISubcategoryService
     {
         private readonly ISubcategoryRepository _subcategoryRepository;
 

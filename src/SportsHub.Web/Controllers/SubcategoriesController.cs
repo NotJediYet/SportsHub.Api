@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services;
-using SportsHub.Shared.Models;
 using SportsHub.Security;
-using FluentValidation;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Web.Controllers
 {
@@ -43,18 +43,17 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpPost]
-        /*[Authorize(Policies.Admin)]*/
-        [AllowAnonymous]
+        [Authorize(Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateSubcategory(CreateSubcategoryModel сreateSubcategoryModel)
         {
-            var result = await _createSubcategoryModelValidator.ValidateAsync(сreateSubcategoryModel);
-            if (!result.IsValid)
+            var validationResult = await _createSubcategoryModelValidator.ValidateAsync(сreateSubcategoryModel);
+            if (!validationResult.IsValid)
             {
-                return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+                return BadRequest(validationResult.ToString());
             }
 
             await _subcategoryService.CreateSubcategoryAsync(сreateSubcategoryModel.Name, сreateSubcategoryModel.CategoryId);

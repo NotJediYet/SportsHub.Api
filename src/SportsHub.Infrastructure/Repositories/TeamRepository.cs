@@ -1,8 +1,7 @@
-﻿using SportsHub.Infrastructure.DBContext;
-using SportsHub.Shared.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SportsHub.Business.Repositories;
-using Microsoft.AspNetCore.Http;
+using SportsHub.Infrastructure.DBContext;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Infrastructure.Repositories
 {
@@ -28,6 +27,7 @@ namespace SportsHub.Infrastructure.Repositories
         public async Task AddTeamAsync(Team team)
         {
             await _context.Set<Team>().AddAsync(team);
+
             await _context.SaveChangesAsync();
         }
 

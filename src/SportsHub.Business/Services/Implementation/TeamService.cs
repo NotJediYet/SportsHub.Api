@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Business.Services
 {
-    internal class TeamService : ITeamService
+    public class TeamService : ITeamService
     {
         private readonly ITeamRepository _teamRepository;
         private readonly ITeamLogoRepository _teamLogoRepository;
@@ -14,7 +14,7 @@ namespace SportsHub.Business.Services
             _teamRepository = teamRepositor ?? throw new ArgumentNullException(nameof(teamRepositor));
             _teamLogoRepository = teamLogoRepositor ?? throw new ArgumentNullException(nameof(teamLogoRepositor));
         }
-       
+
         public async Task<IEnumerable<Team>> GetTeamsAsync()
         {
             return await _teamRepository.GetTeamsAsync();
@@ -33,11 +33,6 @@ namespace SportsHub.Business.Services
             await _teamRepository.AddTeamAsync(newTeam);
             await _teamLogoRepository.AddTeamLogoAsync(teamLogo, newTeam.Id);
         }
-
-        /*public async Task CreateTeamLogoAsync(IFormFile teamLogo, Guid teamId)
-        {
-            await _teamLogoRepository.AddTeamLogoAsync(teamLogo, teamId);
-        }*/
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
         {

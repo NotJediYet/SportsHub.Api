@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services;
-using SportsHub.Shared.Models;
 using SportsHub.Security;
-using FluentValidation;
+using SportsHub.Shared.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Web.Controllers
 {
@@ -40,8 +41,7 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpPost]
-        /*[Authorize(Policies.Admin)]*/
-        [AllowAnonymous]
+        [Authorize(Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -54,10 +54,8 @@ namespace SportsHub.Web.Controllers
                 return BadRequest(result.Errors.Select(e => e.ErrorMessage));
             }
 
-            await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, 
+            await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId,
                                                сreateTeamModel.Location, сreateTeamModel.TeamLogo);
-
-            /*await _teamLogoService.CreateTeamLogoAsync(сreateTeamModel.TeamLogo, createTeamLogoModel.TeamId);*/
 
             return Ok();
         }

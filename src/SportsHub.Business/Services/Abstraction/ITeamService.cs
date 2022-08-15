@@ -8,7 +8,7 @@ namespace SportsHub.Business.Services
         Task<IEnumerable<Team>> GetTeamsAsync();
         
         Task<Team> GetTeamByIdAsync(Guid id);
-        
+
         Task CreateTeamAsync(string teamName, Guid subcategoryId, string location, IFormFile teamLogo);
 
         Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
