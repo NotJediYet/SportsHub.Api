@@ -16,33 +16,29 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task<IEnumerable<Image>> GetImagesAsync()
         {
-            return await _context.Set<Image>().ToListAsync();
+            return await _context.Images.ToListAsync();
         }
 
         public async Task<Image> GetImageByIdAsync(Guid id)
         {
-            return await _context.Set<Image>().FindAsync(id);
+            return await _context.Images.FindAsync(id);
         }
 
         public async Task AddImageAsync(Image image)
         {
-            await _context.Set<Image>().AddAsync(image);
+            await _context.Images.AddAsync(image);
 
             await _context.SaveChangesAsync();
         }
 
         public async Task<bool> DoesImageAlreadyExistByBytesAsync(byte[] bytes)
         {
-            var images = await _context.Set<Image>().ToListAsync();
-
-            return images.Any(image => image.Bytes == bytes);
+            return await _context.Images.AnyAsync((image => image.Bytes == bytes));
         }
 
         public async Task<bool> DoesImageAlreadyExistByIdAsync(Guid id)
         {
-            var images = await _context.Set<Image>().ToListAsync();
-
-            return images.Any(image => image.Id == id);
+            return await _context.Images.AnyAsync(images => images.Id == id);
         }
     }
 }
