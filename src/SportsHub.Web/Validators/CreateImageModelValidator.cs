@@ -17,11 +17,11 @@ namespace SportsHub.Web.Validators
             _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
             _articleService = articleService ?? throw new ArgumentNullException(nameof(articleService));
 
-            RuleFor(logo => logo.Bytes)
+            RuleFor(image => image.Bytes)
                 .NotEmpty().WithMessage("Image data can not be empty!")
                 .MustAsync((bytes, cancellation) => DoesImageDataIsUniqueAsync(bytes)).WithMessage("This image already exists!");
 
-            RuleFor(logo => logo.ArticleId)
+            RuleFor(image => image.ArticleId)
                 .NotEmpty().WithMessage("Team id can not be empty!")
                 .MustAsync((id, cancellation) => _articleService.DoesArticleAlreadyExistByIdAsync(id))
                 .WithMessage("Article with that id does not exist!");
