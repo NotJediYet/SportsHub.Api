@@ -1,15 +1,18 @@
 ﻿using SportsHub.Business.Repositories;
 using SportsHub.Shared.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Business.Services
 {
     internal class TeamService : ITeamService
     {
         private readonly ITeamRepository _teamRepository;
+        private readonly ITeamLogoRepository _teamLogoRepository;
 
-        public TeamService(ITeamRepository teamRepositor)
+        public TeamService(ITeamRepository teamRepositor, ITeamLogoRepository teamLogoRepositor)
         {
             _teamRepository = teamRepositor ?? throw new ArgumentNullException(nameof(teamRepositor));
+            _teamLogoRepository = teamLogoRepositor ?? throw new ArgumentNullException(nameof(teamLogoRepositor));
         }
        
         public async Task<IEnumerable<Team>> GetTeamsAsync()
@@ -24,10 +27,17 @@ namespace SportsHub.Business.Services
             return team;
         }
 
-        public async Task CreateTeamAsync(string teamName, Guid subcategoryId, string location)
+        public async Task CreateTeamAsync(string teamName, Guid subcategoryId, string location, IFormFile teamLogo)
         {
-            await _teamRepository.AddTeamAsync(new Team(teamName, subcategoryId, location));
+            Team newTeam = new Team(teamName, subcategoryId, location);
+            await _teamRepository.AddTeamAsync(newTeam);
+            await _teamLogoRepository.AddTeamLogoAsync(teamLogo, newTeam.Id);
         }
+
+        /*public async Task CreateTeamLogoAsync(IFormFile teamLogo, Guid teamId)
+        {
+            await _teamLogoRepository.AddTeamLogoAsync(teamLogo, teamId);
+        }*/
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
         {

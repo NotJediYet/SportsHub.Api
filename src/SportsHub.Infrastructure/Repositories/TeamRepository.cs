@@ -2,6 +2,7 @@
 using SportsHub.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using SportsHub.Business.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Infrastructure.Repositories
 {
@@ -27,7 +28,6 @@ namespace SportsHub.Infrastructure.Repositories
         public async Task AddTeamAsync(Team team)
         {
             await _context.Set<Team>().AddAsync(team);
-
             await _context.SaveChangesAsync();
         }
 
@@ -43,6 +43,27 @@ namespace SportsHub.Infrastructure.Repositories
             var teams = await _context.Set<Team>().ToListAsync();
 
             return teams.Any(team => team.Id == id);
+        }
+
+        public async Task<bool> DoesTeamLogoAlreadyExistByTeamIdAsync(Guid teamId)
+        {
+            var teamLogos = await _context.Set<TeamLogo>().ToListAsync();
+
+            return teamLogos.Any(teamLogo => teamLogo.TeamId == teamId);
+        }
+
+        public async Task<bool> DoesTeamLogoAlreadySatisfyConditionsAsync(Team team)
+        {
+            var formFile = team.TeamLogo;
+            var fileExtension = Path.GetExtension(formFile.FileName);
+            var fileSize = formFile.Length;
+
+            if (fileSize < 2097152)
+                return true;
+            else if (fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".svg")
+                return true;
+            else
+                return false;
         }
     }
 }

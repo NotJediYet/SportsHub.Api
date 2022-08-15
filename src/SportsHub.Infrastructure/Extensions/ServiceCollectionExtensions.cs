@@ -17,7 +17,7 @@ namespace SportsHub.Extensions
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ISubcategoryRepository, SubcategoryRepository>();
             services.AddScoped<ITeamRepository, TeamRepository>();
-            services.AddTransient<ILogoRepository, LogoRepository>();
+            services.AddTransient<ITeamLogoRepository, TeamLogoRepository>();
 
             return services;
         }

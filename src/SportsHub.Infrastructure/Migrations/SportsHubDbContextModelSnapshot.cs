@@ -45,33 +45,6 @@ namespace SportsHub.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("SportsHub.Shared.Entities.Logo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte[]>("Bytes")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("FileExtension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("TeamId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TeamId");
-
-                    b.ToTable("Logos");
-                });
-
             modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -102,7 +75,6 @@ namespace SportsHub.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -122,13 +94,32 @@ namespace SportsHub.Infrastructure.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("SportsHub.Shared.Entities.Logo", b =>
+            modelBuilder.Entity("SportsHub.Shared.Entities.TeamLogo", b =>
                 {
-                    b.HasOne("SportsHub.Shared.Entities.Team", null)
-                        .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Bytes")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Size")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId")
+                        .IsUnique();
+
+                    b.ToTable("TeamLogos");
                 });
 
             modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
@@ -145,6 +136,15 @@ namespace SportsHub.Infrastructure.Migrations
                     b.HasOne("SportsHub.Shared.Entities.Subcategory", null)
                         .WithMany()
                         .HasForeignKey("SubcategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SportsHub.Shared.Entities.TeamLogo", b =>
+                {
+                    b.HasOne("SportsHub.Shared.Entities.Team", null)
+                        .WithOne()
+                        .HasForeignKey("SportsHub.Shared.Entities.TeamLogo", "TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

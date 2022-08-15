@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SportsHub.Shared.Entities
 {
-    public class Logo
+    public class TeamLogo
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -13,20 +13,20 @@ namespace SportsHub.Shared.Entities
         [Required(ErrorMessage = "Image data is required.")]
         public byte[] Bytes { get; set; }
 
-        [Required(ErrorMessage = "Upload date is required.")]
-        public DateTime UploadDate { get; set; }
-
         [Required(ErrorMessage = "File extension is required.")]
         public string FileExtension { get; set; }
+
+        [Required(ErrorMessage = "Image size is required.")]
+        public decimal Size { get; set; }
 
         [Required(ErrorMessage = "Team id is required.")]
         public Guid TeamId { get; set; }
 
-        public Logo(byte[] bytes, DateTime uploadDate, string fileExtension, Guid teamId)
+        public TeamLogo(byte[] bytes, string fileExtension, decimal size, Guid teamId)
         {
             Bytes = bytes;
-            UploadDate = uploadDate;
             FileExtension = fileExtension;
+            Size = size;
             TeamId = teamId;
         }
     }

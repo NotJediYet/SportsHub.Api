@@ -8,7 +8,7 @@ namespace SportsHub.Infrastructure.DBContext
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<Subcategory> Subcategories => Set<Subcategory>();
         public DbSet<Team> Teams => Set<Team>();
-        public DbSet<Logo> Logos => Set<Logo>();
+        public DbSet<TeamLogo> TeamLogos => Set<TeamLogo>();
 
         public SportsHubDbContext(DbContextOptions<SportsHubDbContext> options) : base(options) { }
 
@@ -25,10 +25,10 @@ namespace SportsHub.Infrastructure.DBContext
                 .HasOne<Subcategory>()
                 .WithMany()
                 .HasForeignKey(t => t.SubcategoryId);
-            modelBuilder.Entity<Logo>()
+            modelBuilder.Entity<TeamLogo>()
                 .HasOne<Team>()
-                .WithMany()
-                .HasForeignKey(t => t.TeamId);
+                .WithOne()
+                .HasForeignKey<TeamLogo>(t => t.TeamId);
         }
     }
 }
