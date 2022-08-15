@@ -24,7 +24,7 @@ namespace SportsHub.Web.Validators
 
             RuleFor(team => team.SubcategoryId)
                 .NotEmpty().WithMessage(Errors.SubcategoryIdCannotBeEmpty)
-                .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlredyExistByIdAsync(id))
+                .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlreadyExistByIdAsync(id))
                 .WithMessage(Errors.SubcategoryDoesNotExist);
         }
 

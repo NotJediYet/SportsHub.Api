@@ -105,32 +105,32 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesSubcategoryAlredyExistByIdAsync_WhenSubcategoryExists_ReturnsTrue()
+        public async Task DoesSubcategoryAlreadyExistByIdAsync_WhenSubcategoryExists_ReturnsTrue()
         {
             // Arrange
             var subcategoryId = Guid.NewGuid();
 
-            _repository.Setup(repo => repo.DoesSubcategoryAlredyExistByIdAsync(subcategoryId))
+            _repository.Setup(repo => repo.DoesSubcategoryAlreadyExistByIdAsync(subcategoryId))
                 .ReturnsAsync(true);
 
             // Act
-            var result = await _service.DoesSubcategoryAlredyExistByIdAsync(subcategoryId);
+            var result = await _service.DoesSubcategoryAlreadyExistByIdAsync(subcategoryId);
 
             // Assert
             Assert.True(result);
         }
 
         [Fact]
-        public async Task DoesSubcategoryAlredyExistByIdAsync_WhenSubcategoryDoesNotExists_ReturnsFalse()
+        public async Task DoesSubcategoryAlreadyExistByIdAsync_WhenSubcategoryDoesNotExists_ReturnsFalse()
         {
             // Arrange
             var subcategoryId = Guid.NewGuid();
 
-            _repository.Setup(repo => repo.DoesSubcategoryAlredyExistByIdAsync(subcategoryId))
+            _repository.Setup(repo => repo.DoesSubcategoryAlreadyExistByIdAsync(subcategoryId))
                 .ReturnsAsync(false);
 
             // Act
-            var result = await _service.DoesSubcategoryAlredyExistByIdAsync(subcategoryId);
+            var result = await _service.DoesSubcategoryAlreadyExistByIdAsync(subcategoryId);
 
             // Assert
             Assert.False(result);

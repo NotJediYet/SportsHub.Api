@@ -92,7 +92,7 @@ namespace SportsHub.Web.Tests.Validators
             };
             var expectedErrorMessage = Errors.SubcategoryDoesNotExist;
 
-            _subcategoryService.Setup(service => service.DoesSubcategoryAlredyExistByIdAsync(team.SubcategoryId))
+            _subcategoryService.Setup(service => service.DoesSubcategoryAlreadyExistByIdAsync(team.SubcategoryId))
                 .ReturnsAsync(false);
 
             // Act
@@ -115,7 +115,7 @@ namespace SportsHub.Web.Tests.Validators
 
             _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
                 .ReturnsAsync(false);
-            _subcategoryService.Setup(service => service.DoesSubcategoryAlredyExistByIdAsync(team.SubcategoryId))
+            _subcategoryService.Setup(service => service.DoesSubcategoryAlreadyExistByIdAsync(team.SubcategoryId))
                 .ReturnsAsync(true);
 
             // Act

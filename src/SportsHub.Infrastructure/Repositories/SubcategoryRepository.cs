@@ -37,7 +37,7 @@ namespace SportsHub.Infrastructure.Repositories
             return subcategories.Any(subcategory => subcategory.Name == subcategoryName);
         }
 
-        public async Task<bool> DoesSubcategoryAlredyExistByIdAsync(Guid id)
+        public async Task<bool> DoesSubcategoryAlreadyExistByIdAsync(Guid id)
         {
             var subcategories = await _context.Set<Subcategory>().ToListAsync();
 
