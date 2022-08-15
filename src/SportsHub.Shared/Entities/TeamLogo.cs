@@ -9,7 +9,7 @@ namespace SportsHub.Shared.Entities
         [Key]
         [Required(ErrorMessage = "Team id is required.")]
         public Guid TeamId { get; set; }
-
+        
         [Required(ErrorMessage = "Image data is required.")]
         public byte[] Bytes { get; set; }
 
@@ -20,6 +20,7 @@ namespace SportsHub.Shared.Entities
         {
             Bytes = bytes;
             FileExtension = fileExtension;
+            Size = size;
             TeamId = teamId;
         }
     }

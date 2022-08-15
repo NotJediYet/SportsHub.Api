@@ -27,7 +27,7 @@ namespace SportsHub.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> DoesTeamLogoAlreadyExistByTeamIdAsync(Guid teamId)
+    public async Task<bool> DoesTeamLogoAlreadyExistByTeamIdAsync(Guid teamId)
         {
             var teamLogos = await _context.Set<TeamLogo>().ToListAsync();
 

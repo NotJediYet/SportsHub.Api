@@ -47,7 +47,7 @@ namespace SportsHub.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubcategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -62,20 +62,20 @@ namespace SportsHub.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Logos",
+                name: "TeamLogos",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Bytes = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FileExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Size = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Logos", x => x.Id);
+                    table.PrimaryKey("PK_TeamLogos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Logos_Teams_TeamId",
+                        name: "FK_TeamLogos_Teams_TeamId",
                         column: x => x.TeamId,
                         principalTable: "Teams",
                         principalColumn: "Id",
@@ -89,11 +89,6 @@ namespace SportsHub.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Logos_TeamId",
-                table: "Logos",
-                column: "TeamId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Subcategories_CategoryId",
                 table: "Subcategories",
                 column: "CategoryId");
@@ -102,6 +97,12 @@ namespace SportsHub.Infrastructure.Migrations
                 name: "IX_Subcategories_Name",
                 table: "Subcategories",
                 column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamLogos_TeamId",
+                table: "TeamLogos",
+                column: "TeamId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -119,7 +120,7 @@ namespace SportsHub.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Logos");
+                name: "TeamLogos");
 
             migrationBuilder.DropTable(
                 name: "Teams");

@@ -11,7 +11,6 @@ namespace SportsHub.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISubcategoryService, SubcategoryService>();
             services.AddScoped<ITeamService, TeamService>();
-            services.AddScoped<ILogoService, LogoService>();
 
             return services;
         }
