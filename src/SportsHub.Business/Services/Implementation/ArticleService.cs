@@ -1,4 +1,5 @@
-﻿using SportsHub.Business.Repositories;
+﻿using Microsoft.AspNetCore.Http;
+using SportsHub.Business.Repositories;
 using SportsHub.Shared.Entities;
 using SportsHub.Shared.Models;
 
@@ -7,10 +8,13 @@ namespace SportsHub.Business.Services
     public class ArticleService : IArticleService
     {
         private readonly IArticleRepository _articleRepository;
+        private readonly IArticleImageRepository _articleImageRepository;
 
-        public ArticleService(IArticleRepository articleRepository)
+
+        public ArticleService(IArticleRepository articleRepository, IArticleImageRepository articleImageRepository)
         {
             _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
+            _articleImageRepository = articleImageRepository ?? throw new ArgumentNullException(nameof(articleImageRepository));
         }
 
         public async Task<IEnumerable<Article>> GetArticlesAsync()
@@ -23,27 +27,12 @@ namespace SportsHub.Business.Services
             return  await _articleRepository.GetArticleByIdAsync(id);
         }
 
-        public async Task CreateArticleAsync(CreateArticleModel createArticleModel, CreateImageModel createImageModel)
+        public async Task CreateArticleAsync(Guid teamId, string location, string headline, string caption, string context, IFormFile articleImage)
         {
-            var article = new Article(
-               createArticleModel.TeamId,
-               createArticleModel.Location,
-               createArticleModel.Headline,
-               createArticleModel.Caption,
-               createArticleModel.Context);
-
-           var image = new Image(
-               createImageModel.Bytes,
-               createImageModel.ImageName,
-               createImageModel.FileExtension,
-               createImageModel.ImageSize,
-               createImageModel.ArticleId);
-
-            article.Image = image;
-
-            await _articleRepository.AddArticleAsync(article);
+          Article newArticle = new Article(teamId, location,headline,caption,context);
+            await _articleRepository.AddArticleAsync(newArticle);
+            await _articleImageRepository.AddImageAsync(articleImage, newArticle.Id);
         }
-
 
         public async Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline)
         {

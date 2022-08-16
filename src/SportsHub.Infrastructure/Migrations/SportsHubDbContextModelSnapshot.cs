@@ -89,29 +89,23 @@ namespace SportsHub.Infrastructure.Migrations
 
             modelBuilder.Entity("SportsHub.Shared.Entities.Image", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<byte[]>("Bytes")
+                        .HasColumnType("varbinary(900)");
 
                     b.Property<Guid>("ArticleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte[]>("Bytes")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("FileExtension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("ImageSize")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Bytes");
+
+                    b.HasIndex("ArticleId")
+                        .IsUnique();
 
                     b.ToTable("Images");
                 });
@@ -164,19 +158,20 @@ namespace SportsHub.Infrastructure.Migrations
 
             modelBuilder.Entity("SportsHub.Shared.Entities.Article", b =>
                 {
-                    b.HasOne("SportsHub.Shared.Entities.Image", "Image")
-                        .WithOne("Article")
-                        .HasForeignKey("SportsHub.Shared.Entities.Article", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SportsHub.Shared.Entities.Team", null)
                         .WithMany()
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.Navigation("Image");
+            modelBuilder.Entity("SportsHub.Shared.Entities.Image", b =>
+                {
+                    b.HasOne("SportsHub.Shared.Entities.Article", null)
+                        .WithOne()
+                        .HasForeignKey("SportsHub.Shared.Entities.Image", "ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
@@ -195,11 +190,6 @@ namespace SportsHub.Infrastructure.Migrations
                         .HasForeignKey("SubcategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SportsHub.Shared.Entities.Image", b =>
-                {
-                    b.Navigation("Article");
                 });
 #pragma warning restore 612, 618
         }

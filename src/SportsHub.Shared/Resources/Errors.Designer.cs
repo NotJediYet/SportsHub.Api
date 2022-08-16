@@ -61,6 +61,24 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Article headline cannot be empty.
+        /// </summary>
+        public static string ArticleHeadlineCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("ArticleHeadlineCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Article headline is not unique.
+        /// </summary>
+        public static string ArticleHeadlineIsNotUnique {
+            get {
+                return ResourceManager.GetString("ArticleHeadlineIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Category does not exist.
         /// </summary>
         public static string CategoryDoesNotExist {
@@ -129,6 +147,33 @@ namespace SportsHub.Shared.Resources {
         public static string SubcategoryNameIsNotUnique {
             get {
                 return ResourceManager.GetString("SubcategoryNameIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team does not exist.
+        /// </summary>
+        public static string TeamDoesNotExist {
+            get {
+                return ResourceManager.GetString("TeamDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Id cannot be empty.
+        /// </summary>
+        public static string TeamIdCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("TeamIdCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Id does not exist.
+        /// </summary>
+        public static string TeamIdDoesNotExist {
+            get {
+                return ResourceManager.GetString("TeamIdDoesNotExist", resourceCulture);
             }
         }
         

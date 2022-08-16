@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,8 +20,10 @@ namespace SportsHub.Shared.Entities
         public string Context { get; set; } = string.Empty;
         public bool IsPublished { get; set; } = false;
         public bool IsShowComments { get; set; } = false;
-        public Image Image { get; set; } = null;
-
+        [FromForm]
+        [NotMapped]
+        public IFormFile ArticleImage { get; set; }
+        
         public Article(Guid teamId, string location, string headline, string caption, string context)
         {
             TeamId = teamId;
