@@ -33,7 +33,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeams = GetTeams();
 
             _repository1.Setup(repository => repository.GetTeamsAsync())
-                .ReturnsAsync(expectedTeams);
+            .ReturnsAsync(expectedTeams);
 
             // Act
             var actualTeams = await _service.GetTeamsAsync();
@@ -52,7 +52,7 @@ namespace SportsHub.Business.Tests.Services
             expectedTeam.Id = expectedTeamId;
 
             _repository1.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
-                .ReturnsAsync(expectedTeam);
+            .ReturnsAsync(expectedTeam);
 
             // Act
             var actualTeam = await _service.GetTeamByIdAsync(expectedTeamId);
@@ -82,7 +82,7 @@ namespace SportsHub.Business.Tests.Services
 
             // Assert
             _repository1.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
-                (team.Name == expectedTeamName) && (team.SubcategoryId == expectedSubcategoryId))));
+            (team.Name == expectedTeamName) && (team.SubcategoryId == expectedSubcategoryId))));
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace SportsHub.Business.Tests.Services
             var teamName = "Name";
 
             _repository1.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-                .ReturnsAsync(true);
+            .ReturnsAsync(true);
 
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
@@ -108,7 +108,7 @@ namespace SportsHub.Business.Tests.Services
             var teamName = "Name";
 
             _repository1.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-                .ReturnsAsync(false);
+            .ReturnsAsync(false);
 
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
