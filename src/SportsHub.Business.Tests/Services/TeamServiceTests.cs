@@ -32,7 +32,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedTeams = GetTeams();
 
-            _repository1.Setup(repository => repository.GetTeamsAsync())
+            _teamRepository.Setup(repository => repository.GetTeamsAsync())
             .ReturnsAsync(expectedTeams);
 
             // Act
@@ -51,7 +51,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeam = new Team(name: "Name", Guid.NewGuid(), location: "Location");
             expectedTeam.Id = expectedTeamId;
 
-            _repository1.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
+            _teamRepository.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
             .ReturnsAsync(expectedTeam);
 
             // Act
