@@ -33,7 +33,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeams = GetTeams();
 
             _teamRepository.Setup(repository => repository.GetTeamsAsync())
-                .ReturnsAsync(expectedTeams);
+            .ReturnsAsync(expectedTeams);
 
             // Act
             var actualTeams = await _service.GetTeamsAsync();
