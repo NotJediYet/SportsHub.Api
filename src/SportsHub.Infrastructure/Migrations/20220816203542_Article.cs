@@ -10,22 +10,6 @@ namespace SportsHub.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Bytes = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FileExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageSize = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Articles",
                 columns: table => new
                 {
@@ -42,15 +26,29 @@ namespace SportsHub.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Articles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Articles_Images_Id",
-                        column: x => x.Id,
-                        principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Articles_Teams_TeamId",
                         column: x => x.TeamId,
                         principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Bytes = table.Column<byte[]>(type: "varbinary(900)", nullable: false),
+                    FileExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageSize = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Bytes);
+                    table.ForeignKey(
+                        name: "FK_Images_Articles_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "Articles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -66,15 +64,21 @@ namespace SportsHub.Infrastructure.Migrations
                 name: "IX_Articles_TeamId",
                 table: "Articles",
                 column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Images_ArticleId",
+                table: "Images",
+                column: "ArticleId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Articles");
+                name: "Images");
 
             migrationBuilder.DropTable(
-                name: "Images");
+                name: "Articles");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SportsHub.Shared.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using SportsHub.Shared.Entities;
 using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Services
@@ -9,7 +10,7 @@ namespace SportsHub.Business.Services
 
         Task<Article> GetArticleByIdAsync(Guid id);
 
-        Task CreateArticleAsync(CreateArticleModel createArticleModel, CreateImageModel createImageModel);
+        Task CreateArticleAsync(Guid teamId, string location, string headline, string caption, string context, IFormFile articleImage);
 
         Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline);
 

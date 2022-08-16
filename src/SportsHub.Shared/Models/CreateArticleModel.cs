@@ -1,4 +1,5 @@
-﻿using SportsHub.Shared.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using SportsHub.Shared.Entities;
 namespace SportsHub.Shared.Models
 {
     public class CreateArticleModel
@@ -8,6 +9,6 @@ namespace SportsHub.Shared.Models
         public string Headline { get; set; } = string.Empty;
         public string Caption { get; set; } = string.Empty;
         public string Context { get; set; } = string.Empty;
-        public Image Image { get; set; }
+        public IFormFile ArticleImage { get; set; }
     }
 }

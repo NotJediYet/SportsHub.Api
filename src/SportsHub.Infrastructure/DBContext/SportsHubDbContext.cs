@@ -37,9 +37,9 @@ namespace SportsHub.Infrastructure.DBContext
                 .Property(a => a.IsShowComments)
                 .HasDefaultValue(false);
             modelBuilder.Entity<Image>()
-                .HasOne(a=>a.Article)
-                .WithOne(b=>b.Image)
-                .HasForeignKey<Article>(b => b.Id);
+                .HasOne<Article>()
+                .WithOne()
+                .HasForeignKey<Image>(a => a.ArticleId);
         }
     }
 }
