@@ -55,7 +55,7 @@ namespace SportsHub.Web.Controllers
             }
 
             await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId,
-                                               сreateTeamModel.Location, сreateTeamModel.TeamLogo);
+                                               сreateTeamModel.Location, сreateTeamModel.Logo);
 
             return Ok();
         }
