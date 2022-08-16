@@ -15,15 +15,15 @@ namespace SportsHub.Business.Tests.Services
 {
     public class TeamServiceTests
     {
-        private readonly Mock<ITeamRepository> _repository1;
-        private readonly Mock<ITeamLogoRepository> _repository2;
+        private readonly Mock<ITeamRepository> _teamRepository;
+        private readonly Mock<ITeamLogoRepository> _teamLogoRepository;
         private readonly ITeamService _service;
 
         public TeamServiceTests()
         {
-            _repository1 = new Mock<ITeamRepository>();
-            _repository2 = new Mock<ITeamLogoRepository>();
-            _service = new TeamService(_repository1.Object, _repository2.Object);
+            _teamRepository = new Mock<ITeamRepository>();
+            _teamLogoRepository = new Mock<ITeamLogoRepository>();
+            _service = new TeamService(_teamRepository.Object, _teamLogoRepository.Object);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedTeams = GetTeams();
 
-            _repository1.Setup(repository => repository.GetTeamsAsync())
+            _teamRepository.Setup(repository => repository.GetTeamsAsync())
                 .ReturnsAsync(expectedTeams);
 
             // Act
@@ -51,7 +51,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeam = new Team(name: "Name", Guid.NewGuid(), location: "Location");
             expectedTeam.Id = expectedTeamId;
 
-            _repository1.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
+            _teamRepository.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
                 .ReturnsAsync(expectedTeam);
 
             // Act
@@ -81,7 +81,7 @@ namespace SportsHub.Business.Tests.Services
             await _service.CreateTeamAsync(expectedTeamName, expectedSubcategoryId, expectedlocation, expectedTeamLogo);
 
             // Assert
-            _repository1.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
+            _teamRepository.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
                 (team.Name == expectedTeamName) && (team.SubcategoryId == expectedSubcategoryId))));
         }
 
@@ -91,7 +91,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var teamName = "Name";
 
-            _repository1.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
+            _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
                 .ReturnsAsync(true);
 
             // Act
@@ -107,7 +107,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var teamName = "Name";
 
-            _repository1.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
+            _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
                 .ReturnsAsync(false);
 
             // Act

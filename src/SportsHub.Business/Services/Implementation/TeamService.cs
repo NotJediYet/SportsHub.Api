@@ -9,10 +9,10 @@ namespace SportsHub.Business.Services
         private readonly ITeamRepository _teamRepository;
         private readonly ITeamLogoRepository _teamLogoRepository;
 
-        public TeamService(ITeamRepository teamRepositor, ITeamLogoRepository teamLogoRepositor)
+        public TeamService(ITeamRepository teamRepository, ITeamLogoRepository teamLogoRepository)
         {
-            _teamRepository = teamRepositor ?? throw new ArgumentNullException(nameof(teamRepositor));
-            _teamLogoRepository = teamLogoRepositor ?? throw new ArgumentNullException(nameof(teamLogoRepositor));
+            _teamRepository = teamRepository ?? throw new ArgumentNullException(nameof(teamRepository));
+            _teamLogoRepository = teamLogoRepository ?? throw new ArgumentNullException(nameof(teamLogoRepository));
         }
 
         public async Task<IEnumerable<Team>> GetTeamsAsync()

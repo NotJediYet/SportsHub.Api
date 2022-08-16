@@ -51,19 +51,5 @@ namespace SportsHub.Infrastructure.Repositories
 
             return teamLogos.Any(teamLogo => teamLogo.TeamId == teamId);
         }
-
-        public async Task<bool> DoesTeamLogoAlreadySatisfyConditionsAsync(Team team)
-        {
-            var formFile = team.TeamLogo;
-            var fileExtension = Path.GetExtension(formFile.FileName);
-            var fileSize = formFile.Length;
-
-            if (fileSize < 2097152)
-                return true;
-            else if (fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".svg")
-                return true;
-            else
-                return false;
-        }
     }
 }
