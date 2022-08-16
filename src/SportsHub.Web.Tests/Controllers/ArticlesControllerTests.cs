@@ -96,7 +96,7 @@ namespace SportsHub.Web.Tests.Controllers
             var expectedArticles = GetArticles();
 
             _serviceArticle.Setup(service => service.GetArticlesAsync())
-            .ReturnsAsync(expectedArticles);
+                .ReturnsAsync(expectedArticles);
 
             // Act
             var result = await _controller.GetArticles();
@@ -116,7 +116,7 @@ namespace SportsHub.Web.Tests.Controllers
             var articleId = Guid.NewGuid();
 
             _serviceArticle.Setup(service => service.GetArticleByIdAsync(articleId))
-            .ReturnsAsync((Article)null);
+                .ReturnsAsync((Article)null);
 
             // Act
             var result = await _controller.GetArticle(articleId);
@@ -137,7 +137,7 @@ namespace SportsHub.Web.Tests.Controllers
           
 
             _serviceArticle.Setup(service => service.GetArticleByIdAsync(expectedArticleId))
-            .ReturnsAsync(expectedArticle);
+               .ReturnsAsync(expectedArticle);
 
             // Act
             var result = await _controller.GetArticle(expectedArticleId);
@@ -157,7 +157,7 @@ namespace SportsHub.Web.Tests.Controllers
         private IEnumerable<Article> GetArticles()
         {
             IEnumerable<Article> articles = new List<Article>
-            {  
+            {
                 new Article(Guid.NewGuid(),"location1" ,"altImage1","headline1" ,"caption1" ,"content1", false),
                 new Article(Guid.NewGuid(),"location2" ,"altImage2","headline2" ,"caption2" ,"content2", true),
                 new Article(Guid.NewGuid(),"location3" ,"altImage3","headline3" ,"caption3" ,"content3", false)
