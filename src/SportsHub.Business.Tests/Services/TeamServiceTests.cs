@@ -32,8 +32,8 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedTeams = GetTeams();
 
-            _teamRepository.Setup(repository => repository.GetTeamsAsync())
-                .ReturnsAsync(expectedTeams);
+            _repository1.Setup(repository => repository.GetTeamsAsync())
+            .ReturnsAsync(expectedTeams);
 
             // Act
             var actualTeams = await _service.GetTeamsAsync();
@@ -51,8 +51,8 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeam = new Team(name: "Name", Guid.NewGuid(), location: "Location");
             expectedTeam.Id = expectedTeamId;
 
-            _teamRepository.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
-                .ReturnsAsync(expectedTeam);
+            _repository1.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
+            .ReturnsAsync(expectedTeam);
 
             // Act
             var actualTeam = await _service.GetTeamByIdAsync(expectedTeamId);
@@ -84,7 +84,6 @@ namespace SportsHub.Business.Tests.Services
             _teamRepository.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
                 (team.Name == expectedTeamName) && (team.SubcategoryId == expectedSubcategoryId))));
         }
-
         [Fact]
         public async Task DoesTeamAlreadyExistByNameAsync_WhenTeamExists_ReturnsTrue()
         {
@@ -92,8 +91,7 @@ namespace SportsHub.Business.Tests.Services
             var teamName = "Name";
 
             _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-                .ReturnsAsync(true);
-
+            .ReturnsAsync(true);
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
 
@@ -108,8 +106,7 @@ namespace SportsHub.Business.Tests.Services
             var teamName = "Name";
 
             _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-                .ReturnsAsync(false);
-
+            .ReturnsAsync(false);
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
 
