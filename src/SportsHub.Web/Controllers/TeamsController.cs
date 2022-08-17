@@ -14,13 +14,16 @@ namespace SportsHub.Web.Controllers
     {
         private readonly ITeamService _teamService;
         private IValidator<CreateTeamModel> _createTeamModelValidator;
+        private IValidator<EditTeamModel> _editTeamModelValidator;
 
         public TeamsController(
             ITeamService teamService,
-            IValidator<CreateTeamModel> createTeamModelValidator)
+            IValidator<CreateTeamModel> createTeamModelValidator,
+            IValidator<EditTeamModel> editTeamModelValidator)
         {
             _teamService = teamService ?? throw new ArgumentNullException(nameof(teamService));
             _createTeamModelValidator = createTeamModelValidator ?? throw new ArgumentNullException(nameof(createTeamModelValidator));
+            _editTeamModelValidator = editTeamModelValidator ?? throw new ArgumentNullException(nameof(editTeamModelValidator));
         }
 
         [HttpGet]
@@ -56,6 +59,26 @@ namespace SportsHub.Web.Controllers
 
             await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId,
                                                сreateTeamModel.Location, сreateTeamModel.TeamLogo);
+
+            return Ok();
+        }
+        
+        [HttpPut]
+        [Authorize(Policies.Admin)]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> EditTeam([FromForm] EditTeamModel teamModel)
+        {
+            var result = await _editTeamModelValidator.ValidateAsync(teamModel);
+            if (!result.IsValid)
+            {
+                return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+            }
+
+            await _teamService.EditTeam(teamModel);
 
             return Ok();
         }

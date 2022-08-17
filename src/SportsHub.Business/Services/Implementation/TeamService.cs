@@ -1,6 +1,7 @@
 ﻿using SportsHub.Business.Repositories;
 using SportsHub.Shared.Entities;
 using Microsoft.AspNetCore.Http;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Services
 {
@@ -46,6 +47,11 @@ namespace SportsHub.Business.Services
             var result = await _teamRepository.DoesTeamAlreadyExistByIdAsync(id);
 
             return result;
+        }
+        
+        public async Task EditTeam(EditTeamModel teamModel)
+        {
+            await _teamRepository.UpdateTeamAsync(teamModel);
         }
     }
 }

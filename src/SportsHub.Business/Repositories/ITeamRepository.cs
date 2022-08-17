@@ -1,4 +1,5 @@
 ﻿using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Repositories
 {
@@ -15,5 +16,7 @@ namespace SportsHub.Business.Repositories
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
 
         Task<bool> DoesTeamLogoAlreadySatisfyConditionsAsync(Team team);
+        
+        Task UpdateTeamAsync(EditTeamModel team);
     }
 }

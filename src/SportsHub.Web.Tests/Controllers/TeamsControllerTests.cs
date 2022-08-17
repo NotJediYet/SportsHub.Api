@@ -20,14 +20,16 @@ namespace SportsHub.Web.Tests.Controllers
     {
         private readonly Mock<ITeamService> _service;
         private readonly Mock<IValidator<CreateTeamModel>> _validator;
+        private readonly Mock<IValidator<EditTeamModel>> _validatorEditTeamModel;
         private readonly TeamsController _controller;
 
         public TeamsControllerTests()
         {
             _service = new Mock<ITeamService>();
             _validator = new Mock<IValidator<CreateTeamModel>>();
+            _validatorEditTeamModel = new Mock<IValidator<EditTeamModel>>();
 
-            _controller = new TeamsController(_service.Object, _validator.Object);
+            _controller = new TeamsController(_service.Object, _validator.Object, _validatorEditTeamModel.Object);
         }
 
         [Fact]

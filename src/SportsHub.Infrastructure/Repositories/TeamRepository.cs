@@ -2,6 +2,7 @@
 using SportsHub.Business.Repositories;
 using SportsHub.Infrastructure.DBContext;
 using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Infrastructure.Repositories
 {
@@ -64,6 +65,27 @@ namespace SportsHub.Infrastructure.Repositories
                 return true;
             else
                 return false;
+        }
+        
+        public async Task UpdateTeamAsync(EditTeamModel Team)
+        {
+            var team = await _context.Teams.Where(team => team.Id == Team.Id).FirstOrDefaultAsync();
+
+            team.Name = Team.Name;
+            team.Location = Team.Location;
+            team.SubcategoryId = Team.SubcategoryId;
+
+            var logo = await _context.TeamLogos.Where(logo => logo.TeamId == team.Id).FirstOrDefaultAsync();
+
+            var memoryStream = new MemoryStream();
+            await Team.Logo.CopyToAsync(memoryStream);
+
+            logo.Bytes = memoryStream.ToArray();
+            logo.FileExtension = Path.GetExtension(Team.Logo.FileName);
+            logo.Size = Team.Logo.Length;
+
+            await _context.SaveChangesAsync();
+            
         }
     }
 }
