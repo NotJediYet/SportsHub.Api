@@ -9,7 +9,7 @@ namespace SportsHub.Infrastructure.DBContext
         public DbSet<Subcategory> Subcategories => Set<Subcategory>();
         public DbSet<Team> Teams => Set<Team>();
         public DbSet<Article> Articles => Set<Article>();
-        public DbSet<Image> Images => Set<Image>();
+        public DbSet<ArticleImage> Images => Set<ArticleImage>();
 
         public SportsHubDbContext(DbContextOptions<SportsHubDbContext> options) : base(options) { }
 
@@ -36,10 +36,10 @@ namespace SportsHub.Infrastructure.DBContext
             modelBuilder.Entity<Article>()
                 .Property(a => a.IsShowComments)
                 .HasDefaultValue(false);
-            modelBuilder.Entity<Image>()
+            modelBuilder.Entity<ArticleImage>()
                 .HasOne<Article>()
                 .WithOne()
-                .HasForeignKey<Image>(a => a.ArticleId);
+                .HasForeignKey<ArticleImage>(a => a.ArticleId);
         }
     }
 }

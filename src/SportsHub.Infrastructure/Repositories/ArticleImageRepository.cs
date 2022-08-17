@@ -15,17 +15,17 @@ namespace SportsHub.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Image>> GetImagesAsync()
+        public async Task<IEnumerable<ArticleImage>> GetImagesAsync()
         {
             return await _context.Images.ToListAsync();
         }
 
-        public async Task<Image> GetImageByIdAsync(Guid id)
+        public async Task<ArticleImage> GetImageByIdAsync(Guid id)
         {
             return await _context.Images.FindAsync(id);
         }
 
-        public async Task AddImageAsync(Image image)
+        public async Task AddImageAsync(ArticleImage image)
         {
             await _context.Images.AddAsync(image);
 
@@ -42,7 +42,7 @@ namespace SportsHub.Infrastructure.Repositories
           
             var fileSize = articleImageFile.Length;
 
-            Image newArticleImage = new Image(fileBytes, fileExtension, fileSize, articleId);
+            ArticleImage newArticleImage = new ArticleImage(fileBytes, fileExtension, fileSize, articleId);
 
             await articleImageFile.CopyToAsync(memoryStream);
             

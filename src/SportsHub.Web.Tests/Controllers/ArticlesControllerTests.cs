@@ -29,8 +29,6 @@ namespace SportsHub.Web.Tests.Controllers
 
             _validatorArticle = new Mock<IValidator<CreateArticleModel>>();
 
-           
-
             _controller = new ArticlesController(_serviceArticle.Object, _validatorArticle.Object);
         }
 
@@ -59,7 +57,6 @@ namespace SportsHub.Web.Tests.Controllers
             var objectResult = Assert.IsType<OkResult>(result);
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
         }
-
 
         public async Task CreateTeam_WhenModelIsInvalid_ReturnsBadRequestResult()
         {
@@ -95,7 +92,7 @@ namespace SportsHub.Web.Tests.Controllers
             var expectedArticles = GetArticles();
 
             _serviceArticle.Setup(service => service.GetArticlesAsync())
-                .ReturnsAsync(expectedArticles);
+            .ReturnsAsync(expectedArticles);
 
             // Act
             var result = await _controller.GetArticles();
@@ -115,7 +112,7 @@ namespace SportsHub.Web.Tests.Controllers
             var articleId = Guid.NewGuid();
 
             _serviceArticle.Setup(service => service.GetArticleByIdAsync(articleId))
-                .ReturnsAsync((Article)null);
+            .ReturnsAsync((Article)null);
 
             // Act
             var result = await _controller.GetArticle(articleId);
@@ -136,7 +133,7 @@ namespace SportsHub.Web.Tests.Controllers
           
 
             _serviceArticle.Setup(service => service.GetArticleByIdAsync(expectedArticleId))
-               .ReturnsAsync(expectedArticle);
+            .ReturnsAsync(expectedArticle);
 
             // Act
             var result = await _controller.GetArticle(expectedArticleId);
