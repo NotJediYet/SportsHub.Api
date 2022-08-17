@@ -20,7 +20,6 @@ namespace SportsHub.Shared.Entities
         {
             Bytes = bytes;
             FileExtension = fileExtension;
-            Size = size;
             TeamId = teamId;
         }
     }
