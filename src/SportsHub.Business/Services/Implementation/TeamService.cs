@@ -10,10 +10,10 @@ namespace SportsHub.Business.Services
         private readonly ITeamRepository _teamRepository;
         private readonly ITeamLogoRepository _teamLogoRepository;
 
-        public TeamService(ITeamRepository teamRepositor, ITeamLogoRepository teamLogoRepositor)
+        public TeamService(ITeamRepository teamRepository, ITeamLogoRepository teamLogoRepository)
         {
-            _teamRepository = teamRepositor ?? throw new ArgumentNullException(nameof(teamRepositor));
-            _teamLogoRepository = teamLogoRepositor ?? throw new ArgumentNullException(nameof(teamLogoRepositor));
+            _teamRepository = teamRepository ?? throw new ArgumentNullException(nameof(teamRepository));
+            _teamLogoRepository = teamLogoRepository ?? throw new ArgumentNullException(nameof(teamLogoRepository));
         }
 
         public async Task<IEnumerable<Team>> GetTeamsAsync()
@@ -28,11 +28,13 @@ namespace SportsHub.Business.Services
             return team;
         }
 
-        public async Task CreateTeamAsync(string teamName, Guid subcategoryId, string location, IFormFile teamLogo)
+        public async Task CreateTeamAsync(CreateTeamModel сreateTeamModel)
         {
-            Team newTeam = new Team(teamName, subcategoryId, location);
+            Team newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);
+
             await _teamRepository.AddTeamAsync(newTeam);
-            await _teamLogoRepository.AddTeamLogoAsync(teamLogo, newTeam.Id);
+
+            await _teamLogoRepository.AddTeamLogoAsync(сreateTeamModel.Logo, newTeam.Id);
         }
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)

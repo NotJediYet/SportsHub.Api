@@ -2,28 +2,27 @@
 using SportsHub.Business.Repositories;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using System.Drawing;
-using System.Drawing.Imaging;
 
 namespace SportsHub.Business.Tests.Services
 {
     public class TeamServiceTests
     {
-        private readonly Mock<ITeamRepository> _repository1;
-        private readonly Mock<ITeamLogoRepository> _repository2;
+        private readonly Mock<ITeamRepository> _teamRepository;
+        private readonly Mock<ITeamLogoRepository> _teamLogoRepository;
         private readonly ITeamService _service;
 
         public TeamServiceTests()
         {
-            _repository1 = new Mock<ITeamRepository>();
-            _repository2 = new Mock<ITeamLogoRepository>();
-            _service = new TeamService(_repository1.Object, _repository2.Object);
+            _teamRepository = new Mock<ITeamRepository>();
+            _teamLogoRepository = new Mock<ITeamLogoRepository>();
+            _service = new TeamService(_teamRepository.Object, _teamLogoRepository.Object);
         }
 
         [Fact]
@@ -32,8 +31,8 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedTeams = GetTeams();
 
-            _repository1.Setup(repository => repository.GetTeamsAsync())
-                .ReturnsAsync(expectedTeams);
+            _teamRepository.Setup(repository => repository.GetTeamsAsync())
+            .ReturnsAsync(expectedTeams);
 
             // Act
             var actualTeams = await _service.GetTeamsAsync();
@@ -51,8 +50,8 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeam = new Team(name: "Name", Guid.NewGuid(), location: "Location");
             expectedTeam.Id = expectedTeamId;
 
-            _repository1.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
-                .ReturnsAsync(expectedTeam);
+            _teamRepository.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
+            .ReturnsAsync(expectedTeam);
 
             // Act
             var actualTeam = await _service.GetTeamByIdAsync(expectedTeamId);
@@ -69,31 +68,44 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedTeamName = "Name";
             var expectedSubcategoryId = Guid.NewGuid();
-            var expectedlocation = "Location";
-            var imageStream = new MemoryStream(GenerateImageByteArray());
-            IFormFile expectedTeamLogo = new FormFile(imageStream, 0, imageStream.Length, "UnitTest", "UnitTest.jpg")
+            var expectedLocation = "Location";
+
+            var fileMock = new Mock<IFormFile>();
+            var content = "Hello World from a Fake File";
+            var fileName = "test.pdf";
+            var ms = new MemoryStream();
+            var writer = new StreamWriter(ms);
+            writer.Write(content);
+            writer.Flush();
+            ms.Position = 0;
+            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
+            fileMock.Setup(_ => _.FileName).Returns(fileName);
+            fileMock.Setup(_ => _.Length).Returns(ms.Length);
+            var expectedTeamLogo = fileMock.Object;
+
+            CreateTeamModel сreateTeamModel = new()
             {
-                Headers = new HeaderDictionary(),
-                ContentType = "image/jpeg"
-            };
+                Name = expectedTeamName,
+                Location = expectedLocation,
+                SubcategoryId = expectedSubcategoryId,
+                Logo = expectedTeamLogo
+            };      
 
             // Act
-            await _service.CreateTeamAsync(expectedTeamName, expectedSubcategoryId, expectedlocation, expectedTeamLogo);
+            await _service.CreateTeamAsync(сreateTeamModel);
 
             // Assert
-            _repository1.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
+            _teamRepository.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
                 (team.Name == expectedTeamName) && (team.SubcategoryId == expectedSubcategoryId))));
         }
-
         [Fact]
         public async Task DoesTeamAlreadyExistByNameAsync_WhenTeamExists_ReturnsTrue()
         {
             // Arrange
             var teamName = "Name";
 
-            _repository1.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-                .ReturnsAsync(true);
-
+            _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
+            .ReturnsAsync(true);
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
 
@@ -107,9 +119,8 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var teamName = "Name";
 
-            _repository1.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-                .ReturnsAsync(false);
-
+            _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
+            .ReturnsAsync(false);
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
 
@@ -127,22 +138,6 @@ namespace SportsHub.Business.Tests.Services
             };
 
             return teams;
-        }
-        private byte[] GenerateImageByteArray(int width = 50, int height = 50)
-        {
-            Bitmap bitmapImage = new Bitmap(width, height);
-            Graphics imageData = Graphics.FromImage(bitmapImage);
-            imageData.DrawLine(new Pen(Color.Blue), 0, 0, width, height);
-
-            MemoryStream memoryStream = new MemoryStream();
-            byte[] byteArray;
-
-            using (memoryStream)
-            {
-                bitmapImage.Save(memoryStream, ImageFormat.Jpeg);
-                byteArray = memoryStream.ToArray();
-            }
-            return byteArray;
         }
     }
 }

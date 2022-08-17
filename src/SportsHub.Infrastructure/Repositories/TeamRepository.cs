@@ -52,40 +52,5 @@ namespace SportsHub.Infrastructure.Repositories
 
             return teamLogos.Any(teamLogo => teamLogo.TeamId == teamId);
         }
-
-        public async Task<bool> DoesTeamLogoAlreadySatisfyConditionsAsync(Team team)
-        {
-            var formFile = team.TeamLogo;
-            var fileExtension = Path.GetExtension(formFile.FileName);
-            var fileSize = formFile.Length;
-
-            if (fileSize < 2097152)
-                return true;
-            else if (fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".svg")
-                return true;
-            else
-                return false;
-        }
-        
-        public async Task UpdateTeamAsync(EditTeamModel Team)
-        {
-            var team = await _context.Teams.Where(team => team.Id == Team.Id).FirstOrDefaultAsync();
-
-            team.Name = Team.Name;
-            team.Location = Team.Location;
-            team.SubcategoryId = Team.SubcategoryId;
-
-            var logo = await _context.TeamLogos.Where(logo => logo.TeamId == team.Id).FirstOrDefaultAsync();
-
-            var memoryStream = new MemoryStream();
-            await Team.Logo.CopyToAsync(memoryStream);
-
-            logo.Bytes = memoryStream.ToArray();
-            logo.FileExtension = Path.GetExtension(Team.Logo.FileName);
-            logo.Size = Team.Logo.Length;
-
-            await _context.SaveChangesAsync();
-            
-        }
     }
 }

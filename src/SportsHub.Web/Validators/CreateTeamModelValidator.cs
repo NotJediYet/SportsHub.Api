@@ -26,6 +26,15 @@ namespace SportsHub.Web.Validators
                 .NotEmpty().WithMessage(Errors.SubcategoryIdCannotBeEmpty)
                 .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlreadyExistByIdAsync(id))
                 .WithMessage(Errors.SubcategoryDoesNotExist);
+
+            When(teamLogo => teamLogo.Logo != null, () =>
+            {
+                RuleFor(teamLogo => teamLogo.Logo)
+                .NotEmpty().WithMessage(Errors.TeamLogoCannotBeEmpty)
+                .MustAsync((teamLogo, cancellation) => DoesTeamLogoHaveSatisfactoryExtension(teamLogo))
+                .WithMessage(Errors.TeamLogoCannotHaveThisExtension);
+            });
+            
         }
 
         private async Task<bool> DoesTeamNameIsUniqueAsync(string teamName)
@@ -33,6 +42,21 @@ namespace SportsHub.Web.Validators
             var result = await _teamService.DoesTeamAlreadyExistByNameAsync(teamName);
 
             return !result;
+        }
+
+        private Task<bool> DoesTeamLogoHaveSatisfactoryExtension(IFormFile teamLogo)
+        { 
+            var formFile = teamLogo;
+            var fileExtension = "";
+
+            if (formFile != null)
+                fileExtension = Path.GetExtension(formFile.FileName);
+
+            if (fileExtension == ".JPG" || fileExtension == ".PNG" || fileExtension == ".SVG" || 
+                fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".svg")
+                return Task.FromResult(true);
+            else
+                return Task.FromResult(false);
         }
     }
 }
