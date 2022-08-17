@@ -52,7 +52,7 @@ namespace SportsHub.Web.Tests.Validators
             var expectedErrorMessage = Errors.TeamNameIsNotUnique;
 
             _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
-                .ReturnsAsync(true);
+            .ReturnsAsync(true);
 
             // Act
             var result = await _validator.ValidateAsync(team);
@@ -93,7 +93,7 @@ namespace SportsHub.Web.Tests.Validators
             var expectedErrorMessage = Errors.SubcategoryDoesNotExist;
 
             _subcategoryService.Setup(service => service.DoesSubcategoryAlreadyExistByIdAsync(team.SubcategoryId))
-                .ReturnsAsync(false);
+            .ReturnsAsync(false);
 
             // Act
             var result = await _validator.ValidateAsync(team);
@@ -114,9 +114,9 @@ namespace SportsHub.Web.Tests.Validators
             };
 
             _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
-                .ReturnsAsync(false);
+            .ReturnsAsync(false);
             _subcategoryService.Setup(service => service.DoesSubcategoryAlreadyExistByIdAsync(team.SubcategoryId))
-                .ReturnsAsync(true);
+            .ReturnsAsync(true);
 
             // Act
             var result = await _validator.ValidateAsync(team);

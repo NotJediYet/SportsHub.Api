@@ -23,6 +23,7 @@ namespace SportsHub.Infrastructure.Repositories
         public async Task AddTeamLogoAsync(IFormFile teamLogoFile, Guid teamId)
         {
             var memoryStream = new MemoryStream();
+
             await teamLogoFile.CopyToAsync(memoryStream);
 
             var fileBytes = memoryStream.ToArray();
@@ -30,6 +31,7 @@ namespace SportsHub.Infrastructure.Repositories
             TeamLogo newTeamLogo = new TeamLogo(fileBytes, fileExtension, teamId);
 
             await _context.Set<TeamLogo>().AddAsync(newTeamLogo);
+
             await _context.SaveChangesAsync();
         }
     }

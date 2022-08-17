@@ -31,7 +31,9 @@ namespace SportsHub.Business.Services
         public async Task CreateTeamAsync(CreateTeamModel сreateTeamModel)
         {
             Team newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);
+
             await _teamRepository.AddTeamAsync(newTeam);
+
             await _teamLogoRepository.AddTeamLogoAsync(сreateTeamModel.Logo, newTeam.Id);
         }
 

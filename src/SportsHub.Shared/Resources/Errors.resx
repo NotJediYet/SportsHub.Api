@@ -141,6 +141,12 @@
   <data name="SubcategoryNameIsNotUnique" xml:space="preserve">
     <value>Subcategory name is not unique</value>
   </data>
+  <data name="TeamLogoCannotBeEmpty" xml:space="preserve">
+    <value>Team logo cannot be empty</value>
+  </data>
+  <data name="TeamLogoCannotHaveThisExtension" xml:space="preserve">
+    <value>Team logo cannot have this extension</value>
+  </data>
   <data name="TeamNameCannotBeEmpty" xml:space="preserve">
     <value>Team name cannot be empty</value>
   </data>
