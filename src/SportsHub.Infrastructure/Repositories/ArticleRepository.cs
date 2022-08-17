@@ -30,6 +30,17 @@ namespace SportsHub.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
         }
+        public async Task<Article> DeleteArticleAsync(Guid id)
+        {
+            var article = _context.Articles.Find(id);
+            if (article != null)
+            {
+                _context.Articles.Remove(article);
+                await _context.SaveChangesAsync();
+            }
+
+            return article;
+        }
 
         public async Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline)
         {
