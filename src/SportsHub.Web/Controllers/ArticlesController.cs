@@ -81,5 +81,19 @@ namespace SportsHub.Web.Controllers
 
             return Ok();
         }
+
+        [HttpPost("{id}")]
+        [Authorize(Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> DeleteArticle(Guid id)
+        {
+            var article = await _articleService.DeleteArticleAsync(id);
+            return article != null
+                ? Ok(article)
+                : NotFound();
+        }
     }
 }
