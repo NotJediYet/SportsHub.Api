@@ -89,7 +89,7 @@ namespace SportsHub.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("SportsHub.Shared.Entities.Image", b =>
+            modelBuilder.Entity("SportsHub.Shared.Entities.ArticleImage", b =>
                 {
                     b.Property<byte[]>("Bytes")
                         .HasColumnType("varbinary(900)");
@@ -167,11 +167,11 @@ namespace SportsHub.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SportsHub.Shared.Entities.Image", b =>
+            modelBuilder.Entity("SportsHub.Shared.Entities.ArticleImage", b =>
                 {
                     b.HasOne("SportsHub.Shared.Entities.Article", null)
                         .WithOne()
-                        .HasForeignKey("SportsHub.Shared.Entities.Image", "ArticleId")
+                        .HasForeignKey("SportsHub.Shared.Entities.ArticleImage", "ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
