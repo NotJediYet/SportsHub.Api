@@ -13,5 +13,9 @@ namespace SportsHub.Business.Services
         Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
        
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
+
+        Task<Guid> FindTeamIdByTeamName(string teamName);
+
+        Task<Guid> FindTeamIdBySubcategoryId(Guid subcategoryId);
     }
 }
