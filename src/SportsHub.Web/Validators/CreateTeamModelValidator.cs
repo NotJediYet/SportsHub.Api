@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
+using SportsHub.Shared.Resources;
 
 namespace SportsHub.Web.Validators
 {
-    internal class CreateTeamModelValidator : AbstractValidator<CreateTeamModel>
+    public class CreateTeamModelValidator : AbstractValidator<CreateTeamModel>
     {
         private readonly ISubcategoryService _subcategoryService;
         private readonly ITeamService _teamService;
@@ -17,13 +18,14 @@ namespace SportsHub.Web.Validators
             _teamService = teamService ?? throw new ArgumentNullException(nameof(teamService));
 
             RuleFor(team => team.Name)
-                .NotEmpty().WithMessage("Team name cannot be empty!")
-                .MustAsync((name, cancellation) => DoesTeamNameIsUniqueAsync(name)).WithMessage("Team with that name already exists!");
+                .NotEmpty().WithMessage(Errors.TeamNameCannotBeEmpty)
+                .MustAsync((name, cancellation) => DoesTeamNameIsUniqueAsync(name))
+                .WithMessage(Errors.TeamNameIsNotUnique);
 
             RuleFor(team => team.SubcategoryId)
-                .NotEmpty().WithMessage("Subcategory id cannot be empty!")
-                .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlredyExistByIdAsync(id))
-                .WithMessage("Subcategory with that id does not exist!");
+                .NotEmpty().WithMessage(Errors.SubcategoryIdCannotBeEmpty)
+                .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlreadyExistByIdAsync(id))
+                .WithMessage(Errors.SubcategoryDoesNotExist);
         }
 
         private async Task<bool> DoesTeamNameIsUniqueAsync(string teamName)

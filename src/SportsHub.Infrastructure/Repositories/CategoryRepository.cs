@@ -1,7 +1,7 @@
-﻿using SportsHub.Infrastructure.DBContext;
-using SportsHub.Shared.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SportsHub.Business.Repositories;
+using SportsHub.Infrastructure.DBContext;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Infrastructure.Repositories
 {
@@ -38,7 +38,7 @@ namespace SportsHub.Infrastructure.Repositories
             return categories;
         }
 
-        public async Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id)
+        public async Task<bool> DoesCategoryAlreadyExistByIdAsync(Guid id)
         {
             var categories = await _context.Categories.AnyAsync(category => category.Id == id);
 

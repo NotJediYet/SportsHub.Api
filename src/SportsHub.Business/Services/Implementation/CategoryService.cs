@@ -3,7 +3,7 @@ using SportsHub.Shared.Entities;
 
 namespace SportsHub.Business.Services
 {
-    internal class CategoryService : ICategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -26,7 +26,9 @@ namespace SportsHub.Business.Services
 
         public async Task CreateCategoryAsync(string categoryName)
         {
-            await _categoryRepository.AddCategoryAsync(new Category(categoryName));
+            var category = new Category(categoryName);
+
+            await _categoryRepository.AddCategoryAsync(category);
         }
 
         public async Task<bool> DoesCategoryAlreadyExistByNameAsync(string categoryName)
@@ -36,9 +38,9 @@ namespace SportsHub.Business.Services
             return result;
         }
 
-        public async Task<bool> DoesCategoryAlredyExistByIdAsync(Guid id)
+        public async Task<bool> DoesCategoryAlreadyExistByIdAsync(Guid id)
         {
-            var result = await _categoryRepository.DoesCategoryAlredyExistByIdAsync(id);
+            var result = await _categoryRepository.DoesCategoryAlreadyExistByIdAsync(id);
 
             return result;
         }

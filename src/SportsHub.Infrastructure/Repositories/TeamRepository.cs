@@ -1,7 +1,7 @@
-﻿using SportsHub.Infrastructure.DBContext;
-using SportsHub.Shared.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SportsHub.Business.Repositories;
+using SportsHub.Infrastructure.DBContext;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Infrastructure.Repositories
 {

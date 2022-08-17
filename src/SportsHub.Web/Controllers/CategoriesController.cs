@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services;
-using SportsHub.Shared.Models;
 using SportsHub.Security;
-using FluentValidation;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Web.Controllers
 {
@@ -56,10 +56,10 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateCategory(CreateCategoryModel сreateCategoryModel)
         {
-            var result = await _createCategoryModelValidator.ValidateAsync(сreateCategoryModel);
-            if (!result.IsValid)
+            var validationResult = await _createCategoryModelValidator.ValidateAsync(сreateCategoryModel);
+            if (!validationResult.IsValid)
             {
-                return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+                return BadRequest(validationResult.ToString());
             }
 
             await _categoryService.CreateCategoryAsync(сreateCategoryModel.Name);

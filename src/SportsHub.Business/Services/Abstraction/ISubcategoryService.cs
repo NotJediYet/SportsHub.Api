@@ -12,6 +12,6 @@ namespace SportsHub.Business.Services
         
         Task<bool> DoesSubcategoryAlreadyExistByNameAsync(string subcategoryName);
 
-        Task<bool> DoesSubcategoryAlredyExistByIdAsync(Guid id);
+        Task<bool> DoesSubcategoryAlreadyExistByIdAsync(Guid id);
     }
 }
