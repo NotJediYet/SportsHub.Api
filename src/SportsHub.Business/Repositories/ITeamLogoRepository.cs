@@ -4,14 +4,8 @@ using Microsoft.AspNetCore.Http;
 namespace SportsHub.Business.Repositories
 {
     public interface ITeamLogoRepository {
-        Task<IEnumerable<TeamLogo>> GetTeamLogosAsync();
-
-        Task<TeamLogo> GetTeamLogoByIdAsync(Guid id);
+        Task<TeamLogo> GetTeamLogoByTeamIdAsync(Guid teamId);
 
         Task AddTeamLogoAsync(IFormFile teamLogoFile, Guid teamId);
-
-        Task<bool> DoesTeamLogoAlreadyExistByTeamIdAsync(Guid teamId);
-
-        Task<bool> DoesTeamLogoAlreadyExistByIdAsync(Guid id);
     }
 }

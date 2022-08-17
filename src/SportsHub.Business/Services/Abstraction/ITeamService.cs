@@ -1,5 +1,6 @@
 ﻿using SportsHub.Shared.Entities;
 using Microsoft.AspNetCore.Http;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Services
 {
@@ -9,7 +10,7 @@ namespace SportsHub.Business.Services
         
         Task<Team> GetTeamByIdAsync(Guid id);
 
-        Task CreateTeamAsync(string teamName, Guid subcategoryId, string location, IFormFile teamLogo);
+        Task CreateTeamAsync(CreateTeamModel сreateTeamModel);
 
         Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
 

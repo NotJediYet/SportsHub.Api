@@ -8,8 +8,6 @@ namespace SportsHub.Shared.Models
 
         public string FileExtension { get; set; }
 
-        public decimal Size { get; set; }
-
         public Guid TeamId { get; set; }
     }
 }

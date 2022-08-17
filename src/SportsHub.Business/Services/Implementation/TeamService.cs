@@ -1,6 +1,7 @@
 ﻿using SportsHub.Business.Repositories;
 using SportsHub.Shared.Entities;
 using Microsoft.AspNetCore.Http;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Services
 {
@@ -27,11 +28,11 @@ namespace SportsHub.Business.Services
             return team;
         }
 
-        public async Task CreateTeamAsync(string teamName, Guid subcategoryId, string location, IFormFile teamLogo)
+        public async Task CreateTeamAsync(CreateTeamModel сreateTeamModel)
         {
-            Team newTeam = new Team(teamName, subcategoryId, location);
+            Team newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);
             await _teamRepository.AddTeamAsync(newTeam);
-            await _teamLogoRepository.AddTeamLogoAsync(teamLogo, newTeam.Id);
+            await _teamLogoRepository.AddTeamLogoAsync(сreateTeamModel.Logo, newTeam.Id);
         }
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
