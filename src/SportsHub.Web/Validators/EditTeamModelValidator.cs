@@ -34,7 +34,7 @@ namespace SportsHub.Web.Validators
                 .NotEmpty().WithMessage(Errors.SubcategoryIdCannotBeEmpty)
                 .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlreadyExistByIdAsync(id))
                 .WithMessage(Errors.SubcategoryDoesNotExist);
-
+            
             RuleFor(team => team.TeamLogo)
                 .NotEmpty().WithMessage(Errors.TeamLogoIsRequired)
                 .SetValidator(new IFormFileValidator());
