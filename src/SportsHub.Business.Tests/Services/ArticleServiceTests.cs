@@ -96,6 +96,28 @@ namespace SportsHub.Business.Tests.Services
                 &&(article.Caption == expectedCaption) && (article.Context == expectedContext))));
         }
 
+        [Fact]
+        public async Task DeleteArticleAsync_WhenIdIsValid_ReturnsExpectedArticle()
+        {
+            // Arrange
+            var expectedArticleId = Guid.NewGuid();
+
+            var expectedArticle = new Article(Guid.NewGuid(), location: "Location", headline: "Headline", caption: "Caption", context: "Context");
+            expectedArticle.Id = expectedArticleId;
+
+            _articleRepository.Setup(repo => repo.DeleteArticleAsync(expectedArticleId))
+                .ReturnsAsync(expectedArticle);
+
+            // Act
+            var actualArticle = await _service.DeleteArticleAsync(expectedArticleId);
+
+            // Assert
+            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
+            Assert.Equal(expectedArticle.Id, actualArticle.Id);
+            Assert.Equal(expectedArticle.Location, actualArticle.Location);
+            Assert.Equal(expectedArticle.Headline, actualArticle.Headline);
+            Assert.Equal(expectedArticle.Caption, actualArticle.Caption);
+        }
 
         [Fact]
         public async Task DoesArticleAlreadyExistByHeadlineAsync_WhenArticleExists_ReturnsTrue()

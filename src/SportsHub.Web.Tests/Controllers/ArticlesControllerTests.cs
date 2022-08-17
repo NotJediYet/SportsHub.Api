@@ -160,5 +160,49 @@ namespace SportsHub.Web.Tests.Controllers
             };
             return articles;
         }
+
+        [Fact]
+        public async Task DeleteArticle_WhenArticleDoesNotExist_ReturnsNotFoundResult()
+        {
+            // Arrange
+            var articleId = Guid.NewGuid();
+
+            _serviceArticle.Setup(service => service.DeleteArticleAsync(articleId))
+                .ReturnsAsync((Article)null);
+
+            // Act
+            var result = await _controller.DeleteArticle(articleId);
+
+            // Assert
+            var objectResult = Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(StatusCodes.Status404NotFound, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteArticle_WhenArticleExists_ReturnsOkObjectResultWithArticle()
+        {
+            // Arrange
+            var expectedArticleId = Guid.NewGuid();
+
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", headline: "headline", caption: "caption", context: "context");
+            expectedArticle.Id = expectedArticleId;
+
+            _serviceArticle.Setup(service => service.DeleteArticleAsync(expectedArticleId))
+               .ReturnsAsync(expectedArticle);
+
+            // Act
+            var result = await _controller.DeleteArticle(expectedArticleId);
+
+            // Assert
+            var objectResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+
+            var actualArticle = Assert.IsType<Article>(objectResult.Value);
+            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
+            Assert.Equal(expectedArticle.Id, actualArticle.Id);
+            Assert.Equal(expectedArticle.Location, actualArticle.Location);
+            Assert.Equal(expectedArticle.Headline, actualArticle.Headline);
+            Assert.Equal(expectedArticle.Caption, actualArticle.Caption);
+        }
     }
 }
