@@ -5,9 +5,9 @@ namespace SportsHub.Business.Repositories
 {
     public interface IArticleImageRepository
     {
-        Task<IEnumerable<Image>> GetImagesAsync();
+        Task<IEnumerable<ArticleImage>> GetImagesAsync();
 
-        Task<Image> GetImageByIdAsync(Guid id);
+        Task<ArticleImage> GetImageByIdAsync(Guid id);
 
         Task AddImageAsync(IFormFile articleImageFile, Guid Article);
 

@@ -4,6 +4,7 @@ using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Security;
 using FluentValidation;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Web.Controllers
 {
@@ -26,7 +27,7 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policies.User)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -39,7 +40,7 @@ namespace SportsHub.Web.Controllers
 
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policies.User)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -69,8 +70,14 @@ namespace SportsHub.Web.Controllers
                 return BadRequest(result.Errors.Select(e => e.ErrorMessage));
             }
 
-            await _articleService.CreateArticleAsync(сreateArticleModel.TeamId, сreateArticleModel.Location,
-                сreateArticleModel.Headline, сreateArticleModel.Caption, сreateArticleModel.Context, сreateArticleModel.ArticleImage);
+            var articleModel = new Article(
+                сreateArticleModel.TeamId,
+                сreateArticleModel.Location,
+                сreateArticleModel.Headline,
+                сreateArticleModel.Caption,
+                сreateArticleModel.Context);
+
+            await _articleService.CreateArticleAsync(articleModel, сreateArticleModel.ArticleImage);
 
             return Ok();
         }

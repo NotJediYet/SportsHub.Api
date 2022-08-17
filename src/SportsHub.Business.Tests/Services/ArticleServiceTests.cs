@@ -4,11 +4,8 @@ using Moq;
 using SportsHub.Business.Repositories;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
-using SportsHub.Shared.Models;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
@@ -73,9 +70,17 @@ namespace SportsHub.Business.Tests.Services
             var expectedLocation ="location" ;
             var expectedHeadline = "headline";
             var expectedCaption = "caption";
-           var expectedContext = "context";
+            var expectedContext = "context";
 
-            var imageStream = new MemoryStream(GenerateImageByteArray());
+            Article article = new Article(
+                teamId: expectedTeamId, 
+                location: expectedLocation,
+                headline: expectedHeadline,
+                caption: expectedCaption,
+                context: expectedContext);
+
+            var imageStream = new MemoryStream(GetRandomBytes());
+
             IFormFile expectedArticleImage = new FormFile(imageStream, 0, imageStream.Length, "UnitTest", "UnitTest.jpg")
             {
                 Headers = new HeaderDictionary(),
@@ -83,7 +88,7 @@ namespace SportsHub.Business.Tests.Services
             };
 
             // Act
-            await _service.CreateArticleAsync(expectedTeamId, expectedLocation, expectedHeadline, expectedCaption, expectedContext, expectedArticleImage);
+            await _service.CreateArticleAsync(article,expectedArticleImage);
 
             // Assert
             _articleRepository.Verify(repository => repository.AddArticleAsync(It.Is<Article>(article =>
@@ -161,28 +166,21 @@ namespace SportsHub.Business.Tests.Services
             IEnumerable<Article> articles = new List<Article>
             {
                 new Article( Guid.NewGuid(),"location1" ,"headline1" ,"caption1" ,"context1"),
-                new  Article(Guid.NewGuid(),"location2" ,"headline2" ,"caption2" ,"context2"),
-                new  Article(Guid.NewGuid(),"location3" ,"headline3" ,"caption3" ,"context3")
+                new Article(Guid.NewGuid(),"location2" ,"headline2" ,"caption2" ,"context2"),
+                new Article(Guid.NewGuid(),"location3" ,"headline3" ,"caption3" ,"context3")
             };
 
             return articles;
         }
 
-        private byte[] GenerateImageByteArray(int width = 50, int height = 50)
+        public byte[] GetRandomBytes()
         {
-            Bitmap bitmapImage = new Bitmap(width, height);
-            Graphics imageData = Graphics.FromImage(bitmapImage);
-            imageData.DrawLine(new Pen(Color.Blue), 0, 0, width, height);
-
-            MemoryStream memoryStream = new MemoryStream();
-            byte[] byteArray;
-
-            using (memoryStream)
-            {
-                bitmapImage.Save(memoryStream, ImageFormat.Jpeg);
-                byteArray = memoryStream.ToArray();
-            }
-            return byteArray;
+            Random random = new Random();
+            int randomNumber = random.Next(0, 100);
+            List<byte> bytes = new List<byte>();
+            for (int b = 0; b < randomNumber; b++)
+                bytes.Add((byte)b);
+            return bytes.ToArray();
         }
     }
 }
