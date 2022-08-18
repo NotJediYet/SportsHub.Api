@@ -79,6 +79,15 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Article image cannot be empty.
+        /// </summary>
+        public static string ArticleImageCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("ArticleImageCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Category does not exist.
         /// </summary>
         public static string CategoryDoesNotExist {
@@ -111,6 +120,15 @@ namespace SportsHub.Shared.Resources {
         public static string CategoryNameIsNotUnique {
             get {
                 return ResourceManager.GetString("CategoryNameIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Does article image cannot have this extension.
+        /// </summary>
+        public static string DoesArticleImageCannotHaveThisExtension {
+            get {
+                return ResourceManager.GetString("DoesArticleImageCannotHaveThisExtension", resourceCulture);
             }
         }
         

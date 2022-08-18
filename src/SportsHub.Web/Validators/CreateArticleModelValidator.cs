@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using SportsHub.Business.Services;
+using SportsHub.Shared.Entities;
 using SportsHub.Shared.Models;
 using SportsHub.Shared.Resources;
 
@@ -26,8 +27,26 @@ namespace SportsHub.Web.Validators
                 .NotEmpty().WithMessage(Errors.TeamIdCannotBeEmpty)
                 .MustAsync((id, cancellation) => _teamService.DoesTeamAlreadyExistByIdAsync(id))
                 .WithMessage(Errors.TeamIdDoesNotExist);
-        }
 
+            When(article => article.ArticleImage != null, () =>
+            {
+             RuleFor(article => article.ArticleImage)
+                .MustAsync((articleImage, cancellation) => DoesArticleImageHaveCorectExtension(articleImage))
+                .WithMessage(Errors.DoesArticleImageCannotHaveThisExtension);
+            });
+            
+        }
+        private Task<bool> DoesArticleImageHaveCorectExtension(IFormFile image)
+        {
+            var fileExtension = ""; 
+
+            if (image != null)
+                fileExtension = Path.GetExtension(image.FileName);
+
+            var result = (fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".svg") ? Task.FromResult(true):Task.FromResult(false);
+
+            return result;
+        }
         private async Task<bool> DoesArticleNameIsUniqueAsync(string headline)
         {
             var result = await _articleService.DoesArticleAlreadyExistByHeadlineAsync(headline);

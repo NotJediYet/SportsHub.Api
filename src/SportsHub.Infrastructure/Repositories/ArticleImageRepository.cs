@@ -25,13 +25,6 @@ namespace SportsHub.Infrastructure.Repositories
             return await _context.Images.FindAsync(id);
         }
 
-        public async Task AddImageAsync(ArticleImage image)
-        {
-            await _context.Images.AddAsync(image);
-
-            await _context.SaveChangesAsync();
-        }
-
         public async Task AddImageAsync(IFormFile articleImageFile, Guid articleId)
         {
             var memoryStream = new MemoryStream();
@@ -42,7 +35,7 @@ namespace SportsHub.Infrastructure.Repositories
           
             var fileSize = articleImageFile.Length;
 
-            ArticleImage newArticleImage = new ArticleImage(fileBytes, fileExtension, fileSize, articleId);
+            ArticleImage newArticleImage = new ArticleImage(fileBytes, fileExtension, articleId);
 
             await articleImageFile.CopyToAsync(memoryStream);
             

@@ -58,7 +58,7 @@ namespace SportsHub.Web.Tests.Controllers
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
         }
 
-        public async Task CreateTeam_WhenModelIsInvalid_ReturnsBadRequestResult()
+        public async Task CreateArticle_WhenModelIsInvalid_ReturnsBadRequestResult()
         {
             // Arrange
             var articleModel = new CreateArticleModel
