@@ -30,7 +30,6 @@ namespace SportsHub.Web.Validators
             When(teamLogo => teamLogo.Logo != null, () =>
             {
                 RuleFor(teamLogo => teamLogo.Logo)
-                .NotEmpty().WithMessage(Errors.TeamLogoCannotBeEmpty)
                 .MustAsync((teamLogo, cancellation) => DoesTeamLogoHaveSatisfactoryExtension(teamLogo))
                 .WithMessage(Errors.TeamLogoCannotHaveThisExtension);
             });

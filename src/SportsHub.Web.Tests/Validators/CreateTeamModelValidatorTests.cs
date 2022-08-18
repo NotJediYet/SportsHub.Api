@@ -4,7 +4,9 @@ using SportsHub.Shared.Models;
 using SportsHub.Shared.Resources;
 using SportsHub.Web.Validators;
 using System;
+using System.IO;
 using Xunit;
+using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Web.Tests.Validators
 {
@@ -107,10 +109,24 @@ namespace SportsHub.Web.Tests.Validators
         public async void CreateTeamModel_WhenModelIsValid_ReturnsSuccessValidationResult()
         {
             // Arrange
+            var fileMock = new Mock<IFormFile>();
+            var content = "Hello World from a Fake File";
+            var fileName = "test.png";
+            var ms = new MemoryStream();
+            var writer = new StreamWriter(ms);
+            writer.Write(content);
+            writer.Flush();
+            ms.Position = 0;
+            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
+            fileMock.Setup(_ => _.FileName).Returns(fileName);
+            fileMock.Setup(_ => _.Length).Returns(ms.Length);
+
             var team = new CreateTeamModel
             {
                 Name = "Name",
-                SubcategoryId = Guid.NewGuid()
+                SubcategoryId = Guid.NewGuid(),
+                Location = "Location",
+                Logo = fileMock.Object
             };
 
             _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))

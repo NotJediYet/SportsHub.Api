@@ -72,7 +72,7 @@ namespace SportsHub.Business.Tests.Services
 
             var fileMock = new Mock<IFormFile>();
             var content = "Hello World from a Fake File";
-            var fileName = "test.pdf";
+            var fileName = "test.png";
             var ms = new MemoryStream();
             var writer = new StreamWriter(ms);
             writer.Write(content);

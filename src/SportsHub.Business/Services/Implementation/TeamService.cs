@@ -34,7 +34,8 @@ namespace SportsHub.Business.Services
 
             await _teamRepository.AddTeamAsync(newTeam);
 
-            await _teamLogoRepository.AddTeamLogoAsync(сreateTeamModel.Logo, newTeam.Id);
+            if (сreateTeamModel.Logo != null)
+                await _teamLogoRepository.AddTeamLogoAsync(сreateTeamModel.Logo, newTeam.Id);
         }
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
