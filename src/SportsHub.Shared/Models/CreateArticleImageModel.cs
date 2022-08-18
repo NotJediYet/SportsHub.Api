@@ -6,7 +6,6 @@ namespace SportsHub.Shared.Models
     {
         public byte[] Bytes { get; set; }
         public string FileExtension { get; set; }
-        public decimal ImageSize { get; set; }
         public Guid ArticleId { get; set; }
     }
 }

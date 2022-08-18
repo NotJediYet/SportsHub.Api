@@ -123,6 +123,9 @@
   <data name="ArticleHeadlineIsNotUnique" xml:space="preserve">
     <value>Article headline is not unique</value>
   </data>
+  <data name="ArticleImageCannotBeEmpty" xml:space="preserve">
+    <value>Article image cannot be empty</value>
+  </data>
   <data name="CategoryDoesNotExist" xml:space="preserve">
     <value>Category does not exist</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="CategoryNameIsNotUnique" xml:space="preserve">
     <value>Category name is not unique</value>
+  </data>
+  <data name="DoesArticleImageCannotHaveThisExtension" xml:space="preserve">
+    <value>Does article image cannot have this extension</value>
   </data>
   <data name="SubcategoryDoesNotExist" xml:space="preserve">
     <value>Subcategory does not exist</value>

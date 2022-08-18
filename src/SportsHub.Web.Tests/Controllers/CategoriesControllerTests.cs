@@ -26,7 +26,7 @@ namespace SportsHub.Web.Tests.Controllers
         {
             _service = new Mock<ICategoryService>();
             _validator = new Mock<IValidator<CreateCategoryModel>>();
-            
+
             _controller = new CategoriesController(_service.Object, _validator.Object);
         }
 

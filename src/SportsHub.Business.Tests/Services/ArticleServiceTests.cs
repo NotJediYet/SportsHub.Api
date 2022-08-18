@@ -114,7 +114,7 @@ namespace SportsHub.Business.Tests.Services
         }
 
         [Fact]
-        public async Task DoesSubcategoryAlreadyExistByHeadlineAsync_WhenSubcategoryDoesNotExist_ReturnsFalse()
+        public async Task DoesArticleAlreadyExistByHeadlineAsync_WhenArticleDoesNotExist_ReturnsFalse()
         {
             // Arrange
             var articleHeadline = "Headline";

@@ -12,16 +12,12 @@ namespace SportsHub.Shared.Entities
         [Required(ErrorMessage = "File extension name is required.")]
         public string FileExtension { get; set; }
 
-        [Required(ErrorMessage = "ArticleImage size is required.")]
-        public decimal ImageSize { get; set; }
-
         [Required(ErrorMessage = "ArticleId is required.")]
         public Guid ArticleId { get; set; }
-        public ArticleImage(byte[] bytes, string fileExtension, decimal imageSize, Guid articleId)
+        public ArticleImage(byte[] bytes, string fileExtension, Guid articleId)
         {
             Bytes = bytes;
             FileExtension = fileExtension;
-            ImageSize = imageSize;
             ArticleId = articleId;
         }
     }
