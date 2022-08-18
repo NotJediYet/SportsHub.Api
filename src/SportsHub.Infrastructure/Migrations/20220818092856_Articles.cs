@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SportsHub.Infrastructure.Migrations
 {
-    public partial class Article : Migration
+    public partial class Articles : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,7 +39,6 @@ namespace SportsHub.Infrastructure.Migrations
                 {
                     Bytes = table.Column<byte[]>(type: "varbinary(900)", nullable: false),
                     FileExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageSize = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
