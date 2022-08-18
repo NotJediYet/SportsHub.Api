@@ -48,14 +48,14 @@ namespace SportsHub.Business.Services
             return _articleRepository.GetArticlesFilteredByTeamId(teamId, articles);
         }
 
-        public IEnumerable<Article> GetArticlesFilteredByPublished(string isPublished, IEnumerable<Article> articles)
+        public IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles)
         {
-            return _articleRepository.GetArticlesFilteredByPublished(isPublished, articles);
+            return _articleRepository.GetArticlesFilteredByStatus(status, articles);
         }
 
-        public async Task<IEnumerable<Article>> GetSortedArticles()
+        public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
         {
-            return await _articleRepository.GetSortedArticles();
+            return await _articleRepository.GetSortedArticlesAsync();
         }
     }
 }

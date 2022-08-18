@@ -31,7 +31,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedArticles = GetArticles();
 
-            _articleRepository.Setup(repository => repository.GetArticlesAsync())
+            _articleRepository.Setup(repo => repo.GetArticlesAsync())
             .ReturnsAsync(expectedArticles);
 
             // Act
@@ -95,7 +95,6 @@ namespace SportsHub.Business.Tests.Services
                 (article.TeamId == expectedTeamId) && (article.Location == expectedLocation)&&(article.Headline == expectedHeadline)
                 &&(article.Caption == expectedCaption) && (article.Context == expectedContext))));
         }
-
 
         [Fact]
         public async Task DoesArticleAlreadyExistByHeadlineAsync_WhenArticleExists_ReturnsTrue()
@@ -161,6 +160,58 @@ namespace SportsHub.Business.Tests.Services
             Assert.False(result);
         }
 
+        [Fact]
+        public void GetArticlesFilteredByTeamId_WhenTeamIdIsValid_ReturnsExpectedArticles()
+        {
+            // Arrange
+            var expectedTeamId = Guid.NewGuid();
+
+            var expectedArticles = GetFilteredArticlesByTeamId(expectedTeamId);
+     
+            _articleRepository.Setup(repo => repo.GetArticlesFilteredByTeamId(expectedTeamId, expectedArticles))
+            .Returns(expectedArticles);
+
+            // Act
+            var actualArticles = _service.GetArticlesFilteredByTeamId(expectedTeamId, expectedArticles);
+
+            // Assert
+            Assert.Equal(expectedArticles, actualArticles);
+        }
+
+        [Fact]
+        public void GetArticlesFilteredByPublished_WhenStatusValid_ReturnsExpectedArticles()
+        {
+            // Arrange
+            var expectedStatus = "Unpublished";
+
+            var expectedArticles = GetArticles();
+
+            _articleRepository.Setup(repo => repo.GetArticlesFilteredByStatus(expectedStatus,expectedArticles))
+            .Returns(expectedArticles);
+
+            // Act
+            var actualArticles = _service.GetArticlesFilteredByStatus(expectedStatus, expectedArticles);
+
+            // Assert
+            Assert.Equal(expectedArticles, actualArticles);
+        }
+
+        [Fact]
+        public async Task GetSortedArticles_ReturnsExpectedSortedArticlesOrderByHeadline()
+        {
+            // Arrange
+            var expectedArticles = GetArticles();
+
+            _articleRepository.Setup(repo => repo.GetSortedArticlesAsync())
+            .ReturnsAsync(expectedArticles);
+
+            // Act
+            var actualArticles = await _service.GetSortedArticlesAsync();
+
+            // Assert
+            Assert.Equal(expectedArticles, actualArticles);
+        }
+
         private IEnumerable<Article> GetArticles()
         {
             IEnumerable<Article> articles = new List<Article>
@@ -168,6 +219,18 @@ namespace SportsHub.Business.Tests.Services
                 new Article( Guid.NewGuid(),"location1" ,"headline1" ,"caption1" ,"context1"),
                 new Article(Guid.NewGuid(),"location2" ,"headline2" ,"caption2" ,"context2"),
                 new Article(Guid.NewGuid(),"location3" ,"headline3" ,"caption3" ,"context3")
+            };
+
+            return articles;
+        }
+
+        private IEnumerable<Article> GetFilteredArticlesByTeamId(Guid teamId)
+        {
+            IEnumerable<Article> articles = new List<Article>
+            {
+                new Article( teamId,"location1" ,"headline1" ,"caption1" ,"context1"),
+                new Article(teamId,"location2" ,"headline2" ,"caption2" ,"context2"),
+                new Article(teamId,"location3" ,"headline3" ,"caption3" ,"context3")
             };
 
             return articles;

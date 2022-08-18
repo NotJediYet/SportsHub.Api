@@ -25,16 +25,16 @@ namespace SportsHub.Web.Controllers
             _subcategoryService = subcategoryService ?? throw new ArgumentNullException(nameof(subcategoryService));
         }
 
-        [HttpGet("{subcategoryName}/{teamName}/{isPublished}")]
+        [HttpGet("{subcategoryName}/{teamName}/{status}")]
         [Authorize(Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
 
-        public async Task<IActionResult> GetFilteredArticles(string subcategoryName, string teamName, string isPublished)
+        public async Task<IActionResult> GetFilteredArticles(string subcategoryName, string teamName, string status)
         {
-            var articles = await _articleService.GetSortedArticles();
+            var articles = await _articleService.GetSortedArticlesAsync();
 
             if (teamName != "All Teams")
             {
@@ -42,9 +42,9 @@ namespace SportsHub.Web.Controllers
 
                 articles = _articleService.GetArticlesFilteredByTeamId(idTeam, articles);
             }
-            if (isPublished != "All")
+            if (status != "All")
             {
-                articles = _articleService.GetArticlesFilteredByPublished(isPublished, articles);
+                articles = _articleService.GetArticlesFilteredByStatus(status, articles);
             }
             if (subcategoryName != "All Subcategories")
             {

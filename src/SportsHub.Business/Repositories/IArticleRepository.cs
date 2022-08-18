@@ -16,8 +16,8 @@ namespace SportsHub.Business.Repositories
 
         IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId, IEnumerable<Article> articles);
 
-        IEnumerable<Article> GetArticlesFilteredByPublished(string isPublished, IEnumerable<Article> articles);
+        IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles);
 
-        Task<IEnumerable<Article>> GetSortedArticles();
+        Task<IEnumerable<Article>> GetSortedArticlesAsync();
     }
 }

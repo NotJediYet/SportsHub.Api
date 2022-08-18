@@ -50,9 +50,9 @@ namespace SportsHub.Infrastructure.Repositories
             return articles;
         }
 
-        public IEnumerable<Article> GetArticlesFilteredByPublished(string isPublished, IEnumerable<Article> articles)
+        public IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles)
         {
-            if (isPublished == "Published")
+            if (status == "Published")
             {
                 articles = articles.Where(a => a.IsPublished == true).ToList();
             }
@@ -64,10 +64,10 @@ namespace SportsHub.Infrastructure.Repositories
             return articles;
         }
 
-        public async Task<IEnumerable<Article>> GetSortedArticles()
+        public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
         {
             var articles = await _context.Articles
-                .OrderByDescending(a => a.Headline)
+                .OrderBy(a => a.Headline)
                 .ToListAsync();
 
             return articles;
