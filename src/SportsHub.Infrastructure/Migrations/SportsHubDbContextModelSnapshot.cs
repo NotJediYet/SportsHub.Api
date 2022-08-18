@@ -64,6 +64,26 @@ namespace SportsHub.Infrastructure.Migrations
                     b.ToTable("Articles");
                 });
 
+            modelBuilder.Entity("SportsHub.Shared.Entities.ArticleImage", b =>
+                {
+                    b.Property<byte[]>("Bytes")
+                        .HasColumnType("varbinary(900)");
+
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Bytes");
+
+                    b.HasIndex("ArticleId")
+                        .IsUnique();
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("SportsHub.Shared.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -85,29 +105,6 @@ namespace SportsHub.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("SportsHub.Shared.Entities.ArticleImage", b =>
-                {
-                    b.Property<byte[]>("Bytes")
-                        .HasColumnType("varbinary(900)");
-
-                    b.Property<Guid>("ArticleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FileExtension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("ImageSize")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Bytes");
-
-                    b.HasIndex("ArticleId")
-                        .IsUnique();
-
-                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
