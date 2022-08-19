@@ -38,7 +38,7 @@ namespace SportsHub.Infrastructure.Repositories
         {
             _context.TeamLogos.Update(teamLogo);
 
-            await _context.SaveChangesAsync();
+            return teamLogos.Any(teamLogo => teamLogo.TeamId == teamId);
         }
 
         public async Task EditTeamLogoAsync(IFormFile teamLogoFile, Guid teamId)
