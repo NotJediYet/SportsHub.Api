@@ -67,7 +67,7 @@ namespace SportsHub.Web.Controllers
             var result = await _createArticleModelValidator.ValidateAsync(сreateArticleModel);
             if (!result.IsValid)
             {
-                return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+                return BadRequest(result.Errors.Select(error => error.ErrorMessage));
             }
 
             var articleModel = new Article(

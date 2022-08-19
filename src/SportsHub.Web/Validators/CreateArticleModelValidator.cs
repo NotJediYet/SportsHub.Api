@@ -28,25 +28,25 @@ namespace SportsHub.Web.Validators
                 .MustAsync((id, cancellation) => _teamService.DoesTeamAlreadyExistByIdAsync(id))
                 .WithMessage(Errors.TeamIdDoesNotExist);
 
-            When(article => article.ArticleImage != null, () =>
-            {
-             RuleFor(article => article.ArticleImage)
-                .MustAsync((articleImage, cancellation) => DoesArticleImageHaveCorectExtension(articleImage))
-                .WithMessage(Errors.DoesArticleImageCannotHaveThisExtension);
-            });
-            
         }
-        private Task<bool> DoesArticleImageHaveCorectExtension(IFormFile image)
+
+
+        public class FormFileValidator : AbstractValidator<FormFile>
         {
-            var fileExtension = ""; 
-
-            if (image != null)
-                fileExtension = Path.GetExtension(image.FileName);
-
-            var result = (fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".svg") ? Task.FromResult(true):Task.FromResult(false);
-
-            return result;
+            private const string Extension = @"\.jpg|\.png|\.svg";
+            public FormFileValidator()
+            {
+                SetRules();
+            }
+            private void SetRules()
+            {
+                RuleFor(file => Path.GetExtension(file.FileName))
+                    .Matches(Extension)
+                    .WithMessage(Errors.FileMustHaveAppropriateFormat);
+            }
         }
+
+
         private async Task<bool> DoesArticleNameIsUniqueAsync(string headline)
         {
             var result = await _articleService.DoesArticleAlreadyExistByHeadlineAsync(headline);

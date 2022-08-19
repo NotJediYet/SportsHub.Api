@@ -93,8 +93,8 @@ namespace SportsHub.Infrastructure.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("SportsHub.Shared.Entities.Article", b =>
-                {
+            modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
+            {
                     b.HasOne("SportsHub.Shared.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId")
