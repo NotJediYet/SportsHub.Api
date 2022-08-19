@@ -51,7 +51,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
             expectedArticle.Id = expectedArticleId;
 
-            _articleRepository.Setup(repo => repo.GetArticleByIdAsync(expectedArticleId))
+            _articleRepository.Setup(repository => repository.GetArticleByIdAsync(expectedArticleId))
             .ReturnsAsync(expectedArticle);
 
             // Act
@@ -113,7 +113,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedArticle = new Article(Guid.NewGuid(), location: "Location", headline: "Headline", caption: "Caption", context: "Context");
             expectedArticle.Id = expectedArticleId;
 
-            _articleRepository.Setup(repo => repo.DeleteArticleAsync(expectedArticleId))
+            _articleRepository.Setup(repository => repository.DeleteArticleAsync(expectedArticleId))
                 .ReturnsAsync(expectedArticle);
 
             // Act
