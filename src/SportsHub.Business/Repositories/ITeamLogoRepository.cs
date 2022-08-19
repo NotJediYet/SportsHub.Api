@@ -6,6 +6,10 @@ namespace SportsHub.Business.Repositories
     public interface ITeamLogoRepository {
         Task<TeamLogo> GetTeamLogoByTeamIdAsync(Guid teamId);
 
-        Task AddTeamLogoAsync(IFormFile teamLogoFile, Guid teamId);
+        Task AddTeamLogoAsync(TeamLogo teamLogo);
+
+        byte[] GetTeamLogoByteArray(IFormFile fileLogo);
+
+        Task<bool> DoesTeamLogoAlreadyExistByTeamIdAsync(Guid teamId);
     }
 }

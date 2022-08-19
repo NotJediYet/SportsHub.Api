@@ -97,6 +97,15 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на File must have appropriate format: png, jpg, svg.
+        /// </summary>
+        public static string FileMustHaveAppropriateFormat {
+            get {
+                return ResourceManager.GetString("FileMustHaveAppropriateFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Subcategory does not exist.
         /// </summary>
         public static string SubcategoryDoesNotExist {
@@ -129,24 +138,6 @@ namespace SportsHub.Shared.Resources {
         public static string SubcategoryNameIsNotUnique {
             get {
                 return ResourceManager.GetString("SubcategoryNameIsNotUnique", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Team logo cannot be empty.
-        /// </summary>
-        public static string TeamLogoCannotBeEmpty {
-            get {
-                return ResourceManager.GetString("TeamLogoCannotBeEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Team logo cannot have this extension.
-        /// </summary>
-        public static string TeamLogoCannotHaveThisExtension {
-            get {
-                return ResourceManager.GetString("TeamLogoCannotHaveThisExtension", resourceCulture);
             }
         }
         

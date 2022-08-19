@@ -12,8 +12,8 @@ using SportsHub.Infrastructure.DBContext;
 namespace SportsHub.Infrastructure.Migrations
 {
     [DbContext(typeof(SportsHubDbContext))]
-    [Migration("20220817102855_addTeamLogo")]
-    partial class addTeamLogo
+    [Migration("20220819110341_AddTeamLogo")]
+    partial class AddTeamLogo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

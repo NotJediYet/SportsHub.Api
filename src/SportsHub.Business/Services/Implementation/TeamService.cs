@@ -30,12 +30,21 @@ namespace SportsHub.Business.Services
 
         public async Task CreateTeamAsync(CreateTeamModel сreateTeamModel)
         {
-            Team newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);
-
+            var newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);
             await _teamRepository.AddTeamAsync(newTeam);
 
             if (сreateTeamModel.Logo != null)
-                await _teamLogoRepository.AddTeamLogoAsync(сreateTeamModel.Logo, newTeam.Id);
+            {
+                using var memoryStream = new MemoryStream();
+                await сreateTeamModel.Logo.CopyToAsync(memoryStream);
+
+                var fileBytes = memoryStream.ToArray();
+                var fileExtension = Path.GetExtension(сreateTeamModel.Logo.FileName);
+
+                var newTeamLogo = new TeamLogo(fileBytes, fileExtension, newTeam.Id);
+
+                await _teamLogoRepository.AddTeamLogoAsync(newTeamLogo);
+            }
         }
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)

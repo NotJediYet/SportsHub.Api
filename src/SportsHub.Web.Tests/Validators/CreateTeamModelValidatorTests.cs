@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using Xunit;
 using Microsoft.AspNetCore.Http;
+using System.Text;
 
 namespace SportsHub.Web.Tests.Validators
 {
@@ -54,7 +55,7 @@ namespace SportsHub.Web.Tests.Validators
             var expectedErrorMessage = Errors.TeamNameIsNotUnique;
 
             _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
-            .ReturnsAsync(true);
+                .ReturnsAsync(true);
 
             // Act
             var result = await _validator.ValidateAsync(team);
@@ -95,7 +96,7 @@ namespace SportsHub.Web.Tests.Validators
             var expectedErrorMessage = Errors.SubcategoryDoesNotExist;
 
             _subcategoryService.Setup(service => service.DoesSubcategoryAlreadyExistByIdAsync(team.SubcategoryId))
-            .ReturnsAsync(false);
+                .ReturnsAsync(false);
 
             // Act
             var result = await _validator.ValidateAsync(team);
@@ -109,30 +110,21 @@ namespace SportsHub.Web.Tests.Validators
         public async void CreateTeamModel_WhenModelIsValid_ReturnsSuccessValidationResult()
         {
             // Arrange
-            var fileMock = new Mock<IFormFile>();
-            var content = "Hello World from a Fake File";
-            var fileName = "test.png";
-            var ms = new MemoryStream();
-            var writer = new StreamWriter(ms);
-            writer.Write(content);
-            writer.Flush();
-            ms.Position = 0;
-            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
-            fileMock.Setup(_ => _.FileName).Returns(fileName);
-            fileMock.Setup(_ => _.Length).Returns(ms.Length);
+            var byteArray = Encoding.UTF8.GetBytes("This is a dummy file");
+            var fileLogo = new FormFile(new MemoryStream(byteArray), 0, byteArray.Length, "Data", "image.jpg");
 
             var team = new CreateTeamModel
             {
                 Name = "Name",
                 SubcategoryId = Guid.NewGuid(),
                 Location = "Location",
-                Logo = fileMock.Object
+                Logo = fileLogo
             };
 
             _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
-            .ReturnsAsync(false);
+                .ReturnsAsync(false);
             _subcategoryService.Setup(service => service.DoesSubcategoryAlreadyExistByIdAsync(team.SubcategoryId))
-            .ReturnsAsync(true);
+                .ReturnsAsync(true);
 
             // Act
             var result = await _validator.ValidateAsync(team);

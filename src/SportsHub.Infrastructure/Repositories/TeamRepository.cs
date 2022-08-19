@@ -44,12 +44,5 @@ namespace SportsHub.Infrastructure.Repositories
 
             return teams.Any(team => team.Id == id);
         }
-
-        public async Task<bool> DoesTeamLogoAlreadyExistByTeamIdAsync(Guid teamId)
-        {
-            var teamLogos = await _context.Set<TeamLogo>().ToListAsync();
-
-            return teamLogos.Any(teamLogo => teamLogo.TeamId == teamId);
-        }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SportsHub.Infrastructure.Migrations
 {
-    public partial class addTeamLogo : Migration
+    public partial class AddTeamLogo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
