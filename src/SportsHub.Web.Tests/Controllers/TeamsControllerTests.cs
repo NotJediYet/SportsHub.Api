@@ -20,17 +20,17 @@ namespace SportsHub.Web.Tests.Controllers
     public class TeamsControllerTests
     {
         private readonly Mock<ITeamService> _service;
-        private readonly Mock<IValidator<CreateTeamModel>> _validator;
+        private readonly Mock<IValidator<CreateTeamModel>> _createTeamModelValidator;
         private readonly Mock<IValidator<EditTeamModel>> _EditTeamModelvalidator;
         private readonly TeamsController _controller;
 
         public TeamsControllerTests()
         {
             _service = new Mock<ITeamService>();
-            _validator = new Mock<IValidator<CreateTeamModel>>();
+            _createTeamModelValidator = new Mock<IValidator<CreateTeamModel>>();
             _EditTeamModelvalidator = new Mock<IValidator<EditTeamModel>>();
 
-            _controller = new TeamsController(_service.Object, _validator.Object, _EditTeamModelvalidator.Object);
+            _controller = new TeamsController(_service.Object, _createTeamModelValidator.Object, _EditTeamModelvalidator.Object);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace SportsHub.Web.Tests.Controllers
             };
             var validationResult = new ValidationResult();
 
-            _validator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+            _createTeamModelValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(validationResult);
 
             // Act
@@ -68,7 +68,7 @@ namespace SportsHub.Web.Tests.Controllers
             var validationFailure = new ValidationFailure(nameof(model.Name), Errors.TeamNameCannotBeEmpty);
             var validationResult = new ValidationResult(new[] { validationFailure });
 
-            _validator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+            _createTeamModelValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(validationResult);
 
             // Act
