@@ -12,18 +12,26 @@ namespace SportsHub.Shared.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
         [Required(ErrorMessage = "Team id is required.")]
         public Guid TeamId { get; set; }
+
         public string Location { get; set; } = string.Empty;
+
         public string Headline { get; set; } = string.Empty;
+
         public string Caption { get; set; } = string.Empty;
+
         public string Context { get; set; } = string.Empty;
+
         public bool IsPublished { get; set; } = false;
+
         public bool IsShowComments { get; set; } = false;
+
         [FromForm]
         [NotMapped]
         public IFormFile Image { get; set; }
-        
+
         public Article(Guid teamId, string location, string headline, string caption, string context)
         {
             TeamId = teamId;

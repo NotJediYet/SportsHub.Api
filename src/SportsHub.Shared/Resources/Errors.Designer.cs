@@ -124,11 +124,11 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Does article image cannot have this extension.
+        ///   Looks up a localized string similar to File must have appropriate format.
         /// </summary>
-        public static string DoesArticleImageCannotHaveThisExtension {
+        public static string FileMustHaveAppropriateFormat {
             get {
-                return ResourceManager.GetString("DoesArticleImageCannotHaveThisExtension", resourceCulture);
+                return ResourceManager.GetString("FileMustHaveAppropriateFormat", resourceCulture);
             }
         }
         
