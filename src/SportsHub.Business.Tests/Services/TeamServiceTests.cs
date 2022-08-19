@@ -89,7 +89,7 @@ namespace SportsHub.Business.Tests.Services
                 Location = expectedLocation,
                 SubcategoryId = expectedSubcategoryId,
                 Logo = expectedTeamLogo
-            };      
+            };
 
             // Act
             await _service.CreateTeamAsync(сreateTeamModel);
@@ -138,6 +138,51 @@ namespace SportsHub.Business.Tests.Services
             };
 
             return teams;
+        }
+
+        [Fact]
+        public async Task EditTeamAsync_CallsAppropriateRepositoryMethodWithParameters()
+        {
+            // Arrange
+            var expectedTeamId = Guid.NewGuid();
+            var expectedTeamName = "Name";
+            var expectedSubcategoryId = Guid.NewGuid();
+            var expectedLocation = "Location";
+
+            var fileMock = new Mock<IFormFile>();
+            var content = "Hello World from a Fake File";
+            var fileName = "test.pdf";
+            var ms = new MemoryStream();
+            var writer = new StreamWriter(ms);
+            writer.Write(content);
+            writer.Flush();
+            ms.Position = 0;
+            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
+            fileMock.Setup(_ => _.FileName).Returns(fileName);
+            fileMock.Setup(_ => _.Length).Returns(ms.Length);
+            var expectedTeamLogo = fileMock.Object;
+
+            EditTeamModel editTeamModel = new()
+            {
+                Id = expectedTeamId,
+                Name = expectedTeamName,
+                Location = expectedLocation,
+                SubcategoryId = expectedSubcategoryId,
+                Logo = expectedTeamLogo
+            };
+
+            // Act
+            await _service.EditTeamAsync(editTeamModel);
+
+            // Assert
+            _teamRepository.Verify(repository => repository.UpdateTeamAsync(It.Is<EditTeamModel>(team =>
+                (team.Id == expectedTeamId)
+                && (team.Name == expectedTeamName) 
+                && (team.Location == expectedLocation)
+                && (team.SubcategoryId == expectedSubcategoryId)
+                && (team.Logo == expectedTeamLogo))));
+
+            _teamLogoRepository.Verify(repository => repository.EditTeamLogoAsync(It.Is<IFormFile>(teamLogo => (editTeamModel.Logo == expectedTeamLogo)), It.Is<Guid>(teamId => (editTeamModel.Id == expectedTeamId))));
         }
     }
 }

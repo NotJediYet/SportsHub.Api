@@ -16,6 +16,6 @@ namespace SportsHub.Business.Services
 
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
         
-        Task EditTeam(EditTeamModel teamModel);
+        Task EditTeamAsync(EditTeamModel EditTeamModel);
     }
 }

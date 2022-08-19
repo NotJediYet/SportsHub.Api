@@ -25,16 +25,25 @@ namespace SportsHub.Infrastructure.Repositories
             var memoryStream = new MemoryStream();
             await teamLogoFile.CopyToAsync(memoryStream);
 
-            await teamLogoFile.CopyToAsync(memoryStream);
-
             var fileBytes = memoryStream.ToArray();
             var fileExtension = Path.GetExtension(teamLogoFile.FileName);
             TeamLogo newTeamLogo = new TeamLogo(fileBytes, fileExtension, teamId);
 
             await _context.Set<TeamLogo>().AddAsync(newTeamLogo);
 
-            await _context.Set<TeamLogo>().AddAsync(newTeamLogo);
-            await _context.Set<TeamLogo>().AddAsync(newTeamLogo);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EditTeamLogoAsync(IFormFile teamLogoFile, Guid teamId)
+        {
+            var logo = await _context.TeamLogos.Where(logo => logo.TeamId == teamId).FirstOrDefaultAsync();
+
+            var memoryStream = new MemoryStream();
+            await teamLogoFile.CopyToAsync(memoryStream);
+
+            logo.Bytes = memoryStream.ToArray();
+            logo.FileExtension = Path.GetExtension(teamLogoFile.FileName);
+
             await _context.SaveChangesAsync();
         }
     }

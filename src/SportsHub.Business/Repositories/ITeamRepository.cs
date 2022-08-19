@@ -14,5 +14,7 @@ namespace SportsHub.Business.Repositories
         Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
 
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
+
+        Task UpdateTeamAsync(EditTeamModel EditTeamModel);
     }
 }

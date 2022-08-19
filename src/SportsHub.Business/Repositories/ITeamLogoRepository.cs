@@ -7,5 +7,7 @@ namespace SportsHub.Business.Repositories
         Task<TeamLogo> GetTeamLogoByTeamIdAsync(Guid teamId);
 
         Task AddTeamLogoAsync(IFormFile teamLogoFile, Guid teamId);
+
+        Task EditTeamLogoAsync(IFormFile teamLogoFile, Guid teamId);
     }
 }

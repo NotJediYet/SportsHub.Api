@@ -51,9 +51,11 @@ namespace SportsHub.Business.Services
             return result;
         }
         
-        public async Task EditTeam(EditTeamModel teamModel)
+        public async Task EditTeamAsync(EditTeamModel EditTeamModel)
         {
-            await _teamRepository.UpdateTeamAsync(teamModel);
+            await _teamRepository.UpdateTeamAsync(EditTeamModel);
+
+            await _teamLogoRepository.EditTeamLogoAsync(EditTeamModel.Logo, EditTeamModel.Id);
         }
     }
 }

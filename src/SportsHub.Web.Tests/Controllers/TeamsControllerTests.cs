@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using System.IO;
 
 namespace SportsHub.Web.Tests.Controllers
 {
@@ -20,16 +21,16 @@ namespace SportsHub.Web.Tests.Controllers
     {
         private readonly Mock<ITeamService> _service;
         private readonly Mock<IValidator<CreateTeamModel>> _validator;
-        private readonly Mock<IValidator<EditTeamModel>> _validatorEditTeamModel;
+        private readonly Mock<IValidator<EditTeamModel>> _EditTeamModelvalidator;
         private readonly TeamsController _controller;
 
         public TeamsControllerTests()
         {
             _service = new Mock<ITeamService>();
             _validator = new Mock<IValidator<CreateTeamModel>>();
-            _validatorEditTeamModel = new Mock<IValidator<EditTeamModel>>();
+            _EditTeamModelvalidator = new Mock<IValidator<EditTeamModel>>();
 
-            _controller = new TeamsController(_service.Object, _validator.Object, _validatorEditTeamModel.Object);
+            _controller = new TeamsController(_service.Object, _validator.Object, _EditTeamModelvalidator.Object);
         }
 
         [Fact]
@@ -150,6 +151,83 @@ namespace SportsHub.Web.Tests.Controllers
                 new Team("Name3", Guid.NewGuid(), "Location3")
             };
             return teams;
+        }
+
+        [Fact]
+        public async Task EditTeam_WhenModelIsValid_ReturnsOkResult()
+        {
+            // Arrange
+            //Setup mock file using a memory stream
+            var content = "Hello World from a Fake File";
+            var fileName = "test.png";
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(content);
+            writer.Flush();
+            stream.Position = 0;
+
+            //create FormFile
+            IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
+
+            var model = new EditTeamModel
+            {
+                Id = Guid.NewGuid(),
+                Name = "Name",
+                Location = "Location",
+                SubcategoryId = Guid.NewGuid(),
+                Logo = file
+            };
+            var validationResult = new ValidationResult();
+
+            _EditTeamModelvalidator.Setup(_EditTeamModelvalidator => _EditTeamModelvalidator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(validationResult);
+
+            // Act
+            var result = await _controller.EditTeam(model);
+
+            // Assert
+            var objectResult = Assert.IsType<OkResult>(result);
+            Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task EditTeam_WhenModelIsInvalid_ReturnsBadRequestResult()
+        {
+            // Arrange
+            //Setup mock file using a memory stream
+            var content = "Hello World from a Fake File";
+            var fileName = "test.pdf";
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(content);
+            writer.Flush();
+            stream.Position = 0;
+
+            //create FormFile
+            IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
+
+            var model = new EditTeamModel
+            {
+                Id = Guid.Empty,
+                Name = String.Empty,
+                Location = String.Empty,
+                SubcategoryId = Guid.Empty,
+                Logo = file
+            };
+
+            var validationFailure = new ValidationFailure(nameof(model.Name), Errors.TeamNameCannotBeEmpty);
+            var validationResult = new ValidationResult(new[] { validationFailure });
+
+            _EditTeamModelvalidator.Setup(_EditTeamModelvalidator => _EditTeamModelvalidator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(validationResult);
+
+            // Act
+            var result = await _controller.EditTeam(model);
+
+            // Assert
+            var objectResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, objectResult.StatusCode);
+            Assert.Equal(validationFailure.ErrorMessage, objectResult.Value);
         }
     }
 }

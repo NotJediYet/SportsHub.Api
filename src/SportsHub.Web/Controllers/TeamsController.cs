@@ -63,7 +63,7 @@ namespace SportsHub.Web.Controllers
         }
         
         [HttpPut]
-        [Authorize(Policies.Admin)]
+        /*[Authorize(Policies.Admin)]*/
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,13 +71,13 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> EditTeam([FromForm] EditTeamModel teamModel)
         {
-            var result = await _editTeamModelValidator.ValidateAsync(teamModel);
-            if (!result.IsValid)
+            var validationResult = await _editTeamModelValidator.ValidateAsync(teamModel);
+            if (!validationResult.IsValid)
             {
-                return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+                return BadRequest(validationResult.Errors.Select(error => error.ErrorMessage).First());
             }
 
-            await _teamService.EditTeam(teamModel);
+            await _teamService.EditTeamAsync(teamModel);
 
             return Ok();
         }
