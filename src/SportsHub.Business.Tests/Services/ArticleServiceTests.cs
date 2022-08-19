@@ -50,7 +50,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedArticle = new Article(Guid.NewGuid(),location:"Location",headline: "Headline", caption: "Caption", context: "Context");
             expectedArticle.Id = expectedArticleId;
 
-            _articleRepository.Setup(repo => repo.GetArticleByIdAsync(expectedArticleId))
+            _articleRepository.Setup(repository => repository.GetArticleByIdAsync(expectedArticleId))
             .ReturnsAsync(expectedArticle);
 
             // Act
@@ -105,7 +105,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedArticle = new Article(Guid.NewGuid(), location: "Location", headline: "Headline", caption: "Caption", context: "Context");
             expectedArticle.Id = expectedArticleId;
 
-            _articleRepository.Setup(repo => repo.DeleteArticleAsync(expectedArticleId))
+            _articleRepository.Setup(repository => repository.DeleteArticleAsync(expectedArticleId))
                 .ReturnsAsync(expectedArticle);
 
             // Act
@@ -157,7 +157,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var subcategoryId = Guid.NewGuid();
 
-            _articleRepository.Setup(repo => repo.DoesArticleAlreadyExistByIdAsync(subcategoryId))
+            _articleRepository.Setup(repository => repository.DoesArticleAlreadyExistByIdAsync(subcategoryId))
             .ReturnsAsync(true);
 
             // Act
@@ -173,7 +173,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var articleId = Guid.NewGuid();
 
-            _articleRepository.Setup(repo => repo.DoesArticleAlreadyExistByIdAsync(articleId))
+            _articleRepository.Setup(repository => repository.DoesArticleAlreadyExistByIdAsync(articleId))
              .ReturnsAsync(false);
 
             // Act
