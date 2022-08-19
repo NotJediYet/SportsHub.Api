@@ -75,5 +75,17 @@ namespace SportsHub.Infrastructure.Repositories
 
             return teamLogos.Any(teamLogo => teamLogo.TeamId == teamId);
         }
+
+        public async Task UpdateTeamAsync(EditTeamModel Team)
+        {
+            var team = await _context.Teams.Where(team => team.Id == Team.Id).FirstOrDefaultAsync();
+
+            team.Name = Team.Name;
+            team.Location = Team.Location;
+            team.SubcategoryId = Team.SubcategoryId;
+
+            await _context.SaveChangesAsync();
+
+        }
     }
 }
