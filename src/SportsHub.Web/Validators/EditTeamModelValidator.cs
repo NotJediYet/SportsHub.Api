@@ -30,6 +30,7 @@ namespace SportsHub.Web.Validators
             RuleFor(team => team.Name)
                 .NotEmpty().WithMessage(Errors.TeamNameCannotBeEmpty);
 
+
             RuleFor(team => team.SubcategoryId)
                 .NotEmpty().WithMessage(Errors.SubcategoryIdCannotBeEmpty)
                 .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlreadyExistByIdAsync(id))
@@ -66,6 +67,21 @@ namespace SportsHub.Web.Validators
                     .Matches(Extension)
                     .WithMessage(Errors.FileMustHaveAppropriateFormat);
             }
+        }
+
+        private Task<bool> DoesTeamLogoHaveSatisfactoryExtension(IFormFile teamLogo)
+        {
+            var formFile = teamLogo;
+            var fileExtension = "";
+
+            if (formFile != null)
+                fileExtension = Path.GetExtension(formFile.FileName);
+
+            if (fileExtension == ".JPG" || fileExtension == ".PNG" || fileExtension == ".SVG" ||
+                fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".svg")
+                return Task.FromResult(true);
+            else
+                return Task.FromResult(false);
         }
     }
 }
