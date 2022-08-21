@@ -10,7 +10,7 @@ namespace SportsHub.Business.Services
 
         Task<Article> GetArticleByIdAsync(Guid id);
 
-        Task CreateArticleAsync(Article article, IFormFile Image);
+        Task CreateArticleAsync(CreateArticleModel articleModel);
 
         Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline);
 

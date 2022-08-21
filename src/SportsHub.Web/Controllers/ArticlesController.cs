@@ -70,14 +70,7 @@ namespace SportsHub.Web.Controllers
                 return BadRequest(result.Errors.Select(error => error.ErrorMessage));
             }
 
-            var articleModel = new Article(
-                сreateArticleModel.TeamId,
-                сreateArticleModel.Location,
-                сreateArticleModel.Headline,
-                сreateArticleModel.Caption,
-                сreateArticleModel.Context);
-
-            await _articleService.CreateArticleAsync(articleModel, сreateArticleModel.ArticleImage);
+            await _articleService.CreateArticleAsync(сreateArticleModel);
 
             return Ok();
         }

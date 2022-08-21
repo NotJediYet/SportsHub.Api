@@ -27,10 +27,17 @@ namespace SportsHub.Business.Services
             return  await _articleRepository.GetArticleByIdAsync(id);
         }
 
-        public async Task CreateArticleAsync(Article article, IFormFile Image)
+        public async Task CreateArticleAsync(CreateArticleModel сreateArticleModel)
         {
-            await _articleRepository.AddArticleAsync(article);
-            await _articleImageRepository.AddImageAsync(Image, article.Id);
+
+            var articleModel = new Article(
+                сreateArticleModel.TeamId,
+                сreateArticleModel.Location,
+                сreateArticleModel.Headline,
+                сreateArticleModel.Caption,
+                сreateArticleModel.Context);
+            await _articleRepository.AddArticleAsync(articleModel);
+            await _articleImageRepository.AddImageAsync(articleModel.Image, articleModel.Id);
         }
 
         public async Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline)
