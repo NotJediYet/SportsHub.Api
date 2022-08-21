@@ -4,6 +4,7 @@ using Moq;
 using SportsHub.Business.Repositories;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -72,12 +73,13 @@ namespace SportsHub.Business.Tests.Services
             var expectedCaption = "caption";
             var expectedContext = "context";
 
-            Article article = new Article(
-                teamId: expectedTeamId, 
-                location: expectedLocation,
-                headline: expectedHeadline,
-                caption: expectedCaption,
-                context: expectedContext);
+            CreateArticleModel articleModel = new()
+            {
+               TeamId =expectedTeamId, 
+               Location= expectedLocation,
+               Headline= expectedHeadline,
+               Caption= expectedCaption,
+               Context= expectedContext };
 
             var imageStream = new MemoryStream(GetRandomBytes());
 
@@ -88,7 +90,7 @@ namespace SportsHub.Business.Tests.Services
             };
 
             // Act
-            await _service.CreateArticleAsync(article,expectedArticleImage);
+            await _service.CreateArticleAsync(articleModel);
 
             // Assert
             _articleRepository.Verify(repository => repository.AddArticleAsync(It.Is<Article>(article =>
