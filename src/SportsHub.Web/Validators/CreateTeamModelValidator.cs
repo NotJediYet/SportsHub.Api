@@ -27,7 +27,9 @@ namespace SportsHub.Web.Validators
                 .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlreadyExistByIdAsync(id))
                 .WithMessage(Errors.SubcategoryDoesNotExist);
 
-            RuleFor(team => team.Logo).SetValidator(new IFormFileValidator());
+            RuleFor(team => team.Logo)
+                .NotEmpty().WithMessage(Errors.TeamLogoIsRequired)
+                .SetValidator(new IFormFileValidator());
         }
 
         private async Task<bool> DoesTeamNameIsUniqueAsync(string teamName)

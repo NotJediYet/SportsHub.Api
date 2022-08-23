@@ -27,13 +27,6 @@ namespace SportsHub.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public byte[] GetTeamLogoByteArray(IFormFile fileLogo)
-        {
-            using var ms = new MemoryStream();
-            fileLogo.CopyTo(ms);
-            return ms.ToArray();    
-        }
-
         public async Task<bool> DoesTeamLogoAlreadyExistByTeamIdAsync(Guid teamId)
         {
             var teamLogos = await _context.Set<TeamLogo>().ToListAsync();

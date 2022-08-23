@@ -8,8 +8,6 @@ namespace SportsHub.Business.Repositories
 
         Task AddTeamLogoAsync(TeamLogo teamLogo);
 
-        byte[] GetTeamLogoByteArray(IFormFile fileLogo);
-
         Task<bool> DoesTeamLogoAlreadyExistByTeamIdAsync(Guid teamId);
     }
 }
