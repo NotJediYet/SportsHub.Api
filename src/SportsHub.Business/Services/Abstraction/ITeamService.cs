@@ -9,6 +9,8 @@ namespace SportsHub.Business.Services
         Task<Team> GetTeamByIdAsync(Guid id);
         
         Task CreateTeamAsync(string teamName, Guid subcategoryId);
+
+        Task<Team> DeleteTeamAsync(Guid Id);
         
         Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
        

@@ -38,7 +38,6 @@ namespace SportsHub.Infrastructure.Repositories
                 _context.Articles.Remove(article);
                 await _context.SaveChangesAsync();
             }
-
             return article;
         }
 

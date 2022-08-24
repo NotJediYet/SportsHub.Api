@@ -29,6 +29,11 @@ namespace SportsHub.Business.Services
             await _teamRepository.AddTeamAsync(new Team(teamName, subcategoryId));
         }
 
+        public async Task<Team> DeleteTeamAsync(Guid id)
+        {
+            return await _teamRepository.DeleteTeamAsync(id);
+        }
+
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
         {
             var result = await _teamRepository.DoesTeamAlreadyExistByNameAsync(teamName);

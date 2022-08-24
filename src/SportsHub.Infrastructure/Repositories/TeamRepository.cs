@@ -30,6 +30,16 @@ namespace SportsHub.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
         }
+        public async Task<Team> DeleteTeamAsync(Guid id)
+        {
+            var team = _context.Teams.Find(id);
+            if (team != null)
+            {
+                _context.Teams.Remove(team);
+                await _context.SaveChangesAsync();
+            }
+            return team;
+        }
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
         {
