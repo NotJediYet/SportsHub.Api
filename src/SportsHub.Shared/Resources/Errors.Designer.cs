@@ -142,11 +142,11 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Team logo must be uploaded.
+        ///   Ищет локализованную строку, похожую на Team logo cannot be empty.
         /// </summary>
-        public static string TeamLogoIsRequired {
+        public static string TeamLogoCannotBeEmpty {
             get {
-                return ResourceManager.GetString("TeamLogoIsRequired", resourceCulture);
+                return ResourceManager.GetString("TeamLogoCannotBeEmpty", resourceCulture);
             }
         }
         

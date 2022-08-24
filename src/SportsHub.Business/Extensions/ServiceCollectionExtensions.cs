@@ -14,7 +14,10 @@ namespace SportsHub.Extensions
 
             return services;
         }
+    }
 
+    public static class GetByteArrayFromFile
+    {
         public static byte[] ByteArray(this IFormFile fileLogo)
         {
             using var memoryStream = new MemoryStream();

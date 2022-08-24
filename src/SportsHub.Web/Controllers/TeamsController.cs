@@ -58,5 +58,5 @@ namespace SportsHub.Web.Controllers
 
             return Ok();
         }
-    } 
+    }
 }
