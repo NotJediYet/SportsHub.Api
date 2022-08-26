@@ -97,7 +97,16 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subcategory does not exist.
+        ///   Ищет локализованную строку, похожую на File must have appropriate format: png, jpg, svg.
+        /// </summary>
+        public static string FileMustHaveAppropriateFormat {
+            get {
+                return ResourceManager.GetString("FileMustHaveAppropriateFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Subcategory does not exist.
         /// </summary>
         public static string SubcategoryDoesNotExist {
             get {
@@ -133,38 +142,11 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Team id cannot be empty.
+        ///   Ищет локализованную строку, похожую на Team logo must be uploaded.
         /// </summary>
-        public static string TeamIdCannotBeEmpty {
+        public static string TeamLogoIsRequired {
             get {
-                return ResourceManager.GetString("TeamIdCannotBeEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Team with that id does not exist.
-        /// </summary>
-        public static string TeamIdDoesNotExist {
-            get {
-                return ResourceManager.GetString("TeamIdDoesNotExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Team logo cannot be empty.
-        /// </summary>
-        public static string TeamLogoCannotBeEmpty {
-            get {
-                return ResourceManager.GetString("TeamLogoCannotBeEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Team logo cannot have this extension.
-        /// </summary>
-        public static string TeamLogoCannotHaveThisExtension {
-            get {
-                return ResourceManager.GetString("TeamLogoCannotHaveThisExtension", resourceCulture);
+                return ResourceManager.GetString("TeamLogoIsRequired", resourceCulture);
             }
         }
         

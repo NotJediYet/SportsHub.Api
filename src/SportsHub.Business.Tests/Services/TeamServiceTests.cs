@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Text;
 
 namespace SportsHub.Business.Tests.Services
 {
@@ -32,7 +33,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeams = GetTeams();
 
             _teamRepository.Setup(repository => repository.GetTeamsAsync())
-            .ReturnsAsync(expectedTeams);
+                .ReturnsAsync(expectedTeams);
 
             // Act
             var actualTeams = await _service.GetTeamsAsync();
@@ -51,7 +52,7 @@ namespace SportsHub.Business.Tests.Services
             expectedTeam.Id = expectedTeamId;
 
             _teamRepository.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
-            .ReturnsAsync(expectedTeam);
+                .ReturnsAsync(expectedTeam);
 
             // Act
             var actualTeam = await _service.GetTeamByIdAsync(expectedTeamId);
@@ -66,22 +67,17 @@ namespace SportsHub.Business.Tests.Services
         public async Task CreateTeamAsync_CallsAppropriateRepositoryMethodWithParameters()
         {
             // Arrange
+            var byteArray = Encoding.UTF8.GetBytes("This is a dummy file");
+            var expectedTeamLogo = new FormFile(new MemoryStream(byteArray), 0, byteArray.Length, "Data", "image.jpg");
+            var expectedTeamLogoExtension = Path.GetExtension(expectedTeamLogo.FileName);
+
             var expectedTeamName = "Name";
             var expectedSubcategoryId = Guid.NewGuid();
+            var expectedTeamId = Guid.NewGuid();
+            var teamId = expectedTeamId;
             var expectedLocation = "Location";
-
-            var fileMock = new Mock<IFormFile>();
-            var content = "Hello World from a Fake File";
-            var fileName = "test.pdf";
-            var ms = new MemoryStream();
-            var writer = new StreamWriter(ms);
-            writer.Write(content);
-            writer.Flush();
-            ms.Position = 0;
-            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
-            fileMock.Setup(_ => _.FileName).Returns(fileName);
-            fileMock.Setup(_ => _.Length).Returns(ms.Length);
-            var expectedTeamLogo = fileMock.Object;
+            var expectedByteArray = byteArray;
+            var fileExtension = expectedTeamLogoExtension;
 
             CreateTeamModel сreateTeamModel = new()
             {
@@ -97,6 +93,12 @@ namespace SportsHub.Business.Tests.Services
             // Assert
             _teamRepository.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
                 (team.Name == expectedTeamName) && (team.SubcategoryId == expectedSubcategoryId))));
+
+            _teamLogoRepository.Verify(repository => repository.AddTeamLogoAsync(It.Is<TeamLogo>(teamLogo =>
+                (byteArray == expectedByteArray)
+                && (fileExtension == expectedTeamLogoExtension)
+                && (teamId == expectedTeamId)
+                )));
         }
         [Fact]
         public async Task DoesTeamAlreadyExistByNameAsync_WhenTeamExists_ReturnsTrue()

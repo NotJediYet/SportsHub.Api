@@ -20,18 +20,18 @@ namespace SportsHub.Infrastructure.Repositories
             return await _context.Set<TeamLogo>().FindAsync(teamId);
         }
 
-        public async Task AddTeamLogoAsync(IFormFile teamLogoFile, Guid teamId)
+        public async Task AddTeamLogoAsync(TeamLogo teamLogo)
         {
-            var memoryStream = new MemoryStream();
-            await teamLogoFile.CopyToAsync(memoryStream);
-
-            var fileBytes = memoryStream.ToArray();
-            var fileExtension = Path.GetExtension(teamLogoFile.FileName);
-            TeamLogo newTeamLogo = new TeamLogo(fileBytes, fileExtension, teamId);
-
-            await _context.Set<TeamLogo>().AddAsync(newTeamLogo);
+            await _context.Set<TeamLogo>().AddAsync(teamLogo);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> DoesTeamLogoAlreadyExistByTeamIdAsync(Guid teamId)
+        {
+            var teamLogos = await _context.Set<TeamLogo>().ToListAsync();
+
+            return teamLogos.Any(teamLogo => teamLogo.TeamId == teamId);
         }
 
         public async Task EditTeamLogoAsync(IFormFile teamLogoFile, Guid teamId)

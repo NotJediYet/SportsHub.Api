@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SportsHub.Business.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Extensions
 {
@@ -12,6 +13,14 @@ namespace SportsHub.Extensions
             services.AddScoped<ITeamService, TeamService>();
 
             return services;
+        }
+
+        public static byte[] ByteArray(this IFormFile fileLogo)
+        {
+            using var memoryStream = new MemoryStream();
+            fileLogo.CopyTo(memoryStream);
+
+            return memoryStream.ToArray();
         }
     }
 }

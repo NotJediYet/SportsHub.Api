@@ -27,14 +27,9 @@ namespace SportsHub.Web.Validators
                 .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlreadyExistByIdAsync(id))
                 .WithMessage(Errors.SubcategoryDoesNotExist);
 
-            When(teamLogo => teamLogo.Logo != null, () =>
-            {
-                RuleFor(teamLogo => teamLogo.Logo)
-                .NotEmpty().WithMessage(Errors.TeamLogoCannotBeEmpty)
-                .MustAsync((teamLogo, cancellation) => DoesTeamLogoHaveSatisfactoryExtension(teamLogo))
-                .WithMessage(Errors.TeamLogoCannotHaveThisExtension);
-            });
-            
+            RuleFor(team => team.Logo)
+                .NotEmpty().WithMessage(Errors.TeamLogoIsRequired)
+                .SetValidator(new IFormFileValidator());
         }
 
         private async Task<bool> DoesTeamNameIsUniqueAsync(string teamName)
@@ -43,20 +38,20 @@ namespace SportsHub.Web.Validators
 
             return !result;
         }
+    }
 
-        private Task<bool> DoesTeamLogoHaveSatisfactoryExtension(IFormFile teamLogo)
-        { 
-            var formFile = teamLogo;
-            var fileExtension = "";
-
-            if (formFile != null)
-                fileExtension = Path.GetExtension(formFile.FileName);
-
-            if (fileExtension == ".JPG" || fileExtension == ".PNG" || fileExtension == ".SVG" || 
-                fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".svg")
-                return Task.FromResult(true);
-            else
-                return Task.FromResult(false);
+    public class IFormFileValidator : AbstractValidator<IFormFile>
+    {
+        private const string Extension = @"\.jpg|\.png|\.PNG|\.svg";
+        public IFormFileValidator()
+        {
+            SetRules();
+        }
+        private void SetRules()
+        {
+            RuleFor(file => Path.GetExtension(file.FileName))
+                .Matches(Extension)
+                .WithMessage(Errors.FileMustHaveAppropriateFormat);
         }
     }
 }

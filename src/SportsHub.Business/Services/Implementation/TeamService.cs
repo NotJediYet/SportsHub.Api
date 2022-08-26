@@ -2,6 +2,7 @@
 using SportsHub.Shared.Entities;
 using Microsoft.AspNetCore.Http;
 using SportsHub.Shared.Models;
+using SportsHub.Extensions;
 
 namespace SportsHub.Business.Services
 {
@@ -30,11 +31,17 @@ namespace SportsHub.Business.Services
 
         public async Task CreateTeamAsync(CreateTeamModel сreateTeamModel)
         {
-            Team newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);
-
+            var newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);
             await _teamRepository.AddTeamAsync(newTeam);
 
-            await _teamLogoRepository.AddTeamLogoAsync(сreateTeamModel.Logo, newTeam.Id);
+            using var memoryStream = new MemoryStream();
+            await сreateTeamModel.Logo.CopyToAsync(memoryStream);
+
+            var fileBytes = сreateTeamModel.Logo.ByteArray();
+            var fileExtension = Path.GetExtension(сreateTeamModel.Logo.FileName);
+            var newTeamLogo = new TeamLogo(fileBytes, fileExtension, newTeam.Id);
+
+            await _teamLogoRepository.AddTeamLogoAsync(newTeamLogo);
         }
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
