@@ -97,7 +97,7 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на File must have appropriate format: png, jpg, svg.
+        ///   Looks up a localized string similar to File must have appropriate format: png, jpg, svg.
         /// </summary>
         public static string FileMustHaveAppropriateFormat {
             get {
@@ -106,7 +106,7 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Subcategory does not exist.
+        ///   Looks up a localized string similar to Subcategory does not exist.
         /// </summary>
         public static string SubcategoryDoesNotExist {
             get {
@@ -142,7 +142,25 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Team logo must be uploaded.
+        ///   Looks up a localized string similar to Team id can not be empty.
+        /// </summary>
+        public static string TeamIdCanNotBeEmpty {
+            get {
+                return ResourceManager.GetString("TeamIdCanNotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team with that id does not exist.
+        /// </summary>
+        public static string TeamIdDoesNotExist {
+            get {
+                return ResourceManager.GetString("TeamIdDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team logo must be uploaded.
         /// </summary>
         public static string TeamLogoIsRequired {
             get {

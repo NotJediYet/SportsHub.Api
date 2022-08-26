@@ -45,7 +45,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedSubcategory = new Subcategory(name: "Name", Guid.NewGuid());
             expectedSubcategory.Id = expectedSubcategoryId;
 
-            _repository.Setup(repo => repo.GetSubcategoryByIdAsync(expectedSubcategoryId))
+            _repository.Setup(repository => repository.GetSubcategoryByIdAsync(expectedSubcategoryId))
                 .ReturnsAsync(expectedSubcategory);
 
             // Act
@@ -110,7 +110,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var subcategoryId = Guid.NewGuid();
 
-            _repository.Setup(repo => repo.DoesSubcategoryAlreadyExistByIdAsync(subcategoryId))
+            _repository.Setup(repository => repository.DoesSubcategoryAlreadyExistByIdAsync(subcategoryId))
                 .ReturnsAsync(true);
 
             // Act
@@ -126,7 +126,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var subcategoryId = Guid.NewGuid();
 
-            _repository.Setup(repo => repo.DoesSubcategoryAlreadyExistByIdAsync(subcategoryId))
+            _repository.Setup(repository => repository.DoesSubcategoryAlreadyExistByIdAsync(subcategoryId))
                 .ReturnsAsync(false);
 
             // Act

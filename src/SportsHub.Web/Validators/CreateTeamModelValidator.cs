@@ -36,7 +36,11 @@ namespace SportsHub.Web.Validators
         {
             var result = await _teamService.DoesTeamAlreadyExistByNameAsync(teamName);
 
-            return !result;
+            if (result == Guid.Empty)
+            {
+                return true;
+            }
+            else return false;
         }
     }
 

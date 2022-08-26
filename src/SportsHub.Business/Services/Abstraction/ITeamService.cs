@@ -12,10 +12,10 @@ namespace SportsHub.Business.Services
 
         Task CreateTeamAsync(CreateTeamModel сreateTeamModel);
 
-        Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
+        Task<Guid> DoesTeamAlreadyExistByNameAsync(string teamName);
 
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
         
-        Task EditTeamAsync(EditTeamModel EditTeamModel);
+        Task EditTeamAsync(Team team);
     }
 }

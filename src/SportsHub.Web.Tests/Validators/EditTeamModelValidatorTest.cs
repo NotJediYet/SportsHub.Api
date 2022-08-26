@@ -1,7 +1,6 @@
 ﻿using Moq;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
-using Moq;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Shared.Resources;
@@ -10,6 +9,7 @@ using System;
 using Xunit;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Web.Tests.Validators
 {
@@ -42,15 +42,15 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new EditTeamModel
+            var team = new Team
             {
                 Id = Guid.Empty,
                 Name = "Name",
                 Location = "Location",
                 SubcategoryId = Guid.NewGuid(),
-                Logo = file
+                TeamLogo = file
             };
-            var expectedErrorMessage = Errors.TeamIdCannotBeEmpty;
+            var expectedErrorMessage = Errors.TeamIdCanNotBeEmpty;
 
             // Act
             var result = await _validator.ValidateAsync(team);
@@ -76,13 +76,13 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new EditTeamModel
+            var team = new Team
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
                 Location = "Location",
                 SubcategoryId = Guid.NewGuid(),
-                Logo = file
+                TeamLogo = file
             };
             var expectedErrorMessage = Errors.TeamIdDoesNotExist;
 
@@ -113,13 +113,13 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new EditTeamModel
+            var team = new Team
             {
                 Id = Guid.NewGuid(),
                 Name = string.Empty,
                 Location = "Location",
                 SubcategoryId = Guid.NewGuid(),
-                Logo = file
+                TeamLogo = file
             };
             var expectedErrorMessage = Errors.TeamNameCannotBeEmpty;
 
@@ -147,18 +147,18 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new EditTeamModel
+            var team = new Team
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
                 Location = "Location",
                 SubcategoryId = Guid.NewGuid(),
-                Logo = file
+                TeamLogo = file
             };
             var expectedErrorMessage = Errors.TeamNameIsNotUnique;
 
             _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
-                .ReturnsAsync(true);
+                .ReturnsAsync(Guid.NewGuid());
 
             // Act
             var result = await _validator.ValidateAsync(team);
@@ -184,13 +184,13 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new EditTeamModel
+            var team = new Team
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
                 Location = "Location",
                 SubcategoryId = Guid.Empty,
-                Logo = file
+                TeamLogo = file
             };
             var expectedErrorMessage = Errors.SubcategoryIdCannotBeEmpty;
 
@@ -218,13 +218,13 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new EditTeamModel
+            var team = new Team
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
                 Location = "Location",
                 SubcategoryId = Guid.NewGuid(),
-                Logo = file
+                TeamLogo = file
             };
             var expectedErrorMessage = Errors.SubcategoryDoesNotExist;
 
@@ -255,15 +255,15 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new EditTeamModel
+            var team = new Team
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
                 Location = "Location",
                 SubcategoryId = Guid.NewGuid(),
-                Logo = file
+                TeamLogo = file
             };
-            var expectedErrorMessage = Errors.TeamLogoCannotHaveThisExtension;
+            var expectedErrorMessage = Errors.FileMustHaveAppropriateFormat;
 
             // Act
             var result = await _validator.ValidateAsync(team);
@@ -289,19 +289,19 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new EditTeamModel
+            var team = new Team
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
                 Location = "Location",
                 SubcategoryId = Guid.NewGuid(),
-                Logo = file
+                TeamLogo = file
             };
 
             _teamService.Setup(service => service.DoesTeamAlreadyExistByIdAsync(team.Id))
             .ReturnsAsync(true);
             _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
-            .ReturnsAsync(false);
+            .ReturnsAsync(Guid.Empty);
             _subcategoryService.Setup(service => service.DoesSubcategoryAlreadyExistByIdAsync(team.SubcategoryId))
             .ReturnsAsync(true);
 

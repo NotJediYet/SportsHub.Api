@@ -31,7 +31,13 @@ namespace SportsHub.Business.Services
 
         public async Task CreateTeamAsync(CreateTeamModel сreateTeamModel)
         {
-            var newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);
+            /*var newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);*/
+            var newTeam = new Team()
+            {
+                Name = сreateTeamModel.Name, 
+                SubcategoryId = сreateTeamModel.SubcategoryId, 
+                Location = сreateTeamModel.Location
+            };
             await _teamRepository.AddTeamAsync(newTeam);
 
             using var memoryStream = new MemoryStream();
@@ -44,7 +50,7 @@ namespace SportsHub.Business.Services
             await _teamLogoRepository.AddTeamLogoAsync(newTeamLogo);
         }
 
-        public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
+        public async Task<Guid> DoesTeamAlreadyExistByNameAsync(string teamName)
         {
             var result = await _teamRepository.DoesTeamAlreadyExistByNameAsync(teamName);
 
@@ -58,11 +64,18 @@ namespace SportsHub.Business.Services
             return result;
         }
         
-        public async Task EditTeamAsync(EditTeamModel EditTeamModel)
+        public async Task EditTeamAsync(Team team)
         {
-            await _teamRepository.UpdateTeamAsync(EditTeamModel);
+            await _teamRepository.EditTeamAsync(team);
 
-            await _teamLogoRepository.EditTeamLogoAsync(EditTeamModel.Logo, EditTeamModel.Id);
+            using var memoryStream = new MemoryStream();
+            await team.TeamLogo.CopyToAsync(memoryStream);
+
+            var fileBytes = team.TeamLogo.ByteArray();
+            var fileExtension = Path.GetExtension(team.TeamLogo.FileName);
+            var teamLogo = new TeamLogo(fileBytes, fileExtension, team.Id);
+
+            await _teamLogoRepository.EditTeamLogoAsync(teamLogo);
         }
     }
 }

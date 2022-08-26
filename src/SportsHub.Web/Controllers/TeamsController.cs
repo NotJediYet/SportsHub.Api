@@ -5,6 +5,7 @@ using SportsHub.Business.Services;
 using SportsHub.Security;
 using SportsHub.Shared.Models;
 using Microsoft.AspNetCore.Http;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Web.Controllers
 {
@@ -14,12 +15,12 @@ namespace SportsHub.Web.Controllers
     {
         private readonly ITeamService _teamService;
         private IValidator<CreateTeamModel> _createTeamModelValidator;
-        private IValidator<EditTeamModel> _editTeamModelValidator;
+        private IValidator<Team> _editTeamModelValidator;
 
         public TeamsController(
             ITeamService teamService,
             IValidator<CreateTeamModel> createTeamModelValidator,
-            IValidator<EditTeamModel> editTeamModelValidator)
+            IValidator<Team> editTeamModelValidator)
         {
             _teamService = teamService ?? throw new ArgumentNullException(nameof(teamService));
             _createTeamModelValidator = createTeamModelValidator ?? throw new ArgumentNullException(nameof(createTeamModelValidator));
@@ -44,7 +45,8 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policies.Admin)]
+        /*[Authorize(Policies.Admin)]*/
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -69,15 +71,15 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> EditTeam([FromForm] EditTeamModel teamModel)
+        public async Task<IActionResult> EditTeam([FromForm] Team team)
         {
-            var validationResult = await _editTeamModelValidator.ValidateAsync(teamModel);
+            var validationResult = await _editTeamModelValidator.ValidateAsync(team);
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors.Select(error => error.ErrorMessage).First());
             }
 
-            await _teamService.EditTeamAsync(teamModel);
+            await _teamService.EditTeamAsync(team);
 
             return Ok();
         }

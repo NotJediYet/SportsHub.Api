@@ -48,10 +48,15 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedTeamId = Guid.NewGuid();
 
-            var expectedTeam = new Team(name: "Name", Guid.NewGuid(), location: "Location");
+            var expectedTeam = new Team()
+            {
+                Name = "Name",
+                SubcategoryId = Guid.NewGuid(),
+                Location = "location"
+            };
             expectedTeam.Id = expectedTeamId;
 
-            _teamRepository.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
+            _teamRepository.Setup(repository => repository.GetTeamByIdAsync(expectedTeamId))
                 .ReturnsAsync(expectedTeam);
 
             // Act
@@ -107,12 +112,12 @@ namespace SportsHub.Business.Tests.Services
             var teamName = "Name";
 
             _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-            .ReturnsAsync(true);
+            .ReturnsAsync(Guid.Empty);
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
 
             // Assert
-            Assert.True(result);
+            Assert.Equal(Guid.Empty, result);
         }
 
         [Fact]
@@ -122,21 +127,36 @@ namespace SportsHub.Business.Tests.Services
             var teamName = "Name";
 
             _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-            .ReturnsAsync(false);
+            .ReturnsAsync(Guid.Empty);
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
 
             // Assert
-            Assert.False(result);
+            Assert.Equal(Guid.Empty, result);
         }
 
         private IEnumerable<Team> GetTeams()
         {
             IEnumerable<Team> teams = new List<Team>
             {
-                new Team("Name1", Guid.NewGuid(), "Location1"),
-                new Team("Name2", Guid.NewGuid(), "Location2"),
-                new Team("Name3", Guid.NewGuid(), "Location3")
+                new Team()
+                {
+                    Name = "Name1",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location1"
+                },
+                new Team()
+                {
+                    Name = "Name2",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location2"
+                },
+                new Team()
+                {
+                    Name = "Name3",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location3"
+                }
             };
 
             return teams;
@@ -146,45 +166,41 @@ namespace SportsHub.Business.Tests.Services
         public async Task EditTeamAsync_CallsAppropriateRepositoryMethodWithParameters()
         {
             // Arrange
+            var byteArray = Encoding.UTF8.GetBytes("This is a dummy file");
+            var expectedTeamLogo = new FormFile(new MemoryStream(byteArray), 0, byteArray.Length, "Data", "image.jpg");
+            var expectedTeamLogoExtension = Path.GetExtension(expectedTeamLogo.FileName);
+
             var expectedTeamId = Guid.NewGuid();
             var expectedTeamName = "Name";
             var expectedSubcategoryId = Guid.NewGuid();
             var expectedLocation = "Location";
+            var expectedByteArray = byteArray;
+            var fileExtension = expectedTeamLogoExtension;
 
-            var fileMock = new Mock<IFormFile>();
-            var content = "Hello World from a Fake File";
-            var fileName = "test.pdf";
-            var ms = new MemoryStream();
-            var writer = new StreamWriter(ms);
-            writer.Write(content);
-            writer.Flush();
-            ms.Position = 0;
-            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
-            fileMock.Setup(_ => _.FileName).Returns(fileName);
-            fileMock.Setup(_ => _.Length).Returns(ms.Length);
-            var expectedTeamLogo = fileMock.Object;
-
-            EditTeamModel editTeamModel = new()
+            Team teamModel = new()
             {
                 Id = expectedTeamId,
                 Name = expectedTeamName,
                 Location = expectedLocation,
                 SubcategoryId = expectedSubcategoryId,
-                Logo = expectedTeamLogo
+                TeamLogo = expectedTeamLogo
             };
 
             // Act
-            await _service.EditTeamAsync(editTeamModel);
+            await _service.EditTeamAsync(teamModel);
 
             // Assert
-            _teamRepository.Verify(repository => repository.UpdateTeamAsync(It.Is<EditTeamModel>(team =>
+            _teamRepository.Verify(repository => repository.EditTeamAsync(It.Is<Team>(team =>
                 (team.Id == expectedTeamId)
                 && (team.Name == expectedTeamName) 
                 && (team.Location == expectedLocation)
-                && (team.SubcategoryId == expectedSubcategoryId)
-                && (team.Logo == expectedTeamLogo))));
+                && (team.SubcategoryId == expectedSubcategoryId))));
 
-            _teamLogoRepository.Verify(repository => repository.EditTeamLogoAsync(It.Is<IFormFile>(teamLogo => (editTeamModel.Logo == expectedTeamLogo)), It.Is<Guid>(teamId => (editTeamModel.Id == expectedTeamId))));
+            _teamLogoRepository.Verify(repository => repository.EditTeamLogoAsync(It.Is<TeamLogo>(teamLogo =>
+                (byteArray == expectedByteArray)
+                && (fileExtension == expectedTeamLogoExtension)
+                && (teamModel.Id == expectedTeamId)
+                )));
         }
     }
 }

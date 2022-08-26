@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using SportsHub.Security;
 using SportsHub.Shared.Models;
 using SportsHub.Web.Validators;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Extensions
 {
@@ -78,7 +79,7 @@ namespace SportsHub.Extensions
             services.AddScoped<IValidator<CreateCategoryModel>, CreateCategoryModelValidator>();
             services.AddScoped<IValidator<CreateSubcategoryModel>, CreateSubcategoryModelValidator>();
             services.AddScoped<IValidator<CreateTeamModel>, CreateTeamModelValidator>();
-            services.AddScoped<IValidator<EditTeamModel>, EditTeamModelValidator>();
+            services.AddScoped<IValidator<Team>, EditTeamModelValidator>();
 
             return services;
         }

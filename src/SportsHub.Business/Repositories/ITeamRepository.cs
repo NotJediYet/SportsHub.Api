@@ -11,10 +11,10 @@ namespace SportsHub.Business.Repositories
 
         Task AddTeamAsync(Team team);
 
-        Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
+        Task<Guid> DoesTeamAlreadyExistByNameAsync(string teamName);
 
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
 
-        Task UpdateTeamAsync(EditTeamModel EditTeamModel);
+        Task EditTeamAsync(Team teamModel);
     }
 }

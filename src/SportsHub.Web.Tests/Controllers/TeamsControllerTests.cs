@@ -21,16 +21,16 @@ namespace SportsHub.Web.Tests.Controllers
     {
         private readonly Mock<ITeamService> _service;
         private readonly Mock<IValidator<CreateTeamModel>> _createTeamModelValidator;
-        private readonly Mock<IValidator<EditTeamModel>> _EditTeamModelvalidator;
+        private readonly Mock<IValidator<Team>> _editTeamModelvalidator;
         private readonly TeamsController _controller;
 
         public TeamsControllerTests()
         {
             _service = new Mock<ITeamService>();
             _createTeamModelValidator = new Mock<IValidator<CreateTeamModel>>();
-            _EditTeamModelvalidator = new Mock<IValidator<EditTeamModel>>();
+            _editTeamModelvalidator = new Mock<IValidator<Team>>();
 
-            _controller = new TeamsController(_service.Object, _createTeamModelValidator.Object, _EditTeamModelvalidator.Object);
+            _controller = new TeamsController(_service.Object, _createTeamModelValidator.Object, _editTeamModelvalidator.Object);
         }
 
         [Fact]
@@ -123,7 +123,12 @@ namespace SportsHub.Web.Tests.Controllers
             // Arrange
             var expectedTeamId = Guid.NewGuid();
 
-            var expectedTeam = new Team(name: "Name", subcategoryId: Guid.NewGuid(), location: "Location");
+            var expectedTeam = new Team()
+            {
+                Name = "Name",
+                SubcategoryId = Guid.NewGuid(),
+                Location = "Location"
+            };
             expectedTeam.Id = expectedTeamId;
 
             _service.Setup(service => service.GetTeamByIdAsync(expectedTeamId))
@@ -146,9 +151,24 @@ namespace SportsHub.Web.Tests.Controllers
         {
             IEnumerable<Team> teams = new List<Team>
             {
-                new Team("Name1", Guid.NewGuid(), "Location1"),
-                new Team("Name2", Guid.NewGuid(), "Location2"),
-                new Team("Name3", Guid.NewGuid(), "Location3")
+                new Team()
+                {
+                    Name = "Name1",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location1"
+                },
+                new Team()
+                {
+                    Name = "Name2",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location2"
+                },
+                new Team()
+                {
+                    Name = "Name3",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location3"
+                }
             };
             return teams;
         }
@@ -169,17 +189,17 @@ namespace SportsHub.Web.Tests.Controllers
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var model = new EditTeamModel
+            var model = new Team
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
                 Location = "Location",
                 SubcategoryId = Guid.NewGuid(),
-                Logo = file
+                TeamLogo = file
             };
             var validationResult = new ValidationResult();
 
-            _EditTeamModelvalidator.Setup(_EditTeamModelvalidator => _EditTeamModelvalidator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+            _editTeamModelvalidator.Setup(_EditTeamModelvalidator => _EditTeamModelvalidator.ValidateAsync(model, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(validationResult);
 
             // Act
@@ -206,19 +226,19 @@ namespace SportsHub.Web.Tests.Controllers
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var model = new EditTeamModel
+            var model = new Team
             {
                 Id = Guid.Empty,
                 Name = String.Empty,
                 Location = String.Empty,
                 SubcategoryId = Guid.Empty,
-                Logo = file
+                TeamLogo = file
             };
 
             var validationFailure = new ValidationFailure(nameof(model.Name), Errors.TeamNameCannotBeEmpty);
             var validationResult = new ValidationResult(new[] { validationFailure });
 
-            _EditTeamModelvalidator.Setup(_EditTeamModelvalidator => _EditTeamModelvalidator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+            _editTeamModelvalidator.Setup(_EditTeamModelvalidator => _EditTeamModelvalidator.ValidateAsync(model, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(validationResult);
 
             // Act

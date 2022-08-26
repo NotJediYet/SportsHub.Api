@@ -32,11 +32,16 @@ namespace SportsHub.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
+        public async Task<Guid> DoesTeamAlreadyExistByNameAsync(string teamName)
         {
             var teams = await _context.Set<Team>().ToListAsync();
+            var foundTeam = teams.Find(team => team.Name == teamName);
 
-            return teams.Any(team => team.Name == teamName);
+            if (foundTeam == null)
+            {
+                return Guid.Empty;
+            }
+            else return foundTeam.Id;
         }
 
         public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)
@@ -44,6 +49,17 @@ namespace SportsHub.Infrastructure.Repositories
             var teams = await _context.Set<Team>().ToListAsync();
 
             return teams.Any(team => team.Id == id);
+        }
+
+        public async Task EditTeamAsync(Team team)
+        {
+            var oldTeam = await _context.Teams.FirstOrDefaultAsync(oldTeam => oldTeam.Id == team.Id);
+
+            oldTeam.Name = team.Name;
+            oldTeam.Location = team.Location;
+            oldTeam.SubcategoryId = team.SubcategoryId;
+
+            await _context.SaveChangesAsync();
         }
     }
 }
