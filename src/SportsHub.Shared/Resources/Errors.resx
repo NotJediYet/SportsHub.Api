@@ -150,8 +150,8 @@
   <data name="TeamIdDoesNotExist" xml:space="preserve">
     <value>Team with that id does not exist</value>
   </data>
-  <data name="TeamLogoIsRequired" xml:space="preserve">
-    <value>Team logo must be uploaded</value>
+  <data name="TeamLogoCannotBeEmpty" xml:space="preserve">
+    <value>Team logo cannot be empty</value>
   </data>
   <data name="TeamNameCannotBeEmpty" xml:space="preserve">
     <value>Team name cannot be empty</value>

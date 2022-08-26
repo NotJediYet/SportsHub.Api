@@ -28,7 +28,7 @@ namespace SportsHub.Web.Validators
                 .WithMessage(Errors.SubcategoryDoesNotExist);
 
             RuleFor(team => team.Logo)
-                .NotEmpty().WithMessage(Errors.TeamLogoIsRequired)
+                .NotEmpty().WithMessage(Errors.TeamLogoCannotBeEmpty)
                 .SetValidator(new IFormFileValidator());
         }
 

@@ -31,7 +31,6 @@ namespace SportsHub.Business.Services
 
         public async Task CreateTeamAsync(CreateTeamModel сreateTeamModel)
         {
-            /*var newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);*/
             var newTeam = new Team()
             {
                 Name = сreateTeamModel.Name, 
