@@ -3,6 +3,7 @@ using SportsHub.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using SportsHub.Business.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace SportsHub.Infrastructure.Repositories
 {
@@ -43,13 +44,7 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task EditTeamLogoAsync(IFormFile teamLogoFile, Guid teamId)
         {
-            var logo = await _context.TeamLogos.Where(logo => logo.TeamId == teamId).FirstOrDefaultAsync();
-
-            var memoryStream = new MemoryStream();
-            await teamLogoFile.CopyToAsync(memoryStream);
-
-            logo.Bytes = memoryStream.ToArray();
-            logo.FileExtension = Path.GetExtension(teamLogoFile.FileName);
+            _context.TeamLogos.Update(teamLogo);
 
             await _context.SaveChangesAsync();
         }

@@ -115,7 +115,7 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Subcategory does not exist.
+        ///   Looks up a localized string similar to Subcategory does not exist.
         /// </summary>
         public static string SubcategoryDoesNotExist {
             get {

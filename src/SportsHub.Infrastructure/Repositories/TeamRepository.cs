@@ -47,6 +47,7 @@ namespace SportsHub.Infrastructure.Repositories
         public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)
         {
             var teams = await _context.Set<Team>().ToListAsync();
+            var foundTeam = teams.Find(team => team.Name == teamName);
 
             return teams.Any(team => team.Id == id);
         }
@@ -67,6 +68,17 @@ namespace SportsHub.Infrastructure.Repositories
             var teams = await _context.Set<Team>().ToListAsync();
 
             return teams.Any(team => team.Id == id);
+        }
+
+        public async Task EditTeamAsync(Team team)
+        {
+            var oldTeam = await _context.Teams.FirstOrDefaultAsync(oldTeam => oldTeam.Id == team.Id);
+
+            oldTeam.Name = team.Name;
+            oldTeam.Location = team.Location;
+            oldTeam.SubcategoryId = team.SubcategoryId;
+
+            await _context.SaveChangesAsync();
         }
     }
 }
