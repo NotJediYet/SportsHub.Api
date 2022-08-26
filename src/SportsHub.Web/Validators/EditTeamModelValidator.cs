@@ -30,7 +30,6 @@ namespace SportsHub.Web.Validators
             RuleFor(team => team.Name)
                 .NotEmpty().WithMessage(Errors.TeamNameCannotBeEmpty);
 
-
             RuleFor(team => team.SubcategoryId)
                 .NotEmpty().WithMessage(Errors.SubcategoryIdCannotBeEmpty)
                 .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlreadyExistByIdAsync(id))
@@ -52,21 +51,6 @@ namespace SportsHub.Web.Validators
             else if (result == Id) { return true; }
             else return false;
             
-        }
-
-        public class IFormFileValidator : AbstractValidator<IFormFile>
-        {
-            private const string Extension = @"\.jpg|\.png|\.PNG|\.svg";
-            public IFormFileValidator()
-            {
-                SetRules();
-            }
-            private void SetRules()
-            {
-                RuleFor(file => Path.GetExtension(file.FileName))
-                    .Matches(Extension)
-                    .WithMessage(Errors.FileMustHaveAppropriateFormat);
-            }
         }
 
         public class IFormFileValidator : AbstractValidator<IFormFile>
