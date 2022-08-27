@@ -26,7 +26,7 @@ namespace SportsHub.Web.Tests.Controllers
         {
             _service = new Mock<ICategoryService>();
             _validator = new Mock<IValidator<CreateCategoryModel>>();
-            
+
             _controller = new CategoriesController(_service.Object, _validator.Object);
         }
 
@@ -102,7 +102,7 @@ namespace SportsHub.Web.Tests.Controllers
             var categoryId = Guid.NewGuid();
 
             _service.Setup(service => service.GetCategoryByIdAsync(categoryId))
-                .ReturnsAsync((Category) null);
+                .ReturnsAsync((Category)null);
 
             // Act
             var result = await _controller.GetCategory(categoryId);
