@@ -12,7 +12,7 @@ using SportsHub.Infrastructure.DBContext;
 namespace SportsHub.Infrastructure.Migrations
 {
     [DbContext(typeof(SportsHubDbContext))]
-    [Migration("20220818092856_Articles")]
+    [Migration("20220826175535_Articles")]
     partial class Articles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,10 +30,13 @@ namespace SportsHub.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AltImage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Caption")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Context")
+                    b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Headline")
@@ -68,20 +71,18 @@ namespace SportsHub.Infrastructure.Migrations
 
             modelBuilder.Entity("SportsHub.Shared.Entities.ArticleImage", b =>
                 {
-                    b.Property<byte[]>("Bytes")
-                        .HasColumnType("varbinary(900)");
-
                     b.Property<Guid>("ArticleId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Bytes")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("FileExtension")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Bytes");
-
-                    b.HasIndex("ArticleId")
-                        .IsUnique();
+                    b.HasKey("ArticleId");
 
                     b.ToTable("Images");
                 });

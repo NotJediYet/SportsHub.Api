@@ -16,9 +16,10 @@ namespace SportsHub.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AltImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Headline = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Caption = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Context = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsPublished = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     IsShowComments = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
@@ -37,13 +38,13 @@ namespace SportsHub.Infrastructure.Migrations
                 name: "Images",
                 columns: table => new
                 {
-                    Bytes = table.Column<byte[]>(type: "varbinary(900)", nullable: false),
-                    FileExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Bytes = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    FileExtension = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.Bytes);
+                    table.PrimaryKey("PK_Images", x => x.ArticleId);
                     table.ForeignKey(
                         name: "FK_Images_Articles_ArticleId",
                         column: x => x.ArticleId,
@@ -63,12 +64,6 @@ namespace SportsHub.Infrastructure.Migrations
                 name: "IX_Articles_TeamId",
                 table: "Articles",
                 column: "TeamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_ArticleId",
-                table: "Images",
-                column: "ArticleId",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

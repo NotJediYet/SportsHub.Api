@@ -23,7 +23,6 @@ namespace SportsHub.Web.Controllers
         {
             _articleService = articleService ?? throw new ArgumentNullException(nameof(articleService));
             _createArticleModelValidator = createArticleModelValidator ?? throw new ArgumentNullException(nameof(createArticleModelValidator));
-           
         }
 
         [HttpGet]
@@ -35,6 +34,7 @@ namespace SportsHub.Web.Controllers
         public async Task<IActionResult> GetArticles()
         {
             var articles = await _articleService.GetArticlesAsync();
+
             return Ok(articles);
         }
 
@@ -67,7 +67,7 @@ namespace SportsHub.Web.Controllers
             var result = await _createArticleModelValidator.ValidateAsync(сreateArticleModel);
             if (!result.IsValid)
             {
-                return BadRequest(result.Errors.Select(error => error.ErrorMessage));
+                return BadRequest(result.ToString());
             }
 
             await _articleService.CreateArticleAsync(сreateArticleModel);

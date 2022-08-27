@@ -25,12 +25,16 @@ namespace SportsHub.Web.Tests.Validators
         public async void CreateArticleModel_WhenNameIsEmpty_ReturnsValidationResultWithError()
         {
             // Arrange
-            var article = new CreateArticleModel{
+            var article = new CreateArticleModel
+            {
                 TeamId = Guid.NewGuid(),
                 Location = "location",
+                AltImage = "altImage",
                 Headline = string.Empty,
                 Caption = "caption",
-                Context = "context"};
+                Content = "content",
+                IsShowComments = true,
+            };
 
             var expectedErrorMessage = Errors.ArticleHeadlineCannotBeEmpty;
 
@@ -46,12 +50,16 @@ namespace SportsHub.Web.Tests.Validators
         public async void CreateArticleModel_WhenNameIsNotUnique_ReturnsValidationResultWithError()
         {
             // Arrange
-            var article = new CreateArticleModel{
+            var article = new CreateArticleModel
+            {
                 TeamId = Guid.NewGuid(),
                 Location = "location",
+                AltImage = "altImage",
                 Headline = "headline",
                 Caption = "caption",
-                Context = "context"};
+                Content = "content",
+                IsShowComments = true,
+            };
 
             var expectedErrorMessage = Errors.ArticleHeadlineIsNotUnique;
 
@@ -70,12 +78,16 @@ namespace SportsHub.Web.Tests.Validators
         public async void CreateArticleModel_WhenTeamIdIsEmpty_ReturnsValidationResultWithError()
         {
             // Arrange
-            var article = new CreateArticleModel{
+            var article = new CreateArticleModel
+            {
                 TeamId = Guid.Empty,
                 Location = "location",
+                AltImage = "altImage",
                 Headline = "headline",
                 Caption = "caption",
-                Context = "context"};
+                Content = "content",
+                IsShowComments = true,
+            };
 
             var expectedErrorMessage = Errors.TeamIdCannotBeEmpty;
 
@@ -91,12 +103,16 @@ namespace SportsHub.Web.Tests.Validators
         public async void CreateArticleModel_WhenTeamDoesNotExist_ReturnsValidationResultWithError()
         {
             // Arrange
-            var article = new CreateArticleModel{
+            var article = new CreateArticleModel
+            {
                 TeamId = Guid.NewGuid(),
                 Location = "location",
+                AltImage = "altImage",
                 Headline = "headline",
                 Caption = "caption",
-                Context = "context"};
+                Content = "content",
+                IsShowComments = true,
+            };
 
             var expectedErrorMessage = Errors.TeamIdDoesNotExist;
 
@@ -114,13 +130,17 @@ namespace SportsHub.Web.Tests.Validators
         public async void CreateArticleModel_WhenModelIsValid_ReturnsSuccessValidationResult()
         {
             // Arrange
-            var article = new CreateArticleModel{   
+            var article = new CreateArticleModel
+            {
                 TeamId = Guid.NewGuid(),
                 Location = "location",
+                AltImage = "altImage",
                 Headline = "headline",
                 Caption = "caption",
-                Context = "context" };
-        
+                Content = "content",
+                IsShowComments = true,
+            };
+
 
             _articleService.Setup(service => service.DoesArticleAlreadyExistByHeadlineAsync(article.Headline))
             .ReturnsAsync(false);

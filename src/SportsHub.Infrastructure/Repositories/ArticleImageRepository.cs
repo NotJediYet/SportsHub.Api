@@ -24,18 +24,17 @@ namespace SportsHub.Infrastructure.Repositories
         {
             var memoryStream = new MemoryStream();
 
-            var fileBytes = memoryStream.ToArray();
-            
-            var fileExtension = Path.GetExtension(articleImageFile.FileName);
-          
-            var fileSize = articleImageFile.Length;
+            await articleImageFile.CopyToAsync(memoryStream);
 
-            ArticleImage newArticleImage = new ArticleImage(fileBytes, fileExtension, articleId);
+            var bytes = memoryStream.ToArray();
+            var imageExtension = Path.GetExtension(articleImageFile.FileName);
+
+            ArticleImage newArticleImage = new ArticleImage(bytes, imageExtension, articleId);
 
             await articleImageFile.CopyToAsync(memoryStream);
-            
+
             await _context.Images.AddAsync(newArticleImage);
-            
+
             await _context.SaveChangesAsync();
         }
 

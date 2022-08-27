@@ -18,11 +18,13 @@ namespace SportsHub.Shared.Entities
 
         public string Location { get; set; } = string.Empty;
 
+        public string AltImage { get; set; } = string.Empty;
+
         public string Headline { get; set; } = string.Empty;
 
         public string Caption { get; set; } = string.Empty;
 
-        public string Context { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
 
         public bool IsPublished { get; set; } = false;
 
@@ -32,13 +34,15 @@ namespace SportsHub.Shared.Entities
         [NotMapped]
         public IFormFile Image { get; set; }
 
-        public Article(Guid teamId, string location, string headline, string caption, string context)
+        public Article(Guid teamId, string location, string altImage, string headline, string caption, string content, bool isShowComments)
         {
             TeamId = teamId;
             Location = location;
+            AltImage = altImage;
             Headline = headline;
             Caption = caption;
-            Context = context;
+            Content = content;
+            IsShowComments = isShowComments;
         }
     }
 }

@@ -33,7 +33,6 @@ namespace SportsHub.Web.Tests.Controllers
         }
 
         [Fact]
-  
         public async Task CreateArticle_WhenModelIsValid_ReturnsOkResult()
         {
             // Arrange
@@ -41,9 +40,11 @@ namespace SportsHub.Web.Tests.Controllers
             {
                 TeamId = Guid.NewGuid(),
                 Location = "location",
+                AltImage = "altImage",
                 Headline = "headline",
                 Caption = "caption",
-                Context = "context"
+                Content = "content",
+                IsShowComments = false
             };
             var validationResult = new ValidationResult();
 
@@ -58,6 +59,7 @@ namespace SportsHub.Web.Tests.Controllers
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
         }
 
+        [Fact]
         public async Task CreateArticle_WhenModelIsInvalid_ReturnsBadRequestResult()
         {
             // Arrange
@@ -65,9 +67,11 @@ namespace SportsHub.Web.Tests.Controllers
             {
                 TeamId = Guid.NewGuid(),
                 Location = "location",
-                Headline = "headline",
+                AltImage= "altImage",
+                Headline = string.Empty,
                 Caption = "caption",
-                Context = "context"
+                Content = "content",
+                IsShowComments=false
             };
 
             var validationFailure = new ValidationFailure(nameof(articleModel.Headline), Errors.ArticleHeadlineCannotBeEmpty);
@@ -128,7 +132,7 @@ namespace SportsHub.Web.Tests.Controllers
             // Arrange
             var expectedArticleId = Guid.NewGuid();
 
-            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", headline : "headline", caption:"caption",context:"context");
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
             expectedArticle.Id = expectedArticleId;
           
 
@@ -153,10 +157,10 @@ namespace SportsHub.Web.Tests.Controllers
         private IEnumerable<Article> GetArticles()
         {
             IEnumerable<Article> articles = new List<Article>
-            {
-                new Article(Guid.NewGuid(),"location1" ,"headline1" ,"caption1" ,"context1"),
-                new Article(Guid.NewGuid(),"location2" ,"headline2" ,"caption2" ,"context2"),
-                new Article(Guid.NewGuid(),"location3" ,"headline3" ,"caption3" ,"context3")
+            {  
+                new Article( Guid.NewGuid(),"location1" ,"altImage1","headline1" ,"caption1" ,"content1", false),
+                new Article(Guid.NewGuid(),"location2" ,"altImage2","headline2" ,"caption2" ,"content2", true),
+                new Article(Guid.NewGuid(),"location3" ,"altImage3","headline3" ,"caption3" ,"content3", false)
             };
             return articles;
         }

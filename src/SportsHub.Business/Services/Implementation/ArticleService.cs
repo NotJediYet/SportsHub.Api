@@ -29,15 +29,25 @@ namespace SportsHub.Business.Services
 
         public async Task CreateArticleAsync(CreateArticleModel сreateArticleModel)
         {
-
             var articleModel = new Article(
                 сreateArticleModel.TeamId,
                 сreateArticleModel.Location,
+                сreateArticleModel.AltImage,
                 сreateArticleModel.Headline,
                 сreateArticleModel.Caption,
-                сreateArticleModel.Context);
+                сreateArticleModel.Content,
+                сreateArticleModel.IsShowComments);
+
+            articleModel.Image=сreateArticleModel.ArticleImage;
+
             await _articleRepository.AddArticleAsync(articleModel);
-            await _articleImageRepository.AddImageAsync(articleModel.Image, articleModel.Id);
+
+            if (articleModel.Image != null)
+            {
+                await _articleImageRepository.AddImageAsync(articleModel.Image, articleModel.Id);
+            }
+            
+            
         }
 
         public async Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline)

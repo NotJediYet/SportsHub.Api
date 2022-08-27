@@ -47,7 +47,7 @@ namespace SportsHub.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("SportsHub.Shared.Entities.Article", b =>
+            modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -94,7 +94,7 @@ namespace SportsHub.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
-            {
+                {
                     b.HasOne("SportsHub.Shared.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoryId")
@@ -104,7 +104,7 @@ namespace SportsHub.Infrastructure.Migrations
 
             modelBuilder.Entity("SportsHub.Shared.Entities.Team", b =>
                 {
-                    b.HasOne("SportsHub.Shared.Entities.Article", null)
+                    b.HasOne("SportsHub.Shared.Entities.Subcategory", null)
                         .WithMany()
                         .HasForeignKey("SubcategoryId")
                         .OnDelete(DeleteBehavior.Cascade)

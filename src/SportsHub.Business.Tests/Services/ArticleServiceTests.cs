@@ -48,7 +48,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedArticleId = Guid.NewGuid();
 
-            var expectedArticle = new Article(Guid.NewGuid(),location:"Location",headline: "Headline", caption: "Caption", context: "Context");
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
             expectedArticle.Id = expectedArticleId;
 
             _articleRepository.Setup(repo => repo.GetArticleByIdAsync(expectedArticleId))
@@ -68,18 +68,23 @@ namespace SportsHub.Business.Tests.Services
         {
             // Arrange
             var expectedTeamId = Guid.NewGuid();
-            var expectedLocation ="location" ;
+            var expectedLocation = "location";
+            var expectedAltImage = "altImage";
             var expectedHeadline = "headline";
             var expectedCaption = "caption";
-            var expectedContext = "context";
+            var expectedContent = "content";
+            var expectedIsShowComments = true;
 
             CreateArticleModel articleModel = new()
             {
-               TeamId =expectedTeamId, 
-               Location= expectedLocation,
-               Headline= expectedHeadline,
-               Caption= expectedCaption,
-               Context= expectedContext };
+                TeamId = expectedTeamId,
+                Location = expectedLocation,
+                AltImage = expectedAltImage,
+                Headline = expectedHeadline,
+                Caption = expectedCaption,
+                Content = expectedContent,
+                IsShowComments = expectedIsShowComments
+            };
 
             var imageStream = new MemoryStream(GetRandomBytes());
 
@@ -94,8 +99,9 @@ namespace SportsHub.Business.Tests.Services
 
             // Assert
             _articleRepository.Verify(repository => repository.AddArticleAsync(It.Is<Article>(article =>
-                (article.TeamId == expectedTeamId) && (article.Location == expectedLocation)&&(article.Headline == expectedHeadline)
-                &&(article.Caption == expectedCaption) && (article.Context == expectedContext))));
+                    (article.TeamId == expectedTeamId) && (article.Location == expectedLocation) && (article.AltImage == expectedAltImage)
+                && (article.Headline == expectedHeadline) && (article.Caption == expectedCaption) && (article.Content == expectedContent) &&
+                article.IsShowComments == expectedIsShowComments))); ;
         }
 
 
@@ -167,9 +173,9 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Article> articles = new List<Article>
             {
-                new Article( Guid.NewGuid(),"location1" ,"headline1" ,"caption1" ,"context1"),
-                new Article(Guid.NewGuid(),"location2" ,"headline2" ,"caption2" ,"context2"),
-                new Article(Guid.NewGuid(),"location3" ,"headline3" ,"caption3" ,"context3")
+                 new Article( Guid.NewGuid(),"location1" ,"altImage1","headline1" ,"caption1" ,"content1", false),
+                new Article(Guid.NewGuid(),"location2" ,"altImage2","headline2" ,"caption2" ,"content2", true),
+                new Article(Guid.NewGuid(),"location3" ,"altImage3","headline3" ,"caption3" ,"content3", false)
             };
 
             return articles;

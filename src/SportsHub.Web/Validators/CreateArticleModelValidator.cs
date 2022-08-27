@@ -19,9 +19,12 @@ namespace SportsHub.Web.Validators
             _articleService = articleService ?? throw new ArgumentNullException(nameof(articleService));
 
             RuleFor(article => article.Headline)
-               .NotEmpty().WithMessage(Errors.ArticleHeadlineCannotBeEmpty)
-               .MustAsync((headline, cancellation) => DoesArticleNameIsUniqueAsync(headline))
-               .WithMessage(Errors.ArticleHeadlineIsNotUnique);
+                .NotEmpty().WithMessage(Errors.ArticleHeadlineCannotBeEmpty)
+                .MustAsync((headline, cancellation) => DoesArticleNameIsUniqueAsync(headline))
+                .WithMessage(Errors.ArticleHeadlineIsNotUnique);
+
+            RuleFor(article => article.ArticleImage)
+                .SetValidator(new IFormFileValidator());
 
             RuleFor(article => article.TeamId)
                 .NotEmpty().WithMessage(Errors.TeamIdCannotBeEmpty)
@@ -31,10 +34,10 @@ namespace SportsHub.Web.Validators
         }
 
 
-        public class FormFileValidator : AbstractValidator<FormFile>
+        public class IFormFileValidator : AbstractValidator<IFormFile>
         {
             private const string Extension = @"\.jpg|\.png|\.svg";
-            public FormFileValidator()
+            public IFormFileValidator()
             {
                 SetRules();
             }
