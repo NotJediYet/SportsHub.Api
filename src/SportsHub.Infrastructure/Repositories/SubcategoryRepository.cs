@@ -43,5 +43,16 @@ namespace SportsHub.Infrastructure.Repositories
 
             return subcategories;
         }
+
+        public async Task<Guid> FindSubcategoryIdBySubcategoryNameAsync(string subcategoryName)
+        {
+            var subcategories = await _context.Subcategories.ToListAsync();
+
+            Guid subcategoryId = (from subcategory in subcategories
+                                  where subcategory.Name == subcategoryName
+                                  select subcategory.Id).FirstOrDefault();
+
+            return subcategoryId;
+        }
     }
 }
