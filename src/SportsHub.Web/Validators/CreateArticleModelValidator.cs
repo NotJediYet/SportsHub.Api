@@ -27,7 +27,7 @@ namespace SportsHub.Web.Validators
                 .SetValidator(new IFormFileValidator());
 
             RuleFor(article => article.TeamId)
-                .NotEmpty().WithMessage(Errors.TeamIdCannotBeEmpty)
+                .NotEmpty().WithMessage(Errors.TeamIdCanNotBeEmpty)
                 .MustAsync((id, cancellation) => _teamService.DoesTeamAlreadyExistByIdAsync(id))
                 .WithMessage(Errors.TeamIdDoesNotExist);
 

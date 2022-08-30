@@ -173,51 +173,52 @@ namespace SportsHub.Infrastructure.Migrations
                     b.HasKey("TeamId");
 
                     b.ToTable("TeamLogos");
-            modelBuilder.Entity("SportsHub.Shared.Entities.Article", b =>
-                {
-                    b.HasOne("SportsHub.Shared.Entities.Team", null)
-                        .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    modelBuilder.Entity("SportsHub.Shared.Entities.Article", b =>
+                        {
+                            b.HasOne("SportsHub.Shared.Entities.Team", null)
+                                .WithMany()
+                                .HasForeignKey("TeamId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+                        });
 
-            modelBuilder.Entity("SportsHub.Shared.Entities.ArticleImage", b =>
-                {
-                    b.HasOne("SportsHub.Shared.Entities.Article", null)
-                        .WithOne()
-                        .HasForeignKey("SportsHub.Shared.Entities.ArticleImage", "ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    modelBuilder.Entity("SportsHub.Shared.Entities.ArticleImage", b =>
+                        {
+                            b.HasOne("SportsHub.Shared.Entities.Article", null)
+                                .WithOne()
+                                .HasForeignKey("SportsHub.Shared.Entities.ArticleImage", "ArticleId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+                        });
 
-            modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
-                {
-                    b.HasOne("SportsHub.Shared.Entities.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    modelBuilder.Entity("SportsHub.Shared.Entities.Subcategory", b =>
+                        {
+                            b.HasOne("SportsHub.Shared.Entities.Category", null)
+                                .WithMany()
+                                .HasForeignKey("CategoryId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+                        });
 
-            modelBuilder.Entity("SportsHub.Shared.Entities.Team", b =>
-                {
-                    b.HasOne("SportsHub.Shared.Entities.Subcategory", null)
-                        .WithMany()
-                        .HasForeignKey("SubcategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    modelBuilder.Entity("SportsHub.Shared.Entities.Team", b =>
+                        {
+                            b.HasOne("SportsHub.Shared.Entities.Subcategory", null)
+                                .WithMany()
+                                .HasForeignKey("SubcategoryId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+                        });
 
-            modelBuilder.Entity("SportsHub.Shared.Entities.TeamLogo", b =>
-                {
-                    b.HasOne("SportsHub.Shared.Entities.Team", null)
-                        .WithOne()
-                        .HasForeignKey("SportsHub.Shared.Entities.TeamLogo", "TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    modelBuilder.Entity("SportsHub.Shared.Entities.TeamLogo", b =>
+                        {
+                            b.HasOne("SportsHub.Shared.Entities.Team", null)
+                                .WithOne()
+                                .HasForeignKey("SportsHub.Shared.Entities.TeamLogo", "TeamId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+                        });
 #pragma warning restore 612, 618
+                });
         }
     }
 }
