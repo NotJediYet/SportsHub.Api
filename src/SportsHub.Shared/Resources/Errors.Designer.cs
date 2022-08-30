@@ -61,6 +61,33 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Article headline cannot be empty.
+        /// </summary>
+        public static string ArticleHeadlineCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("ArticleHeadlineCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Article headline is not unique.
+        /// </summary>
+        public static string ArticleHeadlineIsNotUnique {
+            get {
+                return ResourceManager.GetString("ArticleHeadlineIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Article image cannot be empty.
+        /// </summary>
+        public static string ArticleImageCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("ArticleImageCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Category does not exist.
         /// </summary>
         public static string CategoryDoesNotExist {

@@ -17,17 +17,17 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task<IEnumerable<Team>> GetTeamsAsync()
         {
-            return await _context.Set<Team>().ToListAsync();
+            return await _context.Teams.ToListAsync();
         }
 
         public async Task<Team> GetTeamByIdAsync(Guid id)
         {
-            return await _context.Set<Team>().FindAsync(id);
+            return await _context.Teams.FindAsync(id);
         }
 
         public async Task AddTeamAsync(Team team)
         {
-            await _context.Set<Team>().AddAsync(team);
+            await _context.Teams.AddAsync(team);
 
             await _context.SaveChangesAsync();
         }
