@@ -108,15 +108,6 @@ namespace SportsHub.Shared.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Subcategory does not exist.
         /// </summary>
-        public static string FileMustHaveAppropriateFormat {
-            get {
-                return ResourceManager.GetString("FileMustHaveAppropriateFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Subcategory does not exist.
-        /// </summary>
         public static string SubcategoryDoesNotExist {
             get {
                 return ResourceManager.GetString("SubcategoryDoesNotExist", resourceCulture);

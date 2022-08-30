@@ -24,11 +24,5 @@ namespace SportsHub.Shared.Entities
         [FromForm]
         [NotMapped]
         public IFormFile TeamLogo { get; set; }
-
-        {
-            Name = name;
-            SubcategoryId = subcategoryId;
-            Location = location;
-        }
     }
 }

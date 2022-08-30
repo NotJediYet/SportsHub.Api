@@ -68,20 +68,5 @@ namespace SportsHub.Web.Validators
                     .WithMessage(Errors.FileMustHaveAppropriateFormat);
             }
         }
-
-        public class IFormFileValidator : AbstractValidator<IFormFile>
-        {
-            private const string Extension = @"\.jpg|\.png|\.PNG|\.svg";
-            public IFormFileValidator()
-            {
-                SetRules();
-            }
-            private void SetRules()
-            {
-                RuleFor(file => Path.GetExtension(file.FileName))
-                    .Matches(Extension)
-                    .WithMessage(Errors.FileMustHaveAppropriateFormat);
-            }
-        }
     }
 }
