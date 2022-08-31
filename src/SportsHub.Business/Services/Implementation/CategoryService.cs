@@ -19,9 +19,7 @@ namespace SportsHub.Business.Services
 
         public async Task<Category> GetCategoryByIdAsync(Guid id)
         {
-            var category = await _categoryRepository.GetCategoryByIdAsync(id);
-
-            return category;
+            return await _categoryRepository.GetCategoryByIdAsync(id);
         }
 
         public async Task CreateCategoryAsync(string categoryName)
@@ -33,16 +31,13 @@ namespace SportsHub.Business.Services
 
         public async Task<bool> DoesCategoryAlreadyExistByNameAsync(string categoryName)
         {
-            var result = await _categoryRepository.DoesCategoryAlreadyExistByNameAsync(categoryName);
+            return await _categoryRepository.DoesCategoryAlreadyExistByNameAsync(categoryName);
 
-            return result;
         }
 
         public async Task<bool> DoesCategoryAlreadyExistByIdAsync(Guid id)
         {
-            var result = await _categoryRepository.DoesCategoryAlreadyExistByIdAsync(id);
-
-            return result;
+            return await _categoryRepository.DoesCategoryAlreadyExistByIdAsync(id);
         }
     }
 }

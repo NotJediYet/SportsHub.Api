@@ -59,5 +59,20 @@ namespace SportsHub.Business.Services
         {
             return await _articleRepository.DoesArticleAlreadyExistByIdAsync(id);
         }
+
+        public IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId, IEnumerable<Article> articles)
+        {
+            return _articleRepository.GetArticlesFilteredByTeamId(teamId, articles);
+        }
+
+        public IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles)
+        {
+            return _articleRepository.GetArticlesFilteredByStatus(status, articles);
+        }
+
+        public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
+        {
+            return await _articleRepository.GetSortedArticlesAsync();
+        }
     }
 }

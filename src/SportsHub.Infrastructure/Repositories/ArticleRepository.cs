@@ -42,5 +42,35 @@ namespace SportsHub.Infrastructure.Repositories
 
             return articles;
         }
+
+        public IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId, IEnumerable<Article> articles)
+        {
+            articles = articles.Where(articles => articles.TeamId == teamId).ToList();
+
+            return articles;
+        }
+
+        public IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles)
+        {
+            if (status == "Published")
+            {
+                articles = articles.Where(articles => articles.IsPublished == true).ToList();
+            }
+            else
+            {
+                articles = articles.Where(articles => articles.IsPublished == false).ToList();
+            }
+
+            return articles;
+        }
+
+        public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
+        {
+            var articles = await _context.Articles
+                .OrderBy(articles => articles.Headline)
+                .ToListAsync();
+
+            return articles;
+        }
     }
 }
