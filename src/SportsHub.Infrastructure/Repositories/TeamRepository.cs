@@ -32,7 +32,7 @@ namespace SportsHub.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Guid> DoesTeamAlreadyExistByNameAsync(string teamName)
+        public async Task<Guid> GetTeamIdByNameAsync(string teamName)
         {
             var teams = await _context.Set<Team>().ToListAsync();
             var foundTeam = teams.Find(team => team.Name == teamName);

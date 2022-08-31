@@ -16,7 +16,7 @@ namespace SportsHub.Extensions
             return services;
         }
 
-        public static byte[] ByteArray(this IFormFile fileLogo)
+        public static byte[] ToByteArray(this IFormFile fileLogo)
         {
             using var memoryStream = new MemoryStream();
             fileLogo.CopyTo(memoryStream);

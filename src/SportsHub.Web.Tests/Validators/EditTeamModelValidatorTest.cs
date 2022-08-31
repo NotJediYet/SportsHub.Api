@@ -40,7 +40,7 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new Team
+            var team = new EditTeamModel
             {
                 Id = Guid.Empty,
                 Name = "Name",
@@ -74,7 +74,7 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new Team
+            var team = new EditTeamModel
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
@@ -111,7 +111,7 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new Team
+            var team = new EditTeamModel
             {
                 Id = Guid.NewGuid(),
                 Name = string.Empty,
@@ -145,7 +145,7 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new Team
+            var team = new EditTeamModel
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
@@ -155,7 +155,7 @@ namespace SportsHub.Web.Tests.Validators
             };
             var expectedErrorMessage = Errors.TeamNameIsNotUnique;
 
-            _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
+            _teamService.Setup(service => service.GetTeamIdByNameAsync(team.Name))
                 .ReturnsAsync(Guid.NewGuid());
 
             // Act
@@ -182,7 +182,7 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new Team
+            var team = new EditTeamModel
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
@@ -216,7 +216,7 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new Team
+            var team = new EditTeamModel
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
@@ -253,7 +253,7 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new Team
+            var team = new EditTeamModel
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
@@ -287,7 +287,7 @@ namespace SportsHub.Web.Tests.Validators
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var team = new Team
+            var team = new EditTeamModel
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
@@ -298,7 +298,7 @@ namespace SportsHub.Web.Tests.Validators
 
             _teamService.Setup(service => service.DoesTeamAlreadyExistByIdAsync(team.Id))
             .ReturnsAsync(true);
-            _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
+            _teamService.Setup(service => service.GetTeamIdByNameAsync(team.Name))
             .ReturnsAsync(Guid.Empty);
             _subcategoryService.Setup(service => service.DoesSubcategoryAlreadyExistByIdAsync(team.SubcategoryId))
             .ReturnsAsync(true);

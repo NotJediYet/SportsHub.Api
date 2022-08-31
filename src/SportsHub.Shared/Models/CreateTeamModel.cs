@@ -10,7 +10,6 @@ namespace SportsHub.Shared.Models
 
         public Guid SubcategoryId { get; set; }
 
-        public IFormFile Logo { get; set; }
         public IFormFile TeamLogo { get;set; }
     }
 }

@@ -21,14 +21,14 @@ namespace SportsHub.Web.Tests.Controllers
     {
         private readonly Mock<ITeamService> _service;
         private readonly Mock<IValidator<CreateTeamModel>> _createTeamModelValidator;
-        private readonly Mock<IValidator<Team>> _editTeamModelvalidator;
+        private readonly Mock<IValidator<EditTeamModel>> _editTeamModelvalidator;
         private readonly TeamsController _controller;
 
         public TeamsControllerTests()
         {
             _service = new Mock<ITeamService>();
             _createTeamModelValidator = new Mock<IValidator<CreateTeamModel>>();
-            _editTeamModelvalidator = new Mock<IValidator<Team>>();
+            _editTeamModelvalidator = new Mock<IValidator<EditTeamModel>>();
 
             _controller = new TeamsController(_service.Object, _createTeamModelValidator.Object, _editTeamModelvalidator.Object);
         }
@@ -189,7 +189,7 @@ namespace SportsHub.Web.Tests.Controllers
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var model = new Team
+            var model = new EditTeamModel
             {
                 Id = Guid.NewGuid(),
                 Name = "Name",
@@ -226,7 +226,7 @@ namespace SportsHub.Web.Tests.Controllers
             //create FormFile
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
-            var model = new Team
+            var model = new EditTeamModel
             {
                 Id = Guid.Empty,
                 Name = String.Empty,

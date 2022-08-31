@@ -89,7 +89,7 @@ namespace SportsHub.Business.Tests.Services
                 Name = expectedTeamName,
                 Location = expectedLocation,
                 SubcategoryId = expectedSubcategoryId,
-                Logo = expectedTeamLogo
+                TeamLogo = expectedTeamLogo
             };
 
             // Act
@@ -111,10 +111,10 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var teamName = "Name";
 
-            _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
+            _teamRepository.Setup(repository => repository.GetTeamIdByNameAsync(teamName))
             .ReturnsAsync(Guid.Empty);
             // Act
-            var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
+            var result = await _service.GetTeamIdByNameAsync(teamName);
 
             // Assert
             Assert.Equal(Guid.Empty, result);
@@ -126,10 +126,10 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var teamName = "Name";
 
-            _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
+            _teamRepository.Setup(repository => repository.GetTeamIdByNameAsync(teamName))
             .ReturnsAsync(Guid.Empty);
             // Act
-            var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
+            var result = await _service.GetTeamIdByNameAsync(teamName);
 
             // Assert
             Assert.Equal(Guid.Empty, result);
@@ -177,7 +177,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedByteArray = byteArray;
             var fileExtension = expectedTeamLogoExtension;
 
-            Team teamModel = new()
+            EditTeamModel teamModel = new()
             {
                 Id = expectedTeamId,
                 Name = expectedTeamName,

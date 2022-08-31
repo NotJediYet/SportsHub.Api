@@ -39,19 +39,16 @@ namespace SportsHub.Business.Services
             };
             await _teamRepository.AddTeamAsync(newTeam);
 
-            using var memoryStream = new MemoryStream();
-            await сreateTeamModel.Logo.CopyToAsync(memoryStream);
-
-            var fileBytes = сreateTeamModel.Logo.ByteArray();
-            var fileExtension = Path.GetExtension(сreateTeamModel.Logo.FileName);
+            var fileBytes = сreateTeamModel.TeamLogo.ToByteArray();
+            var fileExtension = Path.GetExtension(сreateTeamModel.TeamLogo.FileName);
             var newTeamLogo = new TeamLogo(fileBytes, fileExtension, newTeam.Id);
 
             await _teamLogoRepository.AddTeamLogoAsync(newTeamLogo);
         }
 
-        public async Task<Guid> DoesTeamAlreadyExistByNameAsync(string teamName)
+        public async Task<Guid> GetTeamIdByNameAsync(string teamName)
         {
-            var result = await _teamRepository.DoesTeamAlreadyExistByNameAsync(teamName);
+            var result = await _teamRepository.GetTeamIdByNameAsync(teamName);
 
             return result;
         }
@@ -63,16 +60,20 @@ namespace SportsHub.Business.Services
             return result;
         }
         
-        public async Task EditTeamAsync(Team team)
+        public async Task EditTeamAsync(EditTeamModel team)
         {
-            await _teamRepository.EditTeamAsync(team);
+            var teamModel = new Team
+            {
+                Id = team.Id,
+                Name = team.Name,
+                SubcategoryId = team.SubcategoryId,
+                Location = team.Location
+            };
+            await _teamRepository.EditTeamAsync(teamModel);
 
-            using var memoryStream = new MemoryStream();
-            await team.TeamLogo.CopyToAsync(memoryStream);
-
-            var fileBytes = team.TeamLogo.ByteArray();
+            var fileBytes = team.TeamLogo.ToByteArray();
             var fileExtension = Path.GetExtension(team.TeamLogo.FileName);
-            var teamLogo = new TeamLogo(fileBytes, fileExtension, team.Id);
+            var teamLogo = new TeamLogo(fileBytes, fileExtension, teamModel.Id);
 
             await _teamLogoRepository.EditTeamLogoAsync(teamLogo);
         }

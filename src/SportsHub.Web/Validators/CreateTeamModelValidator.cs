@@ -27,35 +27,20 @@ namespace SportsHub.Web.Validators
                 .MustAsync((id, cancellation) => _subcategoryService.DoesSubcategoryAlreadyExistByIdAsync(id))
                 .WithMessage(Errors.SubcategoryDoesNotExist);
 
-            RuleFor(team => team.Logo)
+            RuleFor(team => team.TeamLogo)
                 .NotEmpty().WithMessage(Errors.TeamLogoCannotBeEmpty)
-                .SetValidator(new IFormFileValidator());
+                .SetValidator(new FormFileValidator());
         }
 
         private async Task<bool> DoesTeamNameIsUniqueAsync(string teamName)
         {
-            var result = await _teamService.DoesTeamAlreadyExistByNameAsync(teamName);
+            var result = await _teamService.GetTeamIdByNameAsync(teamName);
 
             if (result == Guid.Empty)
             {
                 return true;
             }
             else return false;
-        }
-    }
-
-    public class IFormFileValidator : AbstractValidator<IFormFile>
-    {
-        private const string Extension = @"\.jpg|\.png|\.PNG|\.svg";
-        public IFormFileValidator()
-        {
-            SetRules();
-        }
-        private void SetRules()
-        {
-            RuleFor(file => Path.GetExtension(file.FileName))
-                .Matches(Extension)
-                .WithMessage(Errors.FileMustHaveAppropriateFormat);
         }
     }
 }
