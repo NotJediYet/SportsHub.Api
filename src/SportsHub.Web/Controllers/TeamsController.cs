@@ -75,15 +75,15 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> EditTeam([FromForm] EditTeamModel team)
+        public async Task<IActionResult> EditTeam([FromForm] EditTeamModel editTeamModel)
         {
-            var validationResult = await _editTeamModelValidator.ValidateAsync(team);
+            var validationResult = await _editTeamModelValidator.ValidateAsync(editTeamModel);
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors.Select(error => error.ErrorMessage).First());
             }
 
-            await _teamService.EditTeamAsync(team);
+            await _teamService.EditTeamAsync(editTeamModel);
 
             return Ok();
         }
