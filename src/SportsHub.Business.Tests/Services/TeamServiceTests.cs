@@ -142,11 +142,11 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeamId = Guid.NewGuid();
             var expectedTeamName = "Name";
 
-            _repository.Setup(repository => repository.FindTeamIdByTeamNameAsync(expectedTeamName))
+            _teamRepository.Setup(repository => repository.GetTeamIdByNameAsync(expectedTeamName))
                 .ReturnsAsync(expectedTeamId);
 
             // Act
-            var actualTeamId = await _service.FindTeamIdByTeamNameAsync(expectedTeamName);
+            var actualTeamId = await _service.GetTeamIdByNameAsync(expectedTeamName);
 
             // Assert
             Assert.Equal(expectedTeamId, actualTeamId);
@@ -159,7 +159,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeamId = Guid.NewGuid();
             var expectedSubcategoryId = Guid.NewGuid();
 
-            _repository.Setup(repository => repository.FindTeamIdBySubcategoryIdAsync(expectedSubcategoryId))
+            _teamRepository.Setup(repository => repository.FindTeamIdBySubcategoryIdAsync(expectedSubcategoryId))
                 .ReturnsAsync(expectedTeamId);
 
             // Act

@@ -45,7 +45,11 @@ namespace SportsHub.Web.Tests.Controllers
 
             var expectedSubcategory = new Subcategory(expectedSubcategoryName, Guid.NewGuid());
             var expectedSubcategoryId = expectedSubcategory.Id;
-            var expectedTeam = new Team(expectedTeamName, expectedSubcategoryId);
+            var expectedTeam = new Team
+            { 
+               Name = expectedTeamName, 
+               SubcategoryId = expectedSubcategoryId 
+            };
             var expectedTeamId = expectedTeam.Id;
 
             var expectedArticles = GetArticles(expectedTeamId);
@@ -53,7 +57,7 @@ namespace SportsHub.Web.Tests.Controllers
             _articleService.Setup(service => service.GetSortedArticlesAsync())
             .ReturnsAsync(expectedArticles);
 
-            _teamService.Setup(service => service.FindTeamIdByTeamNameAsync(expectedTeamName))
+            _teamService.Setup(service => service.GetTeamIdByNameAsync(expectedTeamName))
              .ReturnsAsync(expectedTeamId);
 
             _articleService.Setup(service => service.GetArticlesFilteredByTeamId(expectedTeamId, expectedArticles))

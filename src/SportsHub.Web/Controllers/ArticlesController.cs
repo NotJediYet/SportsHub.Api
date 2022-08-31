@@ -4,7 +4,6 @@ using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Security;
 using FluentValidation;
-using SportsHub.Shared.Entities;
 
 namespace SportsHub.Web.Controllers
 {

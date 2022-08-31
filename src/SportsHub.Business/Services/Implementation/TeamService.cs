@@ -46,7 +46,7 @@ namespace SportsHub.Business.Services
 
         public async Task<Guid> GetTeamIdByNameAsync(string teamName)
         {
-            return await _teamRepository.DoesTeamAlreadyExistByNameAsync(teamName);
+            return await _teamRepository.GetTeamIdByNameAsync(teamName);
         }
 
         public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)
@@ -54,29 +54,24 @@ namespace SportsHub.Business.Services
             return await _teamRepository.DoesTeamAlreadyExistByIdAsync(id);
         }
 
-        public async Task<Guid> FindTeamIdByTeamNameAsync(string teamName)
-        {
-            return await _teamRepository.FindTeamIdByTeamNameAsync(teamName);
-        }
-
         public async Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId)
         {
             return await _teamRepository.FindTeamIdBySubcategoryIdAsync(subcategoryId);
         }
         
-        public async Task EditTeamAsync(EditTeamModel team)
+        public async Task EditTeamAsync(EditTeamModel editTeamModel)
         {
             var teamModel = new Team
             {
-                Id = team.Id,
-                Name = team.Name,
-                SubcategoryId = team.SubcategoryId,
-                Location = team.Location
+                Id = editTeamModel.Id,
+                Name = editTeamModel.Name,
+                SubcategoryId = editTeamModel.SubcategoryId,
+                Location = editTeamModel.Location
             };
             await _teamRepository.EditTeamAsync(teamModel);
 
-            var fileBytes = team.TeamLogo.ToByteArray();
-            var fileExtension = Path.GetExtension(team.TeamLogo.FileName);
+            var fileBytes = editTeamModel.TeamLogo.ToByteArray();
+            var fileExtension = Path.GetExtension(editTeamModel.TeamLogo.FileName);
             var teamLogo = new TeamLogo(fileBytes, fileExtension, teamModel.Id);
 
             await _teamLogoRepository.EditTeamLogoAsync(teamLogo);
