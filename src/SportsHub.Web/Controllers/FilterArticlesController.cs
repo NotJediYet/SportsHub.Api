@@ -26,8 +26,7 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpGet("{subcategoryName}/{teamName}/{status}")]
-        [AllowAnonymous]
-        //[Authorize(Policies.Admin)]
+        [Authorize(Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

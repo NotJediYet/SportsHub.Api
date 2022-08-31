@@ -26,8 +26,7 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        //[Authorize(Policies.User)]
+        [Authorize(Policies.User)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -41,8 +40,7 @@ namespace SportsHub.Web.Controllers
 
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
-        //[Authorize(Policies.User)]
+        [Authorize(Policies.User)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -57,8 +55,7 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
-        //[Authorize(Policies.Admin)]
+        [Authorize(Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
