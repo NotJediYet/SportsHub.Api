@@ -158,10 +158,11 @@ namespace SportsHub.Web.Tests.Controllers
         {
             IEnumerable<Article> articles = new List<Article>
             {  
-                new Article( Guid.NewGuid(),"location1" ,"altImage1","headline1" ,"caption1" ,"content1", false),
+                new Article(Guid.NewGuid(),"location1" ,"altImage1","headline1" ,"caption1" ,"content1", false),
                 new Article(Guid.NewGuid(),"location2" ,"altImage2","headline2" ,"caption2" ,"content2", true),
                 new Article(Guid.NewGuid(),"location3" ,"altImage3","headline3" ,"caption3" ,"content3", false)
             };
+
             return articles;
         }
     }

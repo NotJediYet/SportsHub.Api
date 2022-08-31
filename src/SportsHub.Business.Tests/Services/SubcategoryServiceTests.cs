@@ -136,6 +136,24 @@ namespace SportsHub.Business.Tests.Services
             Assert.False(result);
         }
 
+
+        [Fact]
+        public async Task FindSubcategoryIdBySubcategoryNameAsync_ReturnsExpectedSubcategoryId()
+        {
+            // Arrange
+            var expectedSubcategoryName = "Name";
+            var expectedSubcategoryId = Guid.NewGuid();
+
+            _repository.Setup(repository => repository.FindSubcategoryIdBySubcategoryNameAsync(expectedSubcategoryName))
+                .ReturnsAsync(expectedSubcategoryId);
+
+            // Act
+            var actualSubcategoryId = await _service.FindSubcategoryIdBySubcategoryNameAsync(expectedSubcategoryName);
+
+            // Assert
+            Assert.Equal(expectedSubcategoryId, actualSubcategoryId);
+        }
+
         private IEnumerable<Subcategory> GetSubcategories()
         {
             IEnumerable<Subcategory> subcategories = new List<Subcategory>

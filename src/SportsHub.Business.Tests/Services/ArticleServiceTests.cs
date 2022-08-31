@@ -142,7 +142,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var subcategoryId = Guid.NewGuid();
 
-            _articleRepository.Setup(repo => repo.DoesArticleAlreadyExistByIdAsync(subcategoryId))
+            _articleRepository.Setup(repository => repository.DoesArticleAlreadyExistByIdAsync(subcategoryId))
             .ReturnsAsync(true);
 
             // Act
@@ -158,7 +158,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var articleId = Guid.NewGuid();
 
-            _articleRepository.Setup(repo => repo.DoesArticleAlreadyExistByIdAsync(articleId))
+            _articleRepository.Setup(repository => repository.DoesArticleAlreadyExistByIdAsync(articleId))
              .ReturnsAsync(false);
 
             // Act
@@ -168,6 +168,79 @@ namespace SportsHub.Business.Tests.Services
             Assert.False(result);
         }
 
+        [Fact]
+        public void GetArticlesFilteredByTeamId_WhenTeamIdIsValid_ReturnsExpectedArticles()
+        {
+            // Arrange
+            var expectedTeamId = Guid.NewGuid();
+
+            var expectedArticles = CreateArticles(expectedTeamId, true);
+
+            _articleRepository.Setup(repository => repository.GetArticlesFilteredByTeamId(expectedTeamId, expectedArticles))
+            .Returns(expectedArticles);
+
+            // Act
+            var actualArticles =  _service.GetArticlesFilteredByTeamId(expectedTeamId, expectedArticles);
+
+            // Assert
+            Assert.Equal(expectedArticles, actualArticles);
+        }
+
+
+        [Fact]
+        public void GetArticlesFilteredByStatus_WhenStatusIsPublished_ReturnsExpectedArticles()
+        {
+            // Arrange
+            var isPublished = true;
+            var teamId = Guid.NewGuid();
+            var expectedArticles = CreateArticles(teamId, isPublished);
+            var expectedStatus = "Published";
+
+            _articleRepository.Setup(repository => repository.GetArticlesFilteredByStatus(expectedStatus, expectedArticles))
+            .Returns(expectedArticles);
+
+            // Act
+            var actualArticles = _service.GetArticlesFilteredByStatus(expectedStatus, expectedArticles);
+
+            // Assert
+            Assert.Equal(expectedArticles, actualArticles);
+        }
+
+        [Fact]
+        public void GetArticlesFilteredByStatus_WhenStatusIsUnpublished_ReturnsExpectedArticles()
+        {
+            // Arrange
+            var isPublished = false;
+            var teamId = Guid.NewGuid();
+            var expectedArticles = CreateArticles(teamId, isPublished);
+            var expectedStatus = "Unpublished";
+
+            _articleRepository.Setup(repository => repository.GetArticlesFilteredByStatus(expectedStatus, expectedArticles))
+            .Returns(expectedArticles);
+
+            // Act
+            var actualArticles = _service.GetArticlesFilteredByStatus(expectedStatus, expectedArticles);
+
+            // Assert
+            Assert.Equal(expectedArticles, actualArticles);
+        }
+
+        [Fact]
+        public async Task GetSortedArticlesAsync_ReturnsSortedArticles()
+        {
+            // Arrange
+            var expectedArticles = GetArticles();
+
+            _articleRepository.Setup(repository => repository.GetSortedArticlesAsync())
+            .ReturnsAsync(expectedArticles);
+
+            // Act
+            var actualArticles = await _service.GetSortedArticlesAsync();
+
+            // Assert
+            Assert.Equal(expectedArticles, actualArticles);
+        }
+
         private IEnumerable<Article> GetArticles()
         {
             IEnumerable<Article> articles = new List<Article>
@@ -175,6 +248,18 @@ namespace SportsHub.Business.Tests.Services
                  new Article( Guid.NewGuid(),"location1" ,"altImage1","headline1" ,"caption1" ,"content1", false),
                 new Article(Guid.NewGuid(),"location2" ,"altImage2","headline2" ,"caption2" ,"content2", true),
                 new Article(Guid.NewGuid(),"location3" ,"altImage3","headline3" ,"caption3" ,"content3", false)
+            };
+
+            return articles;
+        }
+
+        private IEnumerable<Article> CreateArticles(Guid teamId, bool status)
+        {
+            IEnumerable<Article> articles = new List<Article>
+            {
+                 new Article(teamId,"location1" ,"altImage1","A" ,"caption1" ,"content1", status),
+                new Article(teamId,"location2" ,"altImage2","B" ,"caption2" ,"content2", status),
+                new Article(teamId,"location3" ,"altImage3","C" ,"caption3" ,"content3", status)
             };
 
             return articles;
