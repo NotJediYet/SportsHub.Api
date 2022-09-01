@@ -32,10 +32,7 @@ namespace SportsHub.Business.Services
             var newTeam = new Team(сreateTeamModel.Name, сreateTeamModel.SubcategoryId, сreateTeamModel.Location);
             await _teamRepository.AddTeamAsync(newTeam);
 
-            using var memoryStream = new MemoryStream();
-            await сreateTeamModel.Logo.CopyToAsync(memoryStream);
-
-            var fileBytes = сreateTeamModel.Logo.ByteArray();
+            var fileBytes = сreateTeamModel.Logo.ToByteArray();
             var fileExtension = Path.GetExtension(сreateTeamModel.Logo.FileName);
             var newTeamLogo = new TeamLogo(fileBytes, fileExtension, newTeam.Id);
 
