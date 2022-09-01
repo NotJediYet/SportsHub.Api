@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ArticleHeadlineCannotBeEmpty" xml:space="preserve">
+    <value>Article headline cannot be empty</value>
+  </data>
+  <data name="ArticleHeadlineIsNotUnique" xml:space="preserve">
+    <value>Article headline is not unique</value>
+  </data>
+  <data name="ArticleImageCannotBeEmpty" xml:space="preserve">
+    <value>Article image cannot be empty</value>
+  </data>
   <data name="CategoryDoesNotExist" xml:space="preserve">
     <value>Category does not exist</value>
   </data>
@@ -130,7 +139,7 @@
     <value>Category name is not unique</value>
   </data>
   <data name="FileMustHaveAppropriateFormat" xml:space="preserve">
-    <value>File must have appropriate format: png, jpg, svg</value>
+    <value>File must have appropriate format (jpg, svg, png)</value>
   </data>
   <data name="SubcategoryDoesNotExist" xml:space="preserve">
     <value>Subcategory does not exist</value>
@@ -143,6 +152,15 @@
   </data>
   <data name="SubcategoryNameIsNotUnique" xml:space="preserve">
     <value>Subcategory name is not unique</value>
+  </data>
+  <data name="TeamDoesNotExist" xml:space="preserve">
+    <value>Team does not exist</value>
+  </data>
+  <data name="TeamIdCannotBeEmpty" xml:space="preserve">
+    <value>Team Id cannot be empty</value>
+  </data>
+  <data name="TeamIdDoesNotExist" xml:space="preserve">
+    <value>Team Id does not exist</value>
   </data>
   <data name="TeamLogoCannotBeEmpty" xml:space="preserve">
     <value>Team logo cannot be empty</value>

@@ -11,11 +11,11 @@ namespace SportsHub.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISubcategoryService, SubcategoryService>();
             services.AddScoped<ITeamService, TeamService>();
+            services.AddScoped<IArticleService, ArticleService>();
 
             return services;
         }
     }
-
     public static class GetByteArrayFromFile
     {
         public static byte[] ByteArray(this IFormFile fileLogo)

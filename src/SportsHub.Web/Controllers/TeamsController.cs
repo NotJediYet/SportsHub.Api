@@ -25,6 +25,10 @@ namespace SportsHub.Web.Controllers
 
         [HttpGet]
         [Authorize(Policies.User)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetTeams()
         {
             return Ok(await _teamService.GetTeamsAsync());
@@ -32,6 +36,10 @@ namespace SportsHub.Web.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Policies.User)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetTeam(Guid id)
         {
             var team = await _teamService.GetTeamByIdAsync(id);

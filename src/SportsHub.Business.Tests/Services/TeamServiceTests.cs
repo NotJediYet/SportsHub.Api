@@ -6,14 +6,14 @@ using SportsHub.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Xunit;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using System.IO;
 using System.Text;
+using Xunit;
 
 namespace SportsHub.Business.Tests.Services
 {
-    public class TeamServiceTests
+     public class TeamServiceTests
     {
         private readonly Mock<ITeamRepository> _teamRepository;
         private readonly Mock<ITeamLogoRepository> _teamLogoRepository;
@@ -100,6 +100,8 @@ namespace SportsHub.Business.Tests.Services
                 && (teamId == expectedTeamId)
                 )));
         }
+
+
         [Fact]
         public async Task DoesTeamAlreadyExistByNameAsync_WhenTeamExists_ReturnsTrue()
         {
@@ -107,7 +109,8 @@ namespace SportsHub.Business.Tests.Services
             var teamName = "Name";
 
             _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-            .ReturnsAsync(true);
+                .ReturnsAsync(true);
+
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
 
@@ -122,12 +125,47 @@ namespace SportsHub.Business.Tests.Services
             var teamName = "Name";
 
             _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-            .ReturnsAsync(false);
+                .ReturnsAsync(false);
+
             // Act
             var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
 
             // Assert
             Assert.False(result);
+        }
+
+        [Fact]
+        public async Task FindTeamIdByTeamNameAsync_ReturnsTeamId()
+        {
+            // Arrange
+            var expectedTeamId = Guid.NewGuid();
+            var expectedTeamName = "Name";
+
+            _teamRepository.Setup(repository => repository.FindTeamIdByTeamNameAsync(expectedTeamName))
+                .ReturnsAsync(expectedTeamId);
+
+            // Act
+            var actualTeamId = await _service.FindTeamIdByTeamNameAsync(expectedTeamName);
+
+            // Assert
+            Assert.Equal(expectedTeamId, actualTeamId);
+        }
+
+        [Fact]
+        public async Task FindTeamIdBySubcategoryIdAsync_ReturnsTeamId()
+        {
+            // Arrange
+            var expectedTeamId = Guid.NewGuid();
+            var expectedSubcategoryId = Guid.NewGuid();
+
+            _teamRepository.Setup(repository => repository.FindTeamIdBySubcategoryIdAsync(expectedSubcategoryId))
+                .ReturnsAsync(expectedTeamId);
+
+            // Act
+            var actualTeamId = await _service.FindTeamIdBySubcategoryIdAsync(expectedSubcategoryId);
+
+            // Assert
+            Assert.Equal(expectedTeamId, actualTeamId);
         }
 
         private IEnumerable<Team> GetTeams()
