@@ -2,6 +2,7 @@
 using SportsHub.Business.Repositories;
 using SportsHub.Infrastructure.DBContext;
 using SportsHub.Shared.Entities;
+using System.Linq;
 
 namespace SportsHub.Infrastructure.Repositories
 {
@@ -61,6 +62,36 @@ namespace SportsHub.Infrastructure.Repositories
                            select team.Id).FirstOrDefault();
 
             return teamId;
+        }
+
+        public List<Team> GetTeamsFilteredByLocation(string location, List<Team> teams)
+        {
+
+            return teams.Where(teams => teams.Location == location).ToList();
+        }
+
+        public List<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, List<Team> teams)
+        {
+
+            return teams.Where(teams => teams.SubcategoryId == subcategoryId).ToList();
+        }
+
+        public List<Team> GetTeamsFilteredBySubcategoryIds(List<Guid> subcategoryIds, List<Team> teams)
+        {
+            var newTeam = teams;
+            teams = newTeam.Where(team => team.SubcategoryId == subcategoryIds[0]).ToList();
+
+            for (int i = 1; i < subcategoryIds.Count; i++)
+            {
+                teams = teams.Concat(newTeam.Where(team => team.SubcategoryId == subcategoryIds[i]).ToList()).ToList();
+            }
+
+            return teams;
+        }
+
+        public async Task<List<Team>> GetSortedTeamAsync()
+        {
+            return await _context.Teams.OrderBy(teams => teams.Name).ToListAsync();
         }
     }
 }

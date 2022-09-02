@@ -1,6 +1,5 @@
 ﻿using SportsHub.Business.Repositories;
 using SportsHub.Shared.Entities;
-using Microsoft.AspNetCore.Http;
 using SportsHub.Shared.Models;
 using SportsHub.Extensions;
 
@@ -57,6 +56,26 @@ namespace SportsHub.Business.Services
         public async Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId)
         {
             return await _teamRepository.FindTeamIdBySubcategoryIdAsync(subcategoryId);
+        }
+
+        public List<Team> GetTeamsFilteredByLocation(string location, List<Team> teams)
+        {
+            return _teamRepository.GetTeamsFilteredByLocation(location, teams);
+        }
+        
+        public List<Team> GetTeamsFilteredBySubcategoryIds(List<Guid> subcategoryIds, List<Team> teams)
+        {
+            return _teamRepository.GetTeamsFilteredBySubcategoryIds(subcategoryIds, teams);
+        }
+
+        public List<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, List<Team> teams)
+        {
+            return _teamRepository.GetTeamsFilteredBySubcategoryId(subcategoryId, teams);
+        }
+
+        public async Task<List<Team>> GetSortedTeamAsync()
+        {
+            return await _teamRepository.GetSortedTeamAsync();
         }
     }
 }

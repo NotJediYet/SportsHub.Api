@@ -1,5 +1,4 @@
 ﻿using SportsHub.Shared.Entities;
-using Microsoft.AspNetCore.Http;
 using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Services
@@ -19,5 +18,13 @@ namespace SportsHub.Business.Services
         Task<Guid> FindTeamIdByTeamNameAsync(string teamName);
 
         Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId);
+
+        List<Team> GetTeamsFilteredByLocation(string location, List<Team> teams);
+
+        List<Team> GetTeamsFilteredBySubcategoryIds(List<Guid> subcategoryIds, List<Team> teams);
+
+        List<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, List<Team> teams);
+
+        Task<List<Team>> GetSortedTeamAsync();
     }
 }
