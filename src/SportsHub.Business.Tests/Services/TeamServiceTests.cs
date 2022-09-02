@@ -168,13 +168,98 @@ namespace SportsHub.Business.Tests.Services
             Assert.Equal(expectedTeamId, actualTeamId);
         }
 
-        private IEnumerable<Team> GetTeams()
+        [Fact]
+        public void GetTeamsFilteredByLocation_ReturnsExpectedTeams()
         {
-            IEnumerable<Team> teams = new List<Team>
+            // Arrange
+            var subcategoryId = Guid.NewGuid();
+            var expectedTeams = CreateTeams(subcategoryId);
+            var expectedLocation = "USA";
+
+            _teamRepository.Setup(repository => repository.GetTeamsFilteredByLocation(expectedLocation, expectedTeams))
+                .Returns(expectedTeams);
+
+            // Act
+            var actualTeams = _service.GetTeamsFilteredByLocation(expectedLocation, expectedTeams);
+
+            // Assert
+            Assert.Equal(expectedTeams, actualTeams);
+        }
+
+        [Fact]
+        public void GetTeamsFilteredBySubcategoryIds_ReturnsExpectedTeams()
+        {
+            // Arrange
+            var subcategoryId = Guid.NewGuid();
+            List<Guid> subcategoryIds = new List<Guid>
+            {
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            };
+            var expectedTeams = CreateTeams(subcategoryId);
+
+            _teamRepository.Setup(repository => repository.GetTeamsFilteredBySubcategoryIds(subcategoryIds, expectedTeams))
+                .Returns(expectedTeams);
+
+            // Act
+            var actualTeams = _service.GetTeamsFilteredBySubcategoryIds(subcategoryIds, expectedTeams);
+
+            // Assert
+            Assert.Equal(expectedTeams, actualTeams);
+        }
+
+        [Fact]
+        public void GetTeamsFilteredBySubcategoryId_ReturnsExpectedTeams()
+        {
+            // Arrange
+            var subcategoryId = Guid.NewGuid();
+            var expectedTeams = CreateTeams(subcategoryId);
+
+            _teamRepository.Setup(repository => repository.GetTeamsFilteredBySubcategoryId(subcategoryId, expectedTeams))
+                .Returns(expectedTeams);
+
+            // Act
+            var actualTeams = _service.GetTeamsFilteredBySubcategoryId(subcategoryId, expectedTeams);
+
+            // Assert
+            Assert.Equal(expectedTeams, actualTeams);
+        }
+
+        [Fact]
+        public async Task GetSortedTeamAsync_ReturnsSortedTeams()
+        {
+            // Arrange
+            var expectedTeams = GetTeams();
+
+            _teamRepository.Setup(repository => repository.GetSortedTeamAsync())
+                .Returns(Task.FromResult(expectedTeams));
+
+            // Act
+            var actualTeams = await _service.GetSortedTeamAsync();
+
+            // Assert
+            Assert.Equal(expectedTeams, actualTeams);
+        }
+
+        private List<Team> GetTeams()
+        {
+            List<Team> teams = new List<Team>
             {
                 new Team("Name1", Guid.NewGuid(), "Location1"),
                 new Team("Name2", Guid.NewGuid(), "Location2"),
                 new Team("Name3", Guid.NewGuid(), "Location3")
+            };
+
+            return teams;
+        }
+
+        private List<Team> CreateTeams(Guid subcategoryId)
+        {
+            List<Team> teams = new List<Team>
+            {
+                new Team("teamName1", subcategoryId, "location1"),
+                new Team("teamName2", subcategoryId, "location2"),
+                new Team("teamName3", subcategoryId, "location3")
             };
 
             return teams;
