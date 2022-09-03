@@ -75,7 +75,7 @@ namespace SportsHub.Web.Controllers
             return Ok();
         }
 
-        [HttpPost("{id}")]
+        [HttpDelete("{id}")]
         [Authorize(Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
