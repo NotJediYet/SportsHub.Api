@@ -110,7 +110,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedArticleId = Guid.NewGuid();
 
-            var expectedArticle = new Article(Guid.NewGuid(), location: "Location", headline: "Headline", caption: "Caption", context: "Context");
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
             expectedArticle.Id = expectedArticleId;
 
             _articleRepository.Setup(repository => repository.DeleteArticleAsync(expectedArticleId))
@@ -120,11 +120,9 @@ namespace SportsHub.Business.Tests.Services
             var actualArticle = await _service.DeleteArticleAsync(expectedArticleId);
 
             // Assert
-            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
-            Assert.Equal(expectedArticle.Id, actualArticle.Id);
-            Assert.Equal(expectedArticle.Location, actualArticle.Location);
             Assert.Equal(expectedArticle.Headline, actualArticle.Headline);
-            Assert.Equal(expectedArticle.Caption, actualArticle.Caption);
+            Assert.Equal(expectedArticle.Id, actualArticle.Id);
+            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
         }
 
         [Fact]

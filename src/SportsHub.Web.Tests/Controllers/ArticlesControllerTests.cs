@@ -189,7 +189,7 @@ namespace SportsHub.Web.Tests.Controllers
             // Arrange
             var expectedArticleId = Guid.NewGuid();
 
-            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", headline: "headline", caption: "caption", context: "context");
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
             expectedArticle.Id = expectedArticleId;
 
             _serviceArticle.Setup(service => service.DeleteArticleAsync(expectedArticleId))
@@ -203,11 +203,9 @@ namespace SportsHub.Web.Tests.Controllers
             Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
 
             var actualArticle = Assert.IsType<Article>(objectResult.Value);
-            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
-            Assert.Equal(expectedArticle.Id, actualArticle.Id);
-            Assert.Equal(expectedArticle.Location, actualArticle.Location);
             Assert.Equal(expectedArticle.Headline, actualArticle.Headline);
-            Assert.Equal(expectedArticle.Caption, actualArticle.Caption);
+            Assert.Equal(expectedArticle.Id, actualArticle.Id);
+            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
         }
     }
 }
