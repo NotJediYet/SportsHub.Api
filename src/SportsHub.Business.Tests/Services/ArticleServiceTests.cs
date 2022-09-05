@@ -266,9 +266,9 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Article> articles = new List<Article>
             {
-                 new Article( Guid.NewGuid(),"location1" ,"altImage1","headline1" ,"caption1" ,"content1", false),
-                new Article(Guid.NewGuid(),"location2" ,"altImage2","headline2" ,"caption2" ,"content2", true),
-                new Article(Guid.NewGuid(),"location3" ,"altImage3","headline3" ,"caption3" ,"content3", false)
+                new Article(Guid.NewGuid(), "location1", "altImage1", "headline1", "caption1", "content1", false),
+                new Article(Guid.NewGuid(), "location2", "altImage2", "headline2", "caption2", "content2", true),
+                new Article(Guid.NewGuid(), "location3", "altImage3", "headline3", "caption3", "content3", false)
             };
 
             return articles;
@@ -278,9 +278,9 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Article> articles = new List<Article>
             {
-                 new Article(teamId,"location1" ,"altImage1","A" ,"caption1" ,"content1", status),
-                new Article(teamId,"location2" ,"altImage2","B" ,"caption2" ,"content2", status),
-                new Article(teamId,"location3" ,"altImage3","C" ,"caption3" ,"content3", status)
+                new Article(teamId, "location1", "altImage1", "A", "caption1", "content1", status),
+                new Article(teamId, "location2", "altImage2", "B", "caption2", "content2", status),
+                new Article(teamId, "location3", "altImage3", "C", "caption3", "content3", status)
             };
 
             return articles;
