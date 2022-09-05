@@ -13,7 +13,7 @@ namespace SportsHub.Web.Validators
 
         public CreateArticleModelValidator(
             ITeamService teamService,
-           IArticleService articleService)
+            IArticleService articleService)
         {
             _teamService = teamService ?? throw new ArgumentNullException(nameof(teamService));
             _articleService = articleService ?? throw new ArgumentNullException(nameof(articleService));
@@ -33,7 +33,6 @@ namespace SportsHub.Web.Validators
 
         }
 
-
         public class IFormFileValidator : AbstractValidator<IFormFile>
         {
             private const string Extension = @"\.jpg|\.png|\.svg";
@@ -48,7 +47,6 @@ namespace SportsHub.Web.Validators
                     .WithMessage(Errors.FileMustHaveAppropriateFormat);
             }
         }
-
 
         private async Task<bool> DoesArticleNameIsUniqueAsync(string headline)
         {

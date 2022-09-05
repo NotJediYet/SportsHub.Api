@@ -18,8 +18,7 @@ namespace SportsHub.Web.Controllers
 
         public ArticlesController(
             IArticleService articleService,
-            IValidator<CreateArticleModel> createArticleModelValidator
-           )
+            IValidator<CreateArticleModel> createArticleModelValidator)
         {
             _articleService = articleService ?? throw new ArgumentNullException(nameof(articleService));
             _createArticleModelValidator = createArticleModelValidator ?? throw new ArgumentNullException(nameof(createArticleModelValidator));
@@ -37,7 +36,6 @@ namespace SportsHub.Web.Controllers
 
             return Ok(articles);
         }
-
 
         [HttpGet("{id}")]
         [Authorize(Policies.User)]
@@ -60,8 +58,6 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-
-
         public async Task<IActionResult> CreateArticle([FromForm]CreateArticleModel сreateArticleModel)
         {
             var result = await _createArticleModelValidator.ValidateAsync(сreateArticleModel);
@@ -84,6 +80,7 @@ namespace SportsHub.Web.Controllers
         public async Task<IActionResult> DeleteArticle(Guid id)
         {
             var article = await _articleService.DeleteArticleAsync(id);
+            
             return article != null
                 ? Ok(article)
                 : NotFound();
