@@ -46,8 +46,13 @@ namespace SportsHub.Business.Services
             {
                 await _articleImageRepository.AddImageAsync(articleModel.Image, articleModel.Id);
             }
+
             
-            
+        }
+
+        public async Task<Article> DeleteArticleAsync(Guid id)
+        {
+            return await _articleRepository.DeleteArticleAsync(id);
         }
 
         public async Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline)
