@@ -14,6 +14,7 @@ namespace SportsHub.Infrastructure.Repositories
         {
             _context = context;
         }
+
         public async Task<IEnumerable<ArticleImage>> GetImagesAsync()
         {
             return await _context.Images.ToListAsync();
