@@ -32,11 +32,6 @@ namespace SportsHub.Business.Services
             return await _teamRepository.DoesTeamAlreadyExistByNameAsync(teamName);
         }
 
-        public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)
-        {
-            return await _teamRepository.DoesTeamAlreadyExistByIdAsync(id);
-        }
-
         public async Task<Guid> FindTeamIdByTeamNameAsync(string teamName)
         {
             return await _teamRepository.FindTeamIdByTeamNameAsync(teamName);
