@@ -10,6 +10,7 @@ namespace SportsHub.Business.Services
         private readonly IArticleRepository _articleRepository;
         private readonly IArticleImageRepository _articleImageRepository;
 
+
         public ArticleService(IArticleRepository articleRepository, IArticleImageRepository articleImageRepository)
         {
             _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
@@ -35,7 +36,7 @@ namespace SportsHub.Business.Services
                     };
 
                     article.Image = imageFile;
-                }
+        }
             }
             return articles;
         }
@@ -80,6 +81,13 @@ namespace SportsHub.Business.Services
             {
                 await _articleImageRepository.AddImageAsync(articleModel.Image, articleModel.Id);
             }
+
+            
+        }
+
+        public async Task<Article> DeleteArticleAsync(Guid id)
+        {
+            return await _articleRepository.DeleteArticleAsync(id);
         }
 
         public async Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline)
@@ -90,6 +98,21 @@ namespace SportsHub.Business.Services
         public async Task<bool> DoesArticleAlreadyExistByIdAsync(Guid id)
         {
             return await _articleRepository.DoesArticleAlreadyExistByIdAsync(id);
+        }
+
+        public IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId, IEnumerable<Article> articles)
+        {
+            return _articleRepository.GetArticlesFilteredByTeamId(teamId, articles);
+        }
+
+        public IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles)
+        {
+            return _articleRepository.GetArticlesFilteredByStatus(status, articles);
+        }
+
+        public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
+        {
+            return await _articleRepository.GetSortedArticlesAsync();
         }
     }
 }

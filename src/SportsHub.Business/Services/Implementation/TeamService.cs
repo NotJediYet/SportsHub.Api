@@ -19,9 +19,7 @@ namespace SportsHub.Business.Services
 
         public async Task<Team> GetTeamByIdAsync(Guid id)
         {
-            var team = await _teamRepository.GetTeamByIdAsync(id);
-
-            return team;
+            return await _teamRepository.GetTeamByIdAsync(id);
         }
 
         public async Task CreateTeamAsync(string teamName, Guid subcategoryId)
@@ -31,9 +29,22 @@ namespace SportsHub.Business.Services
 
         public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
         {
-            var result = await _teamRepository.DoesTeamAlreadyExistByNameAsync(teamName);
+            return await _teamRepository.DoesTeamAlreadyExistByNameAsync(teamName);
+        }
 
-            return result;
+        public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)
+        {
+            return await _teamRepository.DoesTeamAlreadyExistByIdAsync(id);
+        }
+
+        public async Task<Guid> FindTeamIdByTeamNameAsync(string teamName)
+        {
+            return await _teamRepository.FindTeamIdByTeamNameAsync(teamName);
+        }
+
+        public async Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId)
+        {
+            return await _teamRepository.FindTeamIdBySubcategoryIdAsync(subcategoryId);
         }
 
         public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)

@@ -32,7 +32,7 @@ namespace SportsHub.Shared.Entities
 
         [FromForm]
         [NotMapped]
-        public IFormFile Image { get; set;}
+        public IFormFile Image { get; set; }
 
         public Article(Guid teamId, string location, string altImage, string headline, string caption, string content, bool isShowComments)
         {

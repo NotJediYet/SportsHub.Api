@@ -20,7 +20,7 @@ namespace SportsHub.Web.Validators
 
             RuleFor(article => article.Headline)
                 .NotEmpty().WithMessage(Errors.ArticleHeadlineCannotBeEmpty)
-                .MustAsync((headline, cancellation) => DoesArticleNameIsUniqueAsync(headline))
+               .MustAsync((headline, cancellation) => DoesArticleNameIsUniqueAsync(headline))
                 .WithMessage(Errors.ArticleHeadlineIsNotUnique);
 
             RuleFor(article => article.ArticleImage)

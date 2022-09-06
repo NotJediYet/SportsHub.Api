@@ -104,6 +104,40 @@ namespace SportsHub.Business.Tests.Services
             Assert.False(result);
         }
 
+        [Fact]
+        public async Task FindTeamIdByTeamNameAsync_ReturnsTeamId()
+        {
+            // Arrange
+            var expectedTeamId = Guid.NewGuid();
+            var expectedTeamName = "Name";
+
+            _repository.Setup(repository => repository.FindTeamIdByTeamNameAsync(expectedTeamName))
+                .ReturnsAsync(expectedTeamId);
+
+            // Act
+            var actualTeamId = await _service.FindTeamIdByTeamNameAsync(expectedTeamName);
+
+            // Assert
+            Assert.Equal(expectedTeamId, actualTeamId);
+        }
+
+        [Fact]
+        public async Task FindTeamIdBySubcategoryIdAsync_ReturnsTeamId()
+        {
+            // Arrange
+            var expectedTeamId = Guid.NewGuid();
+            var expectedSubcategoryId = Guid.NewGuid();
+
+            _repository.Setup(repository => repository.FindTeamIdBySubcategoryIdAsync(expectedSubcategoryId))
+                .ReturnsAsync(expectedTeamId);
+
+            // Act
+            var actualTeamId = await _service.FindTeamIdBySubcategoryIdAsync(expectedSubcategoryId);
+
+            // Assert
+            Assert.Equal(expectedTeamId, actualTeamId);
+        }
+
         private IEnumerable<Team> GetTeams()
         {
             IEnumerable<Team> teams = new List<Team>
