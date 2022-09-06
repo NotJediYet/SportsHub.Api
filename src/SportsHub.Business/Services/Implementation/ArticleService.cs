@@ -10,7 +10,6 @@ namespace SportsHub.Business.Services
         private readonly IArticleRepository _articleRepository;
         private readonly IArticleImageRepository _articleImageRepository;
 
-
         public ArticleService(IArticleRepository articleRepository, IArticleImageRepository articleImageRepository)
         {
             _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
@@ -19,12 +18,47 @@ namespace SportsHub.Business.Services
 
         public async Task<IEnumerable<Article>> GetArticlesAsync()
         {
-            return await _articleRepository.GetArticlesAsync();
+            var articles = await _articleRepository.GetArticlesAsync();
+            var images = await _articleImageRepository.GetImagesAsync();
+
+            foreach (var article in articles)
+            {
+                var image = images.FirstOrDefault(image => image.ArticleId == article.Id);
+                if (image != null)
+                {
+                    var imageStream = new MemoryStream(image.Bytes);
+
+                    IFormFile imageFile = new FormFile(imageStream, 0, imageStream.Length, image.ArticleId.ToString(), image.ArticleId.ToString() + image.FileExtension)
+                    {
+                        Headers = new HeaderDictionary(),
+                        ContentType = "image/" + image.FileExtension.TrimStart('.'),
+                    };
+
+                    article.Image = imageFile;
+                }
+            }
+            return articles;
         }
 
         public async Task<Article> GetArticleByIdAsync(Guid id)
         {
-            return  await _articleRepository.GetArticleByIdAsync(id);
+         var article = await _articleRepository.GetArticleByIdAsync(id);
+         var image = await _articleImageRepository.GetImageByIdAsync(id);
+
+            if (image != null) 
+            { 
+                var imageStream = new MemoryStream(image.Bytes);
+
+                IFormFile imageFile = new FormFile(imageStream, 0, imageStream.Length, id.ToString(), id.ToString() + image.FileExtension)
+                {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/" + image.FileExtension.TrimStart('.'),
+                };
+
+                article.Image = imageFile;
+             }
+
+         return article;
         }
 
         public async Task CreateArticleAsync(CreateArticleModel сreateArticleModel)
@@ -46,8 +80,6 @@ namespace SportsHub.Business.Services
             {
                 await _articleImageRepository.AddImageAsync(articleModel.Image, articleModel.Id);
             }
-            
-            
         }
 
         public async Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline)
