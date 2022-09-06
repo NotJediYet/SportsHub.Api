@@ -10,7 +10,6 @@ namespace SportsHub.Business.Services
         private readonly IArticleRepository _articleRepository;
         private readonly IArticleImageRepository _articleImageRepository;
 
-
         public ArticleService(IArticleRepository articleRepository, IArticleImageRepository articleImageRepository)
         {
             _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
@@ -25,6 +24,7 @@ namespace SportsHub.Business.Services
             foreach (var article in articles)
             {
                 var image = images.FirstOrDefault(image => image.ArticleId == article.Id);
+                
                 if (image != null)
                 {
                     var imageStream = new MemoryStream(image.Bytes);
@@ -36,9 +36,10 @@ namespace SportsHub.Business.Services
                     };
 
                     article.Image = imageFile;
-        }
+                }
             }
-            return articles;
+
+           return articles;
         }
 
         public async Task<Article> GetArticleByIdAsync(Guid id)
@@ -57,9 +58,9 @@ namespace SportsHub.Business.Services
                 };
 
                 article.Image = imageFile;
-             }
+            }
 
-         return article;
+            return article;
         }
 
         public async Task CreateArticleAsync(CreateArticleModel сreateArticleModel)
@@ -81,8 +82,6 @@ namespace SportsHub.Business.Services
             {
                 await _articleImageRepository.AddImageAsync(articleModel.Image, articleModel.Id);
             }
-
-            
         }
 
         public async Task<Article> DeleteArticleAsync(Guid id)

@@ -62,8 +62,6 @@ namespace SportsHub.Business.Tests.Services
             Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
         }
 
-
-
         [Fact]
         public async Task GetArticlesAsync_ReturnsExpectedArticles_WithImage()
         {
@@ -122,10 +120,6 @@ namespace SportsHub.Business.Tests.Services
             Assert.Equal(expectedArticle.Id, actualArticle.Id);
             Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
         }
-
-
-
-
 
         [Fact]
         public async Task CreateArticleAsync_CallsAppropriateRepositoryMethodWithParameters()
