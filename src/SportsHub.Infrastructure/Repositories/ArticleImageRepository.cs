@@ -18,6 +18,7 @@ namespace SportsHub.Infrastructure.Repositories
         {
             return await _context.Images.ToListAsync();
         }
+
         public async Task<ArticleImage> GetImageByIdAsync(Guid id)
         {
             return await _context.Images.FindAsync(id);

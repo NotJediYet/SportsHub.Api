@@ -37,7 +37,6 @@ namespace SportsHub.Web.Controllers
             return Ok(articles);
         }
 
-
         [HttpGet("{id}")]
         [Authorize(Policies.User)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -59,8 +58,6 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-
-
         public async Task<IActionResult> CreateArticle([FromForm]CreateArticleModel сreateArticleModel)
         {
             var result = await _createArticleModelValidator.ValidateAsync(сreateArticleModel);
