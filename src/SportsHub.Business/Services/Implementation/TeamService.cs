@@ -40,12 +40,5 @@ namespace SportsHub.Business.Services
 
             return result;
         }
-
-        public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)
-        {
-            var result = await _teamRepository.DoesTeamAlreadyExistByIdAsync(id);
-
-            return result;
-        }
     }
 }
