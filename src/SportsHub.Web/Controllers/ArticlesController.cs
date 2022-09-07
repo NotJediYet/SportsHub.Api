@@ -18,12 +18,10 @@ namespace SportsHub.Web.Controllers
 
         public ArticlesController(
             IArticleService articleService,
-            IValidator<CreateArticleModel> createArticleModelValidator
-           )
+            IValidator<CreateArticleModel> createArticleModelValidator)
         {
             _articleService = articleService ?? throw new ArgumentNullException(nameof(articleService));
             _createArticleModelValidator = createArticleModelValidator ?? throw new ArgumentNullException(nameof(createArticleModelValidator));
-           
         }
 
         [HttpGet]
@@ -37,7 +35,6 @@ namespace SportsHub.Web.Controllers
             var articles = await _articleService.GetArticlesAsync();
             return Ok(articles);
         }
-
 
         [HttpGet("{id}")]
         [Authorize(Policies.User)]
@@ -60,29 +57,20 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-
-
         public async Task<IActionResult> CreateArticle([FromForm]CreateArticleModel сreateArticleModel)
         {
             var result = await _createArticleModelValidator.ValidateAsync(сreateArticleModel);
             if (!result.IsValid)
             {
-                return BadRequest(result.Errors.Select(error => error.ErrorMessage));
+                return BadRequest(result.ToString());
             }
 
-            var articleModel = new Article(
-                сreateArticleModel.TeamId,
-                сreateArticleModel.Location,
-                сreateArticleModel.Headline,
-                сreateArticleModel.Caption,
-                сreateArticleModel.Context);
-
-            await _articleService.CreateArticleAsync(articleModel, сreateArticleModel.ArticleImage);
+            await _articleService.CreateArticleAsync(сreateArticleModel);
 
             return Ok();
         }
 
-        [HttpPost("{id}")]
+        [HttpDelete("{id}")]
         [Authorize(Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

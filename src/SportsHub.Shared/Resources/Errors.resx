@@ -139,7 +139,7 @@
     <value>Category name is not unique</value>
   </data>
   <data name="FileMustHaveAppropriateFormat" xml:space="preserve">
-    <value>File must have appropriate format</value>
+    <value>File must have appropriate format (jpg, svg, png)</value>
   </data>
   <data name="SubcategoryDoesNotExist" xml:space="preserve">
     <value>Subcategory does not exist</value>

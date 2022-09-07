@@ -4,6 +4,7 @@ using Moq;
 using SportsHub.Business.Repositories;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,7 +48,8 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedArticleId = Guid.NewGuid();
 
-            var expectedArticle = new Article(Guid.NewGuid(),location:"Location",headline: "Headline", caption: "Caption", context: "Context");
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
+
             expectedArticle.Id = expectedArticleId;
 
             _articleRepository.Setup(repository => repository.GetArticleByIdAsync(expectedArticleId))
@@ -67,17 +69,24 @@ namespace SportsHub.Business.Tests.Services
         {
             // Arrange
             var expectedTeamId = Guid.NewGuid();
-            var expectedLocation ="location" ;
+
+            var expectedLocation = "location";
+            var expectedAltImage = "altImage";
             var expectedHeadline = "headline";
             var expectedCaption = "caption";
-            var expectedContext = "context";
+            var expectedContent = "content";
+            var expectedIsShowComments = true;
 
-            Article article = new Article(
-                teamId: expectedTeamId, 
-                location: expectedLocation,
-                headline: expectedHeadline,
-                caption: expectedCaption,
-                context: expectedContext);
+            CreateArticleModel articleModel = new()
+            {
+                TeamId = expectedTeamId,
+                Location = expectedLocation,
+                AltImage = expectedAltImage,
+                Headline = expectedHeadline,
+                Caption = expectedCaption,
+                Content = expectedContent,
+                IsShowComments = expectedIsShowComments
+            };
 
             var imageStream = new MemoryStream(GetRandomBytes());
 
@@ -88,12 +97,14 @@ namespace SportsHub.Business.Tests.Services
             };
 
             // Act
-            await _service.CreateArticleAsync(article,expectedArticleImage);
+
+            await _service.CreateArticleAsync(articleModel);
 
             // Assert
             _articleRepository.Verify(repository => repository.AddArticleAsync(It.Is<Article>(article =>
-                (article.TeamId == expectedTeamId) && (article.Location == expectedLocation)&&(article.Headline == expectedHeadline)
-                &&(article.Caption == expectedCaption) && (article.Context == expectedContext))));
+                    (article.TeamId == expectedTeamId) && (article.Location == expectedLocation) && (article.AltImage == expectedAltImage)
+                && (article.Headline == expectedHeadline) && (article.Caption == expectedCaption) && (article.Content == expectedContent) &&
+                article.IsShowComments == expectedIsShowComments))); ;
         }
 
         [Fact]
@@ -102,7 +113,8 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedArticleId = Guid.NewGuid();
 
-            var expectedArticle = new Article(Guid.NewGuid(), location: "Location", headline: "Headline", caption: "Caption", context: "Context");
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
+
             expectedArticle.Id = expectedArticleId;
 
             _articleRepository.Setup(repository => repository.DeleteArticleAsync(expectedArticleId))
@@ -112,11 +124,10 @@ namespace SportsHub.Business.Tests.Services
             var actualArticle = await _service.DeleteArticleAsync(expectedArticleId);
 
             // Assert
-            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
-            Assert.Equal(expectedArticle.Id, actualArticle.Id);
-            Assert.Equal(expectedArticle.Location, actualArticle.Location);
+
             Assert.Equal(expectedArticle.Headline, actualArticle.Headline);
-            Assert.Equal(expectedArticle.Caption, actualArticle.Caption);
+            Assert.Equal(expectedArticle.Id, actualArticle.Id);
+            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
         }
 
         [Fact]
@@ -182,14 +193,27 @@ namespace SportsHub.Business.Tests.Services
             // Assert
             Assert.False(result);
         }
-
+        
         private IEnumerable<Article> GetArticles()
         {
             IEnumerable<Article> articles = new List<Article>
             {
-                new Article( Guid.NewGuid(),"location1" ,"headline1" ,"caption1" ,"context1"),
-                new Article(Guid.NewGuid(),"location2" ,"headline2" ,"caption2" ,"context2"),
-                new Article(Guid.NewGuid(),"location3" ,"headline3" ,"caption3" ,"context3")
+
+                new Article(Guid.NewGuid(), "location1", "altImage1", "headline1", "caption1", "content1", false),
+                new Article(Guid.NewGuid(), "location2", "altImage2", "headline2", "caption2", "content2", true),
+                new Article(Guid.NewGuid(), "location3", "altImage3", "headline3", "caption3", "content3", false)
+            };
+
+            return articles;
+        }
+
+        private IEnumerable<Article> CreateArticles(Guid teamId, bool status)
+        {
+            IEnumerable<Article> articles = new List<Article>
+            {
+                new Article(teamId, "location1", "altImage1", "A", "caption1", "content1", status),
+                new Article(teamId, "location2", "altImage2", "B", "caption2", "content2", status),
+                new Article(teamId, "location3", "altImage3", "C", "caption3", "content3", status)
             };
 
             return articles;

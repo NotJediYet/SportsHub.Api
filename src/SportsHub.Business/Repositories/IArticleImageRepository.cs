@@ -7,7 +7,7 @@ namespace SportsHub.Business.Repositories
     {
         Task<ArticleImage> GetImageByIdAsync(Guid id);
 
-        Task AddImageAsync(IFormFile Image, Guid ArticleId);
+        Task AddImageAsync(IFormFile articleImage, Guid id);
 
         Task<bool> DoesImageAlreadyExistByArticleIdAsync(Guid ArticleId);
     }

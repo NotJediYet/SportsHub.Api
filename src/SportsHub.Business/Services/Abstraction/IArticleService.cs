@@ -10,12 +10,18 @@ namespace SportsHub.Business.Services
 
         Task<Article> GetArticleByIdAsync(Guid id);
 
-        Task CreateArticleAsync(Article article, IFormFile Image);
+        Task CreateArticleAsync(CreateArticleModel articleModel);
 
         Task<Article> DeleteArticleAsync(Guid Id);
 
         Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline);
 
         Task<bool> DoesArticleAlreadyExistByIdAsync(Guid id);
+
+        IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId, IEnumerable<Article> articles);
+
+        IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles);
+
+        Task<IEnumerable<Article>> GetSortedArticlesAsync();
     }
 }
