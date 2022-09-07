@@ -27,10 +27,27 @@ namespace SportsHub.Business.Services
             return  await _articleRepository.GetArticleByIdAsync(id);
         }
 
-        public async Task CreateArticleAsync(Article article, IFormFile Image)
+        public async Task CreateArticleAsync(CreateArticleModel сreateArticleModel)
         {
-            await _articleRepository.AddArticleAsync(article);
-            await _articleImageRepository.AddImageAsync(Image, article.Id);
+            var articleModel = new Article(
+                сreateArticleModel.TeamId,
+                сreateArticleModel.Location,
+                сreateArticleModel.AltImage,
+                сreateArticleModel.Headline,
+                сreateArticleModel.Caption,
+                сreateArticleModel.Content,
+                сreateArticleModel.IsShowComments);
+
+            articleModel.Image=сreateArticleModel.ArticleImage;
+
+            await _articleRepository.AddArticleAsync(articleModel);
+
+            if (articleModel.Image != null)
+            {
+                await _articleImageRepository.AddImageAsync(articleModel.Image, articleModel.Id);
+            }
+
+            
         }
 
         public async Task<Article> DeleteArticleAsync(Guid id)
@@ -46,6 +63,21 @@ namespace SportsHub.Business.Services
         public async Task<bool> DoesArticleAlreadyExistByIdAsync(Guid id)
         {
             return await _articleRepository.DoesArticleAlreadyExistByIdAsync(id);
+        }
+
+        public IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId, IEnumerable<Article> articles)
+        {
+            return _articleRepository.GetArticlesFilteredByTeamId(teamId, articles);
+        }
+
+        public IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles)
+        {
+            return _articleRepository.GetArticlesFilteredByStatus(status, articles);
+        }
+
+        public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
+        {
+            return await _articleRepository.GetSortedArticlesAsync();
         }
     }
 }

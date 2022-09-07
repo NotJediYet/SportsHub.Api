@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsHub.Infrastructure.DBContext;
 
@@ -11,9 +12,10 @@ using SportsHub.Infrastructure.DBContext;
 namespace SportsHub.Infrastructure.Migrations
 {
     [DbContext(typeof(SportsHubDbContext))]
-    partial class SportsHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220826175535_Articles")]
+    partial class Articles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,7 +30,6 @@ namespace SportsHub.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-
                     b.Property<string>("AltImage")
                         .HasColumnType("nvarchar(max)");
 
@@ -36,7 +37,6 @@ namespace SportsHub.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
-
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Headline")

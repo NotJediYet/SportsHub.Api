@@ -124,7 +124,7 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File must have appropriate format.
+        ///   Looks up a localized string similar to File must have appropriate format (jpg, svg, png).
         /// </summary>
         public static string FileMustHaveAppropriateFormat {
             get {

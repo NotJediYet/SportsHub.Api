@@ -49,5 +49,34 @@ namespace SportsHub.Infrastructure.Repositories
         {
             return await _context.Teams.AnyAsync(team => team.Id == id);
         }
+
+        public async Task<Guid> FindTeamIdByTeamNameAsync(string teamName)
+        {
+            var teams = await _context.Teams.ToListAsync();
+
+            Guid teamId = (from team in teams
+                           where team.Name == teamName
+                           select team.Id).FirstOrDefault();
+
+            return teamId;
+        }
+
+        public async Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId)
+        {
+            var teams = await _context.Teams.ToListAsync();
+
+            Guid teamId = (from team in teams
+                           where team.SubcategoryId == subcategoryId
+                           select team.Id).FirstOrDefault();
+
+            return teamId;
+        }
+
+        public async Task<bool> DoesTeamAlredyExistByIdAsync(Guid id)
+        {
+            var teams = await _context.Set<Team>().ToListAsync();
+
+            return teams.Any(team => team.Id == id);
+        }
     }
 }

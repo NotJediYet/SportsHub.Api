@@ -30,6 +30,7 @@ namespace SportsHub.Infrastructure.Repositories
 
             await _context.SaveChangesAsync();
         }
+
         public async Task<Article> DeleteArticleAsync(Guid id)
         {
             var article = _context.Articles.Find(id);
@@ -38,6 +39,7 @@ namespace SportsHub.Infrastructure.Repositories
                 _context.Articles.Remove(article);
                 await _context.SaveChangesAsync();
             }
+
             return article;
         }
 
@@ -50,6 +52,36 @@ namespace SportsHub.Infrastructure.Repositories
         {
             var articles = await _context.Articles.AnyAsync(article => article.Id == id);
 
+            return articles;
+        }
+
+        public IEnumerable<Article> GetArticlesFilteredByTeamId(Guid teamId, IEnumerable<Article> articles)
+        {
+            articles = articles.Where(articles => articles.TeamId == teamId).ToList();
+
+            return articles;
+        }
+
+        public IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles)
+        {
+            if (status == "Published")
+            {
+                articles = articles.Where(articles => articles.IsPublished == true).ToList();
+            }
+            else
+        {
+                articles = articles.Where(articles => articles.IsPublished == false).ToList();
+            }
+
+            return articles;
+        }
+
+        public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
+        {
+            var articles = await _context.Articles
+                .OrderBy(articles => articles.Headline)
+                .ToListAsync();
+       
             return articles;
         }
     }

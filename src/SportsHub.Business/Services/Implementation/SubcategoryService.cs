@@ -19,9 +19,7 @@ namespace SportsHub.Business.Services
 
         public async Task<Subcategory> GetSubcategoryByIdAsync(Guid id)
         {
-            var subcategory = await _subcategoryRepository.GetSubcategoryByIdAsync(id);
-
-            return subcategory;
+            return await _subcategoryRepository.GetSubcategoryByIdAsync(id);
         }
 
         public async Task CreateSubcategoryAsync(string subcategoryName, Guid categoryId)
@@ -31,16 +29,17 @@ namespace SportsHub.Business.Services
 
         public async Task<bool> DoesSubcategoryAlreadyExistByNameAsync(string subcategoryName)
         {
-            var result = await _subcategoryRepository.DoesSubcategoryAlreadyExistByNameAsync(subcategoryName);
-
-            return result;
+            return await _subcategoryRepository.DoesSubcategoryAlreadyExistByNameAsync(subcategoryName);
         }
 
         public async Task<bool> DoesSubcategoryAlreadyExistByIdAsync(Guid id)
         {
-            var result = await _subcategoryRepository.DoesSubcategoryAlreadyExistByIdAsync(id);
+            return await _subcategoryRepository.DoesSubcategoryAlreadyExistByIdAsync(id);
+        }
 
-            return result;
+        public async Task<Guid> FindSubcategoryIdBySubcategoryNameAsync(string subcategoryName)
+        {
+            return await _subcategoryRepository.FindSubcategoryIdBySubcategoryNameAsync(subcategoryName);
         }
     }
 }
