@@ -24,19 +24,8 @@ namespace SportsHub.Business.Services
             foreach (var article in articles)
             {
                 var image = images.FirstOrDefault(image => image.ArticleId == article.Id);
-                
-                if (image != null)
-                {
-                    var imageStream = new MemoryStream(image.Bytes);
 
-                    IFormFile imageFile = new FormFile(imageStream, 0, imageStream.Length, image.ArticleId.ToString(), image.ArticleId.ToString() + image.FileExtension)
-                    {
-                        Headers = new HeaderDictionary(),
-                        ContentType = "image/" + image.FileExtension.TrimStart('.'),
-                    };
-
-                    article.Image = imageFile;
-                }
+                article.Image = ConvertImage(image);        
             }
 
            return articles;
@@ -47,20 +36,9 @@ namespace SportsHub.Business.Services
          var article = await _articleRepository.GetArticleByIdAsync(id);
          var image = await _articleImageRepository.GetImageByIdAsync(id);
 
-            if (image != null) 
-            { 
-                var imageStream = new MemoryStream(image.Bytes);
-
-                IFormFile imageFile = new FormFile(imageStream, 0, imageStream.Length, id.ToString(), id.ToString() + image.FileExtension)
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = "image/" + image.FileExtension.TrimStart('.'),
-                };
-
-                article.Image = imageFile;
-            }
-
-            return article;
+         article.Image = ConvertImage(image);
+            
+         return article;
         }
 
         public async Task CreateArticleAsync(CreateArticleModel сreateArticleModel)
@@ -112,6 +90,24 @@ namespace SportsHub.Business.Services
         public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
         {
             return await _articleRepository.GetSortedArticlesAsync();
+        }
+
+        public IFormFile ConvertImage(ArticleImage image)
+        {
+            if (image != null)
+            {
+                var imageStream = new MemoryStream(image.Bytes);
+
+                IFormFile imageFile = new FormFile(imageStream, 0, imageStream.Length, image.ArticleId.ToString(), image.ArticleId.ToString() + image.FileExtension)
+                {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/" + image.FileExtension.TrimStart('.'),
+                };
+
+                return imageFile;
+            }
+
+            else return null;
         }
     }
 }
