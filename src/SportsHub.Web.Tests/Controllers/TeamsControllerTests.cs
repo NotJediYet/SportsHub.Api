@@ -120,7 +120,7 @@ namespace SportsHub.Web.Tests.Controllers
             // Arrange
             var expectedTeamId = Guid.NewGuid();
 
-            var expectedTeam = new Team(name: "Name", subcategoryId: Guid.NewGuid());
+            var expectedTeam = new Team(name: "Name", subcategoryId: Guid.NewGuid(), location: "Location");
             expectedTeam.Id = expectedTeamId;
 
             _service.Setup(service => service.GetTeamByIdAsync(expectedTeamId))
@@ -143,9 +143,9 @@ namespace SportsHub.Web.Tests.Controllers
         {
             IEnumerable<Team> teams = new List<Team>
             {
-                new Team("Name1", Guid.NewGuid()),
-                new Team("Name2", Guid.NewGuid()),
-                new Team("Name3", Guid.NewGuid())
+                new Team("Name1", Guid.NewGuid(), "Location1"),
+                new Team("Name2", Guid.NewGuid(), "Location2"),
+                new Team("Name3", Guid.NewGuid(), "Location3")
             };
             return teams;
         }

@@ -2,22 +2,28 @@
 using SportsHub.Business.Repositories;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 using System;
+using System.IO;
+using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Business.Tests.Services
 {
     public class TeamServiceTests
     {
-        private readonly Mock<ITeamRepository> _repository;
+        private readonly Mock<ITeamRepository> _teamRepository;
+        private readonly Mock<ITeamLogoRepository> _teamLogoRepository;
         private readonly ITeamService _service;
 
         public TeamServiceTests()
         {
-            _repository = new Mock<ITeamRepository>();
-            _service = new TeamService(_repository.Object);
+            _teamRepository = new Mock<ITeamRepository>();
+            _teamLogoRepository = new Mock<ITeamLogoRepository>();
+            _service = new TeamService(_teamRepository.Object, _teamLogoRepository.Object);
         }
 
         [Fact]
@@ -26,7 +32,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedTeams = GetTeams();
 
-            _repository.Setup(repository => repository.GetTeamsAsync())
+            _teamRepository.Setup(repository => repository.GetTeamsAsync())
                 .ReturnsAsync(expectedTeams);
 
             // Act
@@ -42,10 +48,10 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedTeamId = Guid.NewGuid();
 
-            var expectedTeam = new Team(name: "Name", Guid.NewGuid());
+            var expectedTeam = new Team(name: "Name", Guid.NewGuid(), location: "Location");
             expectedTeam.Id = expectedTeamId;
 
-            _repository.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
+            _teamRepository.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
                 .ReturnsAsync(expectedTeam);
 
             // Act
@@ -60,16 +66,37 @@ namespace SportsHub.Business.Tests.Services
         [Fact]
         public async Task CreateTeamAsync_CallsAppropriateRepositoryMethodWithParameters()
         {
-            // Arrange
+            var byteArray = Encoding.UTF8.GetBytes("This is a dummy file");
+            var expectedTeamLogo = new FormFile(new MemoryStream(byteArray), 0, byteArray.Length, "Data", "image.jpg");
+            var expectedTeamLogoExtension = Path.GetExtension(expectedTeamLogo.FileName);
+
             var expectedTeamName = "Name";
             var expectedSubcategoryId = Guid.NewGuid();
+            var expectedTeamId = Guid.NewGuid();
+            var teamId = expectedTeamId;
+            var expectedLocation = "Location";
+            var expectedByteArray = byteArray;
+            var fileExtension = expectedTeamLogoExtension;
+
+            CreateTeamModel сreateTeamModel = new()
+            {
+                Name = expectedTeamName,
+                Location = expectedLocation,
+                SubcategoryId = expectedSubcategoryId,
+                Logo = expectedTeamLogo
+            };
 
             // Act
-            await _service.CreateTeamAsync(expectedTeamName, expectedSubcategoryId);
+            await _service.CreateTeamAsync(сreateTeamModel);
 
             // Assert
-            _repository.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
+            _teamRepository.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
                 (team.Name == expectedTeamName) && (team.SubcategoryId == expectedSubcategoryId))));
+            _teamLogoRepository.Verify(repository => repository.AddTeamLogoAsync(It.Is<TeamLogo>(teamLogo =>
+                (byteArray == expectedByteArray)
+                && (fileExtension == expectedTeamLogoExtension)
+                && (teamId == expectedTeamId)
+                )));
         }
 
         [Fact]
@@ -78,7 +105,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var teamName = "Name";
 
-            _repository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
+            _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
                 .ReturnsAsync(true);
 
             // Act
@@ -94,7 +121,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var teamName = "Name";
 
-            _repository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
+            _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
                 .ReturnsAsync(false);
 
             // Act
@@ -111,7 +138,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeamId = Guid.NewGuid();
             var expectedTeamName = "Name";
 
-            _repository.Setup(repository => repository.FindTeamIdByTeamNameAsync(expectedTeamName))
+            _teamRepository.Setup(repository => repository.FindTeamIdByTeamNameAsync(expectedTeamName))
                 .ReturnsAsync(expectedTeamId);
 
             // Act
@@ -128,7 +155,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeamId = Guid.NewGuid();
             var expectedSubcategoryId = Guid.NewGuid();
 
-            _repository.Setup(repository => repository.FindTeamIdBySubcategoryIdAsync(expectedSubcategoryId))
+            _teamRepository.Setup(repository => repository.FindTeamIdBySubcategoryIdAsync(expectedSubcategoryId))
                 .ReturnsAsync(expectedTeamId);
 
             // Act
@@ -142,9 +169,9 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Team> teams = new List<Team>
             {
-                new Team("Name1", Guid.NewGuid()),
-                new Team("Name2", Guid.NewGuid()),
-                new Team("Name3", Guid.NewGuid())
+                new Team("Name1", Guid.NewGuid(), "Location1"),
+                new Team("Name2", Guid.NewGuid(), "Location2"),
+                new Team("Name3", Guid.NewGuid(), "Location3")
             };
 
             return teams;

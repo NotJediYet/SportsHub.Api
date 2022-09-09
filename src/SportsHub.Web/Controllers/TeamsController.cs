@@ -61,7 +61,7 @@ namespace SportsHub.Web.Controllers
                 return BadRequest(validationResult.ToString());
             }
 
-            await _teamService.CreateTeamAsync(сreateTeamModel.Name, сreateTeamModel.SubcategoryId);
+            await _teamService.CreateTeamAsync(сreateTeamModel);
 
             return Ok();
         }

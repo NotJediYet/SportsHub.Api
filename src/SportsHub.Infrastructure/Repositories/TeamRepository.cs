@@ -35,6 +35,7 @@ namespace SportsHub.Infrastructure.Repositories
         {
             return await _context.Teams.AnyAsync(team => team.Name == teamName);
         }
+
         public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)
         {
             return await _context.Teams.AnyAsync(team => team.Id == id);
