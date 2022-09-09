@@ -20,12 +20,27 @@ namespace SportsHub.Business.Services
 
         public async Task<IEnumerable<Team>> GetTeamsAsync()
         {
-            return await _teamRepository.GetTeamsAsync();
+            var teams = await _teamRepository.GetTeamsAsync();
+            var teamLogos = await _teamLogoRepository.GetTeamLogosAsync();
+
+            foreach (var team in teams)
+            {
+                var logo = teamLogos.FirstOrDefault(logo => logo.TeamId == team.Id);
+
+                team.TeamLogo = ConvertTeamLogo(logo);
+            }
+
+            return teams;
         }
 
         public async Task<Team> GetTeamByIdAsync(Guid id)
         {
-            return await _teamRepository.GetTeamByIdAsync(id);
+            var team = await _teamRepository.GetTeamByIdAsync(id);
+            var teamLogo = await _teamLogoRepository.GetTeamLogoByTeamIdAsync(id);
+
+            team.TeamLogo = ConvertTeamLogo(teamLogo);
+
+            return team;
         }
 
         public async Task CreateTeamAsync(CreateTeamModel сreateTeamModel)
@@ -63,6 +78,24 @@ namespace SportsHub.Business.Services
             var result = await _teamRepository.DoesTeamAlreadyExistByIdAsync(id);
 
             return result;
+        }
+
+        public IFormFile ConvertTeamLogo(TeamLogo logo)
+        {
+            if (logo != null)
+            {
+                var fileStream = new MemoryStream(logo.Bytes);
+
+                IFormFile newFile = new FormFile(fileStream, 0, fileStream.Length, logo.TeamId.ToString(), logo.TeamId.ToString() + logo.FileExtension)
+                {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "teamLogo/" + logo.FileExtension.TrimStart('.'),
+                };
+
+                return newFile;
+            }
+
+            else return null;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SportsHub.Shared.Entities;
 using SportsHub.Shared.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Business.Services
 {

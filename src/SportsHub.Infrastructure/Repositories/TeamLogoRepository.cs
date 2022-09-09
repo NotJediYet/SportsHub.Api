@@ -16,7 +16,12 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task<TeamLogo> GetTeamLogoByTeamIdAsync(Guid teamId)
         {
-            return await _context.Set<TeamLogo>().FindAsync(teamId);
+            return await _context.TeamLogos.FindAsync(teamId);
+        }
+
+        public async Task<IEnumerable<TeamLogo>> GetTeamLogosAsync()
+        {
+            return await _context.TeamLogos.ToListAsync();
         }
 
         public async Task AddTeamLogoAsync(TeamLogo teamLogo)
