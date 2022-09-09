@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Moq;
 using SportsHub.Business.Repositories;
 using SportsHub.Business.Services;
@@ -52,6 +51,65 @@ namespace SportsHub.Business.Tests.Services
             expectedArticle.Id = expectedArticleId;
 
             _articleRepository.Setup(repository => repository.GetArticleByIdAsync(expectedArticleId))
+            .ReturnsAsync(expectedArticle);
+
+            // Act
+            var actualArticle = await _service.GetArticleByIdAsync(expectedArticleId);
+
+            // Assert
+            Assert.Equal(expectedArticle.Headline, actualArticle.Headline);
+            Assert.Equal(expectedArticle.Id, actualArticle.Id);
+            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
+        }
+
+        [Fact]
+        public async Task GetArticlesAsync_ReturnsExpectedArticles_WithImage()
+        {
+            // Arrange
+            var expectedArticles = GetArticles();
+            var imageStream = new MemoryStream(GetRandomBytes());
+
+            IFormFile expectedArticleImage = new FormFile(imageStream, 0, imageStream.Length, "UnitTest", "UnitTest.jpg")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = "image/jpeg",
+            };
+
+           foreach(var expectedArticle in expectedArticles )
+            {
+                expectedArticle.Image = expectedArticleImage;
+            }
+
+            _articleRepository.Setup(repository => repository.GetArticlesAsync())
+            .ReturnsAsync(expectedArticles);
+
+            // Act
+            var actualArticles = await _service.GetArticlesAsync();
+
+            // Assert
+            Assert.Equal(expectedArticles, actualArticles);
+        }
+
+        [Fact]
+        public async Task GetArticleByIdAsync_WhenIdIsValid_ReturnsExpectedArticle_WithImage()
+        {
+            // Arrange
+            var expectedArticleId = Guid.NewGuid();
+
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
+            expectedArticle.Id = expectedArticleId;
+            
+            var imageStream = new MemoryStream(GetRandomBytes());
+
+            IFormFile expectedArticleImage = new FormFile(imageStream, 0, imageStream.Length, "UnitTest", "UnitTest.jpg")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = "image/jpeg",
+            };
+
+            expectedArticle.Image = expectedArticleImage;
+
+            _articleRepository.Setup(repo => repo.GetArticleByIdAsync(expectedArticleId))
             .ReturnsAsync(expectedArticle);
 
             // Act
