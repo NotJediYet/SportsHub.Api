@@ -2,7 +2,6 @@
 using SportsHub.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using SportsHub.Business.Repositories;
-using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Infrastructure.Repositories
 {

@@ -12,7 +12,7 @@ using SportsHub.Infrastructure.DBContext;
 namespace SportsHub.Infrastructure.Migrations
 {
     [DbContext(typeof(SportsHubDbContext))]
-    [Migration("20220901102603_AddTeamLogo")]
+    [Migration("20220909164354_AddTeamLogo")]
     partial class AddTeamLogo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

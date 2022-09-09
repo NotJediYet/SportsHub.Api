@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Moq;
 using SportsHub.Business.Repositories;
 using SportsHub.Business.Services;
@@ -50,6 +49,65 @@ namespace SportsHub.Business.Tests.Services
 
             var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
             expectedArticle.Id = expectedArticleId;
+
+            _articleRepository.Setup(repository => repository.GetArticleByIdAsync(expectedArticleId))
+            .ReturnsAsync(expectedArticle);
+
+            // Act
+            var actualArticle = await _service.GetArticleByIdAsync(expectedArticleId);
+
+            // Assert
+            Assert.Equal(expectedArticle.Headline, actualArticle.Headline);
+            Assert.Equal(expectedArticle.Id, actualArticle.Id);
+            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
+        }
+
+        [Fact]
+        public async Task GetArticlesAsync_ReturnsExpectedArticles_WithImage()
+        {
+            // Arrange
+            var expectedArticles = GetArticles();
+            var imageStream = new MemoryStream(GetRandomBytes());
+
+            IFormFile expectedArticleImage = new FormFile(imageStream, 0, imageStream.Length, "UnitTest", "UnitTest.jpg")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = "image/jpeg",
+            };
+
+           foreach(var expectedArticle in expectedArticles )
+            {
+                expectedArticle.Image = expectedArticleImage;
+            }
+
+            _articleRepository.Setup(repository => repository.GetArticlesAsync())
+            .ReturnsAsync(expectedArticles);
+
+            // Act
+            var actualArticles = await _service.GetArticlesAsync();
+
+            // Assert
+            Assert.Equal(expectedArticles, actualArticles);
+        }
+
+        [Fact]
+        public async Task GetArticleByIdAsync_WhenIdIsValid_ReturnsExpectedArticle_WithImage()
+        {
+            // Arrange
+            var expectedArticleId = Guid.NewGuid();
+
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
+            expectedArticle.Id = expectedArticleId;
+            
+            var imageStream = new MemoryStream(GetRandomBytes());
+
+            IFormFile expectedArticleImage = new FormFile(imageStream, 0, imageStream.Length, "UnitTest", "UnitTest.jpg")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = "image/jpeg",
+            };
+
+            expectedArticle.Image = expectedArticleImage;
 
             _articleRepository.Setup(repo => repo.GetArticleByIdAsync(expectedArticleId))
             .ReturnsAsync(expectedArticle);
@@ -104,6 +162,26 @@ namespace SportsHub.Business.Tests.Services
                 article.IsShowComments == expectedIsShowComments))); ;
         }
 
+        [Fact]
+        public async Task DeleteArticleAsync_WhenIdIsValid_ReturnsExpectedArticle()
+        {
+            // Arrange
+            var expectedArticleId = Guid.NewGuid();
+
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
+            expectedArticle.Id = expectedArticleId;
+
+            _articleRepository.Setup(repository => repository.DeleteArticleAsync(expectedArticleId))
+                .ReturnsAsync(expectedArticle);
+
+            // Act
+            var actualArticle = await _service.DeleteArticleAsync(expectedArticleId);
+
+            // Assert
+            Assert.Equal(expectedArticle.Headline, actualArticle.Headline);
+            Assert.Equal(expectedArticle.Id, actualArticle.Id);
+            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
+        }
 
         [Fact]
         public async Task DoesArticleAlreadyExistByHeadlineAsync_WhenArticleExists_ReturnsTrue()
@@ -246,9 +324,9 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Article> articles = new List<Article>
             {
-                 new Article( Guid.NewGuid(),"location1" ,"altImage1","headline1" ,"caption1" ,"content1", false),
-                new Article(Guid.NewGuid(),"location2" ,"altImage2","headline2" ,"caption2" ,"content2", true),
-                new Article(Guid.NewGuid(),"location3" ,"altImage3","headline3" ,"caption3" ,"content3", false)
+                new Article(Guid.NewGuid(), "location1", "altImage1", "headline1", "caption1", "content1", false),
+                new Article(Guid.NewGuid(), "location2", "altImage2", "headline2", "caption2", "content2", true),
+                new Article(Guid.NewGuid(), "location3", "altImage3", "headline3", "caption3", "content3", false)
             };
 
             return articles;
@@ -258,9 +336,9 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Article> articles = new List<Article>
             {
-                 new Article(teamId,"location1" ,"altImage1","A" ,"caption1" ,"content1", status),
-                new Article(teamId,"location2" ,"altImage2","B" ,"caption2" ,"content2", status),
-                new Article(teamId,"location3" ,"altImage3","C" ,"caption3" ,"content3", status)
+                new Article(teamId, "location1", "altImage1", "A", "caption1", "content1", status),
+                new Article(teamId, "location2", "altImage2", "B", "caption2", "content2", status),
+                new Article(teamId, "location3", "altImage3", "C", "caption3", "content3", status)
             };
 
             return articles;

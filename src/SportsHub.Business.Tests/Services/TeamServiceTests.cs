@@ -4,12 +4,12 @@ using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
 using SportsHub.Shared.Models;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.Internal;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
+using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Business.Tests.Services
 {
@@ -66,7 +66,6 @@ namespace SportsHub.Business.Tests.Services
         [Fact]
         public async Task CreateTeamAsync_CallsAppropriateRepositoryMethodWithParameters()
         {
-            // Arrange
             var byteArray = Encoding.UTF8.GetBytes("This is a dummy file");
             var expectedTeamLogo = new FormFile(new MemoryStream(byteArray), 0, byteArray.Length, "Data", "image.jpg");
             var expectedTeamLogoExtension = Path.GetExtension(expectedTeamLogo.FileName);
@@ -93,14 +92,12 @@ namespace SportsHub.Business.Tests.Services
             // Assert
             _teamRepository.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
                 (team.Name == expectedTeamName) && (team.SubcategoryId == expectedSubcategoryId))));
-
             _teamLogoRepository.Verify(repository => repository.AddTeamLogoAsync(It.Is<TeamLogo>(teamLogo =>
                 (byteArray == expectedByteArray)
                 && (fileExtension == expectedTeamLogoExtension)
                 && (teamId == expectedTeamId)
                 )));
         }
-
 
         [Fact]
         public async Task DoesTeamAlreadyExistByNameAsync_WhenTeamExists_ReturnsTrue()

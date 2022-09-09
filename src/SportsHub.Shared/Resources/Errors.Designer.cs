@@ -196,6 +196,15 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Team logo cannot be empty.
+        /// </summary>
+        public static string TeamLogoCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("TeamLogoCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team name cannot be empty.
         /// </summary>
         public static string TeamNameCannotBeEmpty {

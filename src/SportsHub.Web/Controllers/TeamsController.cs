@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using SportsHub.Business.Services;
 using SportsHub.Security;
 using SportsHub.Shared.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Web.Controllers
 {

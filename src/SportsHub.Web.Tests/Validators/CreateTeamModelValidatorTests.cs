@@ -5,9 +5,9 @@ using SportsHub.Shared.Resources;
 using SportsHub.Web.Validators;
 using System;
 using System.IO;
+using System.Text;
 using Xunit;
 using Microsoft.AspNetCore.Http;
-using System.Text;
 
 namespace SportsHub.Web.Tests.Validators
 {

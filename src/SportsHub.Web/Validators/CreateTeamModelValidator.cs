@@ -38,7 +38,6 @@ namespace SportsHub.Web.Validators
             return !result;
         }
     }
-
     public class IFormFileValidator : AbstractValidator<IFormFile>
     {
         private const string Extension = @"\.jpg|\.png|\.PNG|\.svg";
