@@ -13,7 +13,6 @@ namespace SportsHub.Web.Controllers
     {
         private readonly ICategoryService _categoryService;
         private IValidator<CreateCategoryModel> _createCategoryModelValidator;
-
         public CategoriesController(
             ICategoryService categoryService,
             IValidator<CreateCategoryModel> createCategoryModelValidator)

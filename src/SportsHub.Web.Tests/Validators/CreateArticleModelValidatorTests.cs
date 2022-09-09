@@ -140,7 +140,7 @@ namespace SportsHub.Web.Tests.Validators
                 Content = "content",
                 IsShowComments = true,
             };
-
+        
 
             _articleService.Setup(service => service.DoesArticleAlreadyExistByHeadlineAsync(article.Headline))
             .ReturnsAsync(false);

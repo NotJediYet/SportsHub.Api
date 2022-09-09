@@ -20,7 +20,7 @@ namespace SportsHub.Web.Validators
 
             RuleFor(article => article.Headline)
                 .NotEmpty().WithMessage(Errors.ArticleHeadlineCannotBeEmpty)
-                .MustAsync((headline, cancellation) => DoesArticleNameIsUniqueAsync(headline))
+               .MustAsync((headline, cancellation) => DoesArticleNameIsUniqueAsync(headline))
                 .WithMessage(Errors.ArticleHeadlineIsNotUnique);
 
             RuleFor(article => article.ArticleImage)
@@ -32,7 +32,6 @@ namespace SportsHub.Web.Validators
                 .WithMessage(Errors.TeamIdDoesNotExist);
 
         }
-
 
         public class IFormFileValidator : AbstractValidator<IFormFile>
         {
@@ -48,7 +47,6 @@ namespace SportsHub.Web.Validators
                     .WithMessage(Errors.FileMustHaveAppropriateFormat);
             }
         }
-
 
         private async Task<bool> DoesArticleNameIsUniqueAsync(string headline)
         {

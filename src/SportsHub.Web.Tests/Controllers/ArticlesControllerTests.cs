@@ -96,7 +96,7 @@ namespace SportsHub.Web.Tests.Controllers
             var expectedArticles = GetArticles();
 
             _serviceArticle.Setup(service => service.GetArticlesAsync())
-            .ReturnsAsync(expectedArticles);
+                .ReturnsAsync(expectedArticles);
 
             // Act
             var result = await _controller.GetArticles();
@@ -116,7 +116,7 @@ namespace SportsHub.Web.Tests.Controllers
             var articleId = Guid.NewGuid();
 
             _serviceArticle.Setup(service => service.GetArticleByIdAsync(articleId))
-            .ReturnsAsync((Article)null);
+                .ReturnsAsync((Article)null);
 
             // Act
             var result = await _controller.GetArticle(articleId);
@@ -137,7 +137,7 @@ namespace SportsHub.Web.Tests.Controllers
           
 
             _serviceArticle.Setup(service => service.GetArticleByIdAsync(expectedArticleId))
-            .ReturnsAsync(expectedArticle);
+               .ReturnsAsync(expectedArticle);
 
             // Act
             var result = await _controller.GetArticle(expectedArticleId);
@@ -157,13 +157,55 @@ namespace SportsHub.Web.Tests.Controllers
         private IEnumerable<Article> GetArticles()
         {
             IEnumerable<Article> articles = new List<Article>
-            {  
+            {
                 new Article(Guid.NewGuid(),"location1" ,"altImage1","headline1" ,"caption1" ,"content1", false),
                 new Article(Guid.NewGuid(),"location2" ,"altImage2","headline2" ,"caption2" ,"content2", true),
                 new Article(Guid.NewGuid(),"location3" ,"altImage3","headline3" ,"caption3" ,"content3", false)
             };
 
             return articles;
+        }
+
+        [Fact]
+        public async Task DeleteArticle_WhenArticleDoesNotExist_ReturnsNotFoundResult()
+        {
+            // Arrange
+            var articleId = Guid.NewGuid();
+
+            _serviceArticle.Setup(service => service.DeleteArticleAsync(articleId))
+                .ReturnsAsync((Article)null);
+
+            // Act
+            var result = await _controller.DeleteArticle(articleId);
+
+            // Assert
+            var objectResult = Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(StatusCodes.Status404NotFound, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteArticle_WhenArticleExists_ReturnsOkObjectResultWithArticle()
+        {
+            // Arrange
+            var expectedArticleId = Guid.NewGuid();
+
+            var expectedArticle = new Article(teamId: Guid.NewGuid(), location: "location", altImage: "AltImage", headline: "headline", caption: "caption", content: "content", isShowComments: false);
+            expectedArticle.Id = expectedArticleId;
+
+            _serviceArticle.Setup(service => service.DeleteArticleAsync(expectedArticleId))
+               .ReturnsAsync(expectedArticle);
+
+            // Act
+            var result = await _controller.DeleteArticle(expectedArticleId);
+
+            // Assert
+            var objectResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+
+            var actualArticle = Assert.IsType<Article>(objectResult.Value);
+            Assert.Equal(expectedArticle.Headline, actualArticle.Headline);
+            Assert.Equal(expectedArticle.Id, actualArticle.Id);
+            Assert.Equal(expectedArticle.TeamId, actualArticle.TeamId);
         }
     }
 }

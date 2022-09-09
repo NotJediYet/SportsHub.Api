@@ -31,6 +31,18 @@ namespace SportsHub.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<Article> DeleteArticleAsync(Guid id)
+        {
+            var article = _context.Articles.Find(id);
+            if (article != null)
+            {
+                _context.Articles.Remove(article);
+                await _context.SaveChangesAsync();
+            }
+
+            return article;
+        }
+
         public async Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline)
         {
             return await _context.Articles.AnyAsync(article => article.Headline == headline);
@@ -57,7 +69,7 @@ namespace SportsHub.Infrastructure.Repositories
                 articles = articles.Where(articles => articles.IsPublished == true).ToList();
             }
             else
-            {
+        {
                 articles = articles.Where(articles => articles.IsPublished == false).ToList();
             }
 
@@ -69,7 +81,7 @@ namespace SportsHub.Infrastructure.Repositories
             var articles = await _context.Articles
                 .OrderBy(articles => articles.Headline)
                 .ToListAsync();
-
+       
             return articles;
         }
     }
