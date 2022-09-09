@@ -13,21 +13,24 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using System.IO;
 
 namespace SportsHub.Web.Tests.Controllers
 {
     public class TeamsControllerTests
     {
         private readonly Mock<ITeamService> _service;
-        private readonly Mock<IValidator<CreateTeamModel>> _validator;
+        private readonly Mock<IValidator<CreateTeamModel>> _createTeamModelValidator;
+        private readonly Mock<IValidator<EditTeamModel>> _editTeamModelvalidator;
         private readonly TeamsController _controller;
 
         public TeamsControllerTests()
         {
             _service = new Mock<ITeamService>();
-            _validator = new Mock<IValidator<CreateTeamModel>>();
+            _createTeamModelValidator = new Mock<IValidator<CreateTeamModel>>();
+            _editTeamModelvalidator = new Mock<IValidator<EditTeamModel>>();
 
-            _controller = new TeamsController(_service.Object, _validator.Object);
+            _controller = new TeamsController(_service.Object, _createTeamModelValidator.Object, _editTeamModelvalidator.Object);
         }
 
         [Fact]
@@ -41,7 +44,7 @@ namespace SportsHub.Web.Tests.Controllers
             };
             var validationResult = new ValidationResult();
 
-            _validator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+            _createTeamModelValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(validationResult);
 
             // Act
@@ -65,7 +68,7 @@ namespace SportsHub.Web.Tests.Controllers
             var validationFailure = new ValidationFailure(nameof(model.Name), Errors.TeamNameCannotBeEmpty);
             var validationResult = new ValidationResult(new[] { validationFailure });
 
-            _validator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+            _createTeamModelValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(validationResult);
 
             // Act
@@ -120,7 +123,12 @@ namespace SportsHub.Web.Tests.Controllers
             // Arrange
             var expectedTeamId = Guid.NewGuid();
 
-            var expectedTeam = new Team(name: "Name", subcategoryId: Guid.NewGuid(), location: "Location");
+            var expectedTeam = new Team()
+            {
+                Name = "Name",
+                SubcategoryId = Guid.NewGuid(),
+                Location = "Location"
+            };
             expectedTeam.Id = expectedTeamId;
 
             _service.Setup(service => service.GetTeamByIdAsync(expectedTeamId))
@@ -143,11 +151,103 @@ namespace SportsHub.Web.Tests.Controllers
         {
             IEnumerable<Team> teams = new List<Team>
             {
-                new Team("Name1", Guid.NewGuid(), "Location1"),
-                new Team("Name2", Guid.NewGuid(), "Location2"),
-                new Team("Name3", Guid.NewGuid(), "Location3")
+                new Team()
+                {
+                    Name = "Name1",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location1"
+                },
+                new Team()
+                {
+                    Name = "Name2",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location2"
+                },
+                new Team()
+                {
+                    Name = "Name3",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location3"
+                }
             };
             return teams;
+        }
+
+        [Fact]
+        public async Task EditTeam_WhenModelIsValid_ReturnsOkResult()
+        {
+            // Arrange
+            //Setup mock file using a memory stream
+            var content = "Hello World from a Fake File";
+            var fileName = "test.png";
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(content);
+            writer.Flush();
+            stream.Position = 0;
+
+            //create FormFile
+            IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
+
+            var model = new EditTeamModel
+            {
+                Id = Guid.NewGuid(),
+                Name = "Name",
+                Location = "Location",
+                SubcategoryId = Guid.NewGuid(),
+                TeamLogo = file
+            };
+            var validationResult = new ValidationResult();
+
+            _editTeamModelvalidator.Setup(_EditTeamModelvalidator => _EditTeamModelvalidator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(validationResult);
+
+            // Act
+            var result = await _controller.EditTeam(model);
+
+            // Assert
+            var objectResult = Assert.IsType<OkResult>(result);
+            Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task EditTeam_WhenModelIsInvalid_ReturnsBadRequestResult()
+        {
+            // Arrange
+            //Setup mock file using a memory stream
+            var content = "Hello World from a Fake File";
+            var fileName = "test.pdf";
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(content);
+            writer.Flush();
+            stream.Position = 0;
+
+            //create FormFile
+            IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
+
+            var model = new EditTeamModel
+            {
+                Id = Guid.Empty,
+                Name = String.Empty,
+                Location = String.Empty,
+                SubcategoryId = Guid.Empty,
+                TeamLogo = file
+            };
+
+            var validationFailure = new ValidationFailure(nameof(model.Name), Errors.TeamNameCannotBeEmpty);
+            var validationResult = new ValidationResult(new[] { validationFailure });
+
+            _editTeamModelvalidator.Setup(_EditTeamModelvalidator => _EditTeamModelvalidator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(validationResult);
+
+            // Act
+            var result = await _controller.EditTeam(model);
+
+            // Assert
+            var objectResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, objectResult.StatusCode);
+            Assert.Equal(validationFailure.ErrorMessage, objectResult.Value);
         }
     }
 }

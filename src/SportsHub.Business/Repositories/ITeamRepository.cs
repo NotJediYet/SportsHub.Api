@@ -1,4 +1,5 @@
 ﻿using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Repositories
 {
@@ -10,12 +11,12 @@ namespace SportsHub.Business.Repositories
 
         Task AddTeamAsync(Team team);
 
-        Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
-        
+        Task<Guid> GetTeamIdByNameAsync(string teamName);
+
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
 
-        Task<Guid> FindTeamIdByTeamNameAsync(string teamName);
-
         Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId);
+
+        Task EditTeamAsync(Team team);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using SportsHub.Shared.Entities;
-using SportsHub.Shared.Models;
 using Microsoft.AspNetCore.Http;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Services
 {
@@ -12,12 +12,12 @@ namespace SportsHub.Business.Services
 
         Task CreateTeamAsync(CreateTeamModel сreateTeamModel);
 
-        Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
-       
+        Task<Guid> GetTeamIdByNameAsync(string teamName);
+
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
 
-        Task<Guid> FindTeamIdByTeamNameAsync(string teamName);
-
         Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId);
+
+        Task EditTeamAsync(EditTeamModel editTeamModel);
     }
 }

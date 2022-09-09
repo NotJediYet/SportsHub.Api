@@ -45,7 +45,7 @@ namespace SportsHub.Business.Tests.Services
             var expectedCategory = new Category(name: "Name");
             expectedCategory.Id = expectedCategoryId;
 
-            _repository.Setup(repo => repo.GetCategoryByIdAsync(expectedCategoryId))
+            _repository.Setup(repository => repository.GetCategoryByIdAsync(expectedCategoryId))
                 .ReturnsAsync(expectedCategory);
 
             // Act
@@ -107,7 +107,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var categoryId = Guid.NewGuid();
 
-            _repository.Setup(repo => repo.DoesCategoryAlreadyExistByIdAsync(categoryId))
+            _repository.Setup(repository => repository.DoesCategoryAlreadyExistByIdAsync(categoryId))
                 .ReturnsAsync(true);
 
             // Act
@@ -123,7 +123,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var categoryId = Guid.NewGuid();
 
-            _repository.Setup(repo => repo.DoesCategoryAlreadyExistByIdAsync(categoryId))
+            _repository.Setup(repository => repository.DoesCategoryAlreadyExistByIdAsync(categoryId))
                 .ReturnsAsync(false);
 
             // Act

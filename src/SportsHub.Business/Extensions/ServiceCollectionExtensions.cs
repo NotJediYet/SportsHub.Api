@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SportsHub.Business.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Extensions
 {

@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.Text;
 
 namespace SportsHub.Business.Tests.Services
 {
@@ -48,10 +50,15 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedTeamId = Guid.NewGuid();
 
-            var expectedTeam = new Team(name: "Name", Guid.NewGuid(), location: "Location");
+            var expectedTeam = new Team()
+            {
+                Name = "Name",
+                SubcategoryId = Guid.NewGuid(),
+                Location = "location"
+            };
             expectedTeam.Id = expectedTeamId;
 
-            _teamRepository.Setup(repo => repo.GetTeamByIdAsync(expectedTeamId))
+            _teamRepository.Setup(repository => repository.GetTeamByIdAsync(expectedTeamId))
                 .ReturnsAsync(expectedTeam);
 
             // Act
@@ -66,6 +73,7 @@ namespace SportsHub.Business.Tests.Services
         [Fact]
         public async Task CreateTeamAsync_CallsAppropriateRepositoryMethodWithParameters()
         {
+            // Arrange
             var byteArray = Encoding.UTF8.GetBytes("This is a dummy file");
             var expectedTeamLogo = new FormFile(new MemoryStream(byteArray), 0, byteArray.Length, "Data", "image.jpg");
             var expectedTeamLogoExtension = Path.GetExtension(expectedTeamLogo.FileName);
@@ -83,7 +91,7 @@ namespace SportsHub.Business.Tests.Services
                 Name = expectedTeamName,
                 Location = expectedLocation,
                 SubcategoryId = expectedSubcategoryId,
-                Logo = expectedTeamLogo
+                TeamLogo = expectedTeamLogo
             };
 
             // Act
@@ -92,27 +100,26 @@ namespace SportsHub.Business.Tests.Services
             // Assert
             _teamRepository.Verify(repository => repository.AddTeamAsync(It.Is<Team>(team =>
                 (team.Name == expectedTeamName) && (team.SubcategoryId == expectedSubcategoryId))));
+
             _teamLogoRepository.Verify(repository => repository.AddTeamLogoAsync(It.Is<TeamLogo>(teamLogo =>
                 (byteArray == expectedByteArray)
                 && (fileExtension == expectedTeamLogoExtension)
                 && (teamId == expectedTeamId)
                 )));
         }
-
         [Fact]
         public async Task DoesTeamAlreadyExistByNameAsync_WhenTeamExists_ReturnsTrue()
         {
             // Arrange
             var teamName = "Name";
 
-            _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-                .ReturnsAsync(true);
-
+            _teamRepository.Setup(repository => repository.GetTeamIdByNameAsync(teamName))
+            .ReturnsAsync(Guid.Empty);
             // Act
-            var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
+            var result = await _service.GetTeamIdByNameAsync(teamName);
 
             // Assert
-            Assert.True(result);
+            Assert.Equal(Guid.Empty, result);
         }
 
         [Fact]
@@ -121,14 +128,13 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var teamName = "Name";
 
-            _teamRepository.Setup(repository => repository.DoesTeamAlreadyExistByNameAsync(teamName))
-                .ReturnsAsync(false);
-
+            _teamRepository.Setup(repository => repository.GetTeamIdByNameAsync(teamName))
+            .ReturnsAsync(Guid.Empty);
             // Act
-            var result = await _service.DoesTeamAlreadyExistByNameAsync(teamName);
+            var result = await _service.GetTeamIdByNameAsync(teamName);
 
             // Assert
-            Assert.False(result);
+            Assert.Equal(Guid.Empty, result);
         }
 
         [Fact]
@@ -138,11 +144,11 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeamId = Guid.NewGuid();
             var expectedTeamName = "Name";
 
-            _teamRepository.Setup(repository => repository.FindTeamIdByTeamNameAsync(expectedTeamName))
+            _teamRepository.Setup(repository => repository.GetTeamIdByNameAsync(expectedTeamName))
                 .ReturnsAsync(expectedTeamId);
 
             // Act
-            var actualTeamId = await _service.FindTeamIdByTeamNameAsync(expectedTeamName);
+            var actualTeamId = await _service.GetTeamIdByNameAsync(expectedTeamName);
 
             // Assert
             Assert.Equal(expectedTeamId, actualTeamId);
@@ -169,12 +175,68 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Team> teams = new List<Team>
             {
-                new Team("Name1", Guid.NewGuid(), "Location1"),
-                new Team("Name2", Guid.NewGuid(), "Location2"),
-                new Team("Name3", Guid.NewGuid(), "Location3")
+                new Team()
+                {
+                    Name = "Name1",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location1"
+                },
+                new Team()
+                {
+                    Name = "Name2",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location2"
+                },
+                new Team()
+                {
+                    Name = "Name3",
+                    SubcategoryId = Guid.NewGuid(),
+                    Location = "Location3"
+                }
             };
 
             return teams;
+        }
+
+        [Fact]
+        public async Task EditTeamAsync_CallsAppropriateRepositoryMethodWithParameters()
+        {
+            // Arrange
+            var byteArray = Encoding.UTF8.GetBytes("This is a dummy file");
+            var expectedTeamLogo = new FormFile(new MemoryStream(byteArray), 0, byteArray.Length, "Data", "image.jpg");
+            var expectedTeamLogoExtension = Path.GetExtension(expectedTeamLogo.FileName);
+
+            var expectedTeamId = Guid.NewGuid();
+            var expectedTeamName = "Name";
+            var expectedSubcategoryId = Guid.NewGuid();
+            var expectedLocation = "Location";
+            var expectedByteArray = byteArray;
+            var fileExtension = expectedTeamLogoExtension;
+
+            EditTeamModel teamModel = new()
+            {
+                Id = expectedTeamId,
+                Name = expectedTeamName,
+                Location = expectedLocation,
+                SubcategoryId = expectedSubcategoryId,
+                TeamLogo = expectedTeamLogo
+            };
+
+            // Act
+            await _service.EditTeamAsync(teamModel);
+
+            // Assert
+            _teamRepository.Verify(repository => repository.EditTeamAsync(It.Is<Team>(team =>
+                (team.Id == expectedTeamId)
+                && (team.Name == expectedTeamName) 
+                && (team.Location == expectedLocation)
+                && (team.SubcategoryId == expectedSubcategoryId))));
+
+            _teamLogoRepository.Verify(repository => repository.EditTeamLogoAsync(It.Is<TeamLogo>(teamLogo =>
+                (byteArray == expectedByteArray)
+                && (fileExtension == expectedTeamLogoExtension)
+                && (teamModel.Id == expectedTeamId)
+                )));
         }
     }
 }

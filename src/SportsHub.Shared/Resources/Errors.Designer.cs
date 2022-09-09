@@ -124,7 +124,7 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File must have appropriate format (jpg, svg, png).
+        ///   Looks up a localized string similar to File must have appropriate format: png, jpg, svg.
         /// </summary>
         public static string FileMustHaveAppropriateFormat {
             get {
@@ -169,25 +169,16 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Team does not exist.
+        ///   Looks up a localized string similar to Team id can not be empty.
         /// </summary>
-        public static string TeamDoesNotExist {
+        public static string TeamIdCanNotBeEmpty {
             get {
-                return ResourceManager.GetString("TeamDoesNotExist", resourceCulture);
+                return ResourceManager.GetString("TeamIdCanNotBeEmpty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Team Id cannot be empty.
-        /// </summary>
-        public static string TeamIdCannotBeEmpty {
-            get {
-                return ResourceManager.GetString("TeamIdCannotBeEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Team Id does not exist.
+        ///   Looks up a localized string similar to Team with that id does not exist.
         /// </summary>
         public static string TeamIdDoesNotExist {
             get {

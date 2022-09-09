@@ -38,7 +38,7 @@ namespace SportsHub.Web.Controllers
 
             if (teamName != "All Teams")
             {
-                var idTeam = await _teamService.FindTeamIdByTeamNameAsync(teamName);
+                var idTeam = await _teamService.GetTeamIdByNameAsync(teamName);
 
                 articles = _articleService.GetArticlesFilteredByTeamId(idTeam, articles);
             }

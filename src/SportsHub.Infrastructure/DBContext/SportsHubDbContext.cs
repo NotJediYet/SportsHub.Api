@@ -28,9 +28,9 @@ namespace SportsHub.Infrastructure.DBContext
                 .WithMany()
                 .HasForeignKey(t => t.SubcategoryId);
             modelBuilder.Entity<TeamLogo>()
-               .HasOne<Team>()
-               .WithOne()
-               .HasForeignKey<TeamLogo>(t => t.TeamId);
+                .HasOne<Team>()
+                .WithOne()
+                .HasForeignKey<TeamLogo>(t => t.TeamId);
             modelBuilder.Entity<Article>()
                 .HasOne<Team>()
                 .WithMany()

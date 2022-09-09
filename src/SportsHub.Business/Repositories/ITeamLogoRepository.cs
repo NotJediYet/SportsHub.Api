@@ -11,5 +11,7 @@ namespace SportsHub.Business.Repositories
         Task AddTeamLogoAsync(TeamLogo teamLogo);
 
         Task<bool> DoesTeamLogoAlreadyExistByTeamIdAsync(Guid teamId);
+
+        Task EditTeamLogoAsync(TeamLogo teamLogo);
     }
 }

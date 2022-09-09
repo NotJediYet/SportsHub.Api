@@ -2,6 +2,7 @@
 using SportsHub.Business.Repositories;
 using SportsHub.Infrastructure.DBContext;
 using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Infrastructure.Repositories
 {
@@ -31,25 +32,34 @@ namespace SportsHub.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName)
+        public async Task<Guid> GetTeamIdByNameAsync(string teamName)
         {
-            return await _context.Teams.AnyAsync(team => team.Name == teamName);
+            var teams = await _context.Set<Team>().ToListAsync();
+            var foundTeam = teams.Find(team => team.Name == teamName);
+
+            if (foundTeam == null)
+            {
+                return Guid.Empty;
+            }
+            else return foundTeam.Id;
         }
 
         public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)
         {
-            return await _context.Teams.AnyAsync(team => team.Id == id);
+            var teams = await _context.Set<Team>().ToListAsync();
+
+            return teams.Any(team => team.Id == id);
         }
 
-        public async Task<Guid> FindTeamIdByTeamNameAsync(string teamName)
+        public async Task EditTeamAsync(Team team)
         {
-            var teams = await _context.Teams.ToListAsync();
+            var oldTeam = await _context.Teams.FirstOrDefaultAsync(oldTeam => oldTeam.Id == team.Id);
 
-            Guid teamId = (from team in teams
-                           where team.Name == teamName
-                           select team.Id).FirstOrDefault();
+            oldTeam.Name = team.Name;
+            oldTeam.Location = team.Location;
+            oldTeam.SubcategoryId = team.SubcategoryId;
 
-            return teamId;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId)

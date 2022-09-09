@@ -6,15 +6,15 @@ namespace SportsHub.Shared.Entities
 {
     public class TeamLogo
     {
+        [Key]
+        [Required(ErrorMessage = "Team id is required.")]
+        public Guid TeamId { get; set; }
+        
         [Required(ErrorMessage = "Image data is required.")]
         public byte[] Bytes { get; set; }
 
         [Required(ErrorMessage = "File extension is required.")]
         public string FileExtension { get; set; }
-
-        [Key]
-        [Required(ErrorMessage = "Team id is required.")]
-        public Guid TeamId { get; set; }
 
         public TeamLogo(byte[] bytes, string fileExtension, Guid teamId)
         {
