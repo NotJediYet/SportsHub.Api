@@ -70,11 +70,14 @@ namespace SportsHub.Business.Services
             };
             await _teamRepository.EditTeamAsync(teamModel);
 
-            var fileBytes = editTeamModel.TeamLogo.ToByteArray();
-            var fileExtension = Path.GetExtension(editTeamModel.TeamLogo.FileName);
-            var teamLogo = new TeamLogo(fileBytes, fileExtension, teamModel.Id);
+            if (!(editTeamModel.TeamLogo == null)) {
+                var fileBytes = editTeamModel.TeamLogo.ToByteArray();
+                var fileExtension = Path.GetExtension(editTeamModel.TeamLogo.FileName);
+                var teamLogo = new TeamLogo(fileBytes, fileExtension, teamModel.Id);
 
-            await _teamLogoRepository.EditTeamLogoAsync(teamLogo);
+                await _teamLogoRepository.EditTeamLogoAsync(teamLogo);
+            }
+            
         }
     }
 }
