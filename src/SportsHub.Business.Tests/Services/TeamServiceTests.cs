@@ -13,7 +13,7 @@ using Xunit;
 
 namespace SportsHub.Business.Tests.Services
 {
-     public class TeamServiceTests
+    public class TeamServiceTests
     {
         private readonly Mock<ITeamRepository> _teamRepository;
         private readonly Mock<ITeamLogoRepository> _teamLogoRepository;
