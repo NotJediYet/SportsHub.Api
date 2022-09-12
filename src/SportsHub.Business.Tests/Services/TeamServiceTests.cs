@@ -10,8 +10,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Text;
 
 namespace SportsHub.Business.Tests.Services
 {
