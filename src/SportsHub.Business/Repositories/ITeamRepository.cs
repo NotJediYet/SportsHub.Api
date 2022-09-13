@@ -1,4 +1,5 @@
 ﻿using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Repositories
 {

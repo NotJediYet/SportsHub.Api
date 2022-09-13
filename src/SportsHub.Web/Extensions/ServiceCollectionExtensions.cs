@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using SportsHub.Security;
 using SportsHub.Shared.Models;
 using SportsHub.Web.Validators;
+using SportsHub.Shared.Entities;
 
 namespace SportsHub.Extensions
 {
