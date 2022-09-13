@@ -83,9 +83,24 @@ namespace SportsHub.Web.Tests.Controllers
         {
             List<Team> teams = new List<Team>
             {
-                new Team("teamName1", subcategoryId, "location1"),
-                new Team("teamName2", subcategoryId, "location2"),
-                new Team("teamName3", subcategoryId, "location3")
+                new Team()
+                {
+                    Name = "teamName1",
+                    SubcategoryId = subcategoryId,
+                    Location = "location1"
+                },
+                new Team()
+                {
+                    Name = "teamName2",
+                    SubcategoryId = subcategoryId,
+                    Location = "location2"
+                },
+                new Team()
+                {
+                    Name = "teamName3",
+                    SubcategoryId = subcategoryId,
+                    Location = "location3"
+                }
             };
             return teams;
         }

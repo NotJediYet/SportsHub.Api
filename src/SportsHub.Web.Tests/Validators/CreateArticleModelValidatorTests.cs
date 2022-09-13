@@ -89,7 +89,7 @@ namespace SportsHub.Web.Tests.Validators
                 IsShowComments = true,
             };
 
-            var expectedErrorMessage = Errors.TeamIdCannotBeEmpty;
+            var expectedErrorMessage = Errors.TeamIdCanNotBeEmpty;
 
             // Act
             var result = await _validator.ValidateAsync(article);
@@ -140,7 +140,7 @@ namespace SportsHub.Web.Tests.Validators
                 Content = "content",
                 IsShowComments = true,
             };
-
+        
 
             _articleService.Setup(service => service.DoesArticleAlreadyExistByHeadlineAsync(article.Headline))
             .ReturnsAsync(false);

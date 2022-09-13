@@ -10,18 +10,18 @@ namespace SportsHub.Business.Repositories
 
         Task AddTeamAsync(Team team);
 
-        Task<bool> DoesTeamAlreadyExistByNameAsync(string teamName);
-        
+        Task<Guid> GetTeamIdByNameAsync(string teamName);
+
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
 
-        Task<Guid> FindTeamIdByTeamNameAsync(string teamName);
-
         Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId);
+
+        Task EditTeamAsync(Team team);
 
         List<Team> GetTeamsFilteredByLocation(string location, List<Team> teams);
 
         List<Team> GetTeamsFilteredBySubcategoryIds(List<Guid> subcategoryIds, List<Team> teams);
-        
+
         List<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, List<Team> teams);
 
         Task<List<Team>> GetSortedTeamAsync();

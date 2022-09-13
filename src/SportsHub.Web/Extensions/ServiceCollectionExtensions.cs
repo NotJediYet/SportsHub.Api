@@ -78,6 +78,7 @@ namespace SportsHub.Extensions
             services.AddScoped<IValidator<CreateCategoryModel>, CreateCategoryModelValidator>();
             services.AddScoped<IValidator<CreateSubcategoryModel>, CreateSubcategoryModelValidator>();
             services.AddScoped<IValidator<CreateTeamModel>, CreateTeamModelValidator>();
+            services.AddScoped<IValidator<EditTeamModel>, EditTeamModelValidator>();
             services.AddScoped<IValidator<CreateArticleModel>, CreateArticleModelValidator>();
 
             return services;

@@ -54,8 +54,8 @@ namespace SportsHub.Web.Tests.Validators
             };
             var expectedErrorMessage = Errors.TeamNameIsNotUnique;
 
-            _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
-                .ReturnsAsync(true);
+            _teamService.Setup(service => service.GetTeamIdByNameAsync(team.Name))
+                .ReturnsAsync(Guid.NewGuid());
 
             // Act
             var result = await _validator.ValidateAsync(team);
@@ -118,11 +118,11 @@ namespace SportsHub.Web.Tests.Validators
                 Name = "Name",
                 SubcategoryId = Guid.NewGuid(),
                 Location = "Location",
-                Logo = fileLogo
+                TeamLogo = fileLogo
             };
 
-            _teamService.Setup(service => service.DoesTeamAlreadyExistByNameAsync(team.Name))
-                .ReturnsAsync(false);
+            _teamService.Setup(service => service.GetTeamIdByNameAsync(team.Name))
+                .ReturnsAsync(Guid.Empty);
             _subcategoryService.Setup(service => service.DoesSubcategoryAlreadyExistByIdAsync(team.SubcategoryId))
                 .ReturnsAsync(true);
 

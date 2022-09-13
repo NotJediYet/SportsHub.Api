@@ -61,7 +61,7 @@ namespace SportsHub.Infrastructure.Repositories
 
             var subcategoryIds = (from subcategory in subcategories
                                   where subcategory.CategoryId == idCategory
-                                 select subcategory.Id).ToList();
+                                  select subcategory.Id).ToList();
 
             return subcategoryIds;
         }

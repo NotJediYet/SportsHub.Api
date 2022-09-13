@@ -139,7 +139,7 @@
     <value>Category name is not unique</value>
   </data>
   <data name="FileMustHaveAppropriateFormat" xml:space="preserve">
-    <value>File must have appropriate format (jpg, svg, png)</value>
+    <value>File must have appropriate format: png, jpg, svg</value>
   </data>
   <data name="SubcategoryDoesNotExist" xml:space="preserve">
     <value>Subcategory does not exist</value>
@@ -153,14 +153,11 @@
   <data name="SubcategoryNameIsNotUnique" xml:space="preserve">
     <value>Subcategory name is not unique</value>
   </data>
-  <data name="TeamDoesNotExist" xml:space="preserve">
-    <value>Team does not exist</value>
-  </data>
-  <data name="TeamIdCannotBeEmpty" xml:space="preserve">
-    <value>Team Id cannot be empty</value>
+  <data name="TeamIdCanNotBeEmpty" xml:space="preserve">
+    <value>Team id can not be empty</value>
   </data>
   <data name="TeamIdDoesNotExist" xml:space="preserve">
-    <value>Team Id does not exist</value>
+    <value>Team with that id does not exist</value>
   </data>
   <data name="TeamLogoCannotBeEmpty" xml:space="preserve">
     <value>Team logo cannot be empty</value>

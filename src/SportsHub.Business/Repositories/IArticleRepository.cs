@@ -10,6 +10,8 @@ namespace SportsHub.Business.Repositories
 
         Task AddArticleAsync(Article article);
 
+        Task<Article> DeleteArticleAsync(Guid id);
+
         Task<bool> DoesArticleAlreadyExistByHeadlineAsync(string headline);
 
         Task<bool> DoesArticleAlreadyExistByIdAsync(Guid id);

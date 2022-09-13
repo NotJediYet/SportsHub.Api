@@ -50,8 +50,8 @@ namespace SportsHub.Infrastructure.Repositories
             var categories = await _context.Categories.ToListAsync();
 
             Guid categoryId = (from category in categories
-                           where category.Name == categoryName
-                           select category.Id).FirstOrDefault();
+                               where category.Name == categoryName
+                               select category.Id).FirstOrDefault();
 
             return categoryId;
         }

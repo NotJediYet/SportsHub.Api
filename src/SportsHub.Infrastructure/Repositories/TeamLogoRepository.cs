@@ -17,7 +17,12 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task<TeamLogo> GetTeamLogoByTeamIdAsync(Guid teamId)
         {
-            return await _context.Set<TeamLogo>().FindAsync(teamId);
+            return await _context.TeamLogos.FindAsync(teamId);
+        }
+
+        public async Task<IEnumerable<TeamLogo>> GetTeamLogosAsync()
+        {
+            return await _context.TeamLogos.ToListAsync();
         }
 
         public async Task AddTeamLogoAsync(TeamLogo teamLogo)
@@ -32,6 +37,13 @@ namespace SportsHub.Infrastructure.Repositories
             var teamLogos = await _context.Set<TeamLogo>().ToListAsync();
 
             return teamLogos.Any(teamLogo => teamLogo.TeamId == teamId);
+        }
+
+        public async Task EditTeamLogoAsync(TeamLogo teamLogo)
+        {
+            _context.TeamLogos.Update(teamLogo);
+
+            await _context.SaveChangesAsync();
         }
     }
 }
