@@ -37,21 +37,21 @@ namespace SportsHub.Web.Controllers
             if (categoryName != "All")
             {
                 var idCategory = await _categoryService.FindCategoryIdByCategoryNameAsync(categoryName);
-                var subcategoryIds = await _subcategoryService.FindSubcategoryIdByCategoryIdAsync(idCategory);
+                var subcategories = _subcategoryService.GetSubcategoryIdByCategoryIdAsync(idCategory);
 
-                teams = _teamService.GetTeamsFilteredBySubcategoryIds(subcategoryIds, teams);
+                teams = _teamService.GetTeamsFilteredBySubcategoryIds(subcategories, teams.ToList());
             }
 
             if (location != "All")
             {
-                teams = _teamService.GetTeamsFilteredByLocation(location, teams);
+                teams = _teamService.GetTeamsFilteredByLocation(location, teams.ToList());
             }
 
             if (subcategoryName != "All")
             {
                 var idSubcategory = await _subcategoryService.FindSubcategoryIdBySubcategoryNameAsync(subcategoryName);
 
-                teams = _teamService.GetTeamsFilteredBySubcategoryId(idSubcategory, teams);
+                teams = _teamService.GetTeamsFilteredBySubcategoryId(idSubcategory, teams.ToList());
             }
 
             return teams != null

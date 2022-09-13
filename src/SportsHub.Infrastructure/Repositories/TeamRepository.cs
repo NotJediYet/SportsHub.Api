@@ -80,20 +80,20 @@ namespace SportsHub.Infrastructure.Repositories
             return teams.Any(team => team.Id == id);
         }
 
-        public List<Team> GetTeamsFilteredByLocation(string location, List<Team> teams)
+        public IEnumerable<Team> GetTeamsFilteredByLocation(string location, ICollection<Team> teams)
         {
-
             return teams.Where(teams => teams.Location == location).ToList();
         }
 
-        public List<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, List<Team> teams)
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams)
         {
-
             return teams.Where(teams => teams.SubcategoryId == subcategoryId).ToList();
         }
 
-        public List<Team> GetTeamsFilteredBySubcategoryIds(List<Guid> subcategoryIds, List<Team> teams)
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IQueryable<Subcategory> subcategories, ICollection<Team> teams)
         {
+            var subcategoryIds = (from subcategory in subcategories
+                                  select subcategory.Id).ToList();
             var newTeam = teams;
             teams = newTeam.Where(team => team.SubcategoryId == subcategoryIds[0]).ToList();
 
@@ -102,10 +102,10 @@ namespace SportsHub.Infrastructure.Repositories
                 teams = teams.Concat(newTeam.Where(team => team.SubcategoryId == subcategoryIds[i]).ToList()).ToList();
             }
 
-            return teams;
+            return teams.AsEnumerable();
         }
 
-        public async Task<List<Team>> GetSortedTeamAsync()
+        public async Task<IEnumerable<Team>> GetSortedTeamAsync()
         {
             return await _context.Teams.OrderBy(teams => teams.Name).ToListAsync();
         }

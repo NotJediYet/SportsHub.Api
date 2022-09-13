@@ -19,12 +19,12 @@ namespace SportsHub.Business.Repositories
 
         Task EditTeamAsync(Team team);
 
-        List<Team> GetTeamsFilteredByLocation(string location, List<Team> teams);
+        IEnumerable<Team> GetTeamsFilteredByLocation(string location, ICollection<Team> teams);
 
-        List<Team> GetTeamsFilteredBySubcategoryIds(List<Guid> subcategoryIds, List<Team> teams);
+        IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams);
 
-        List<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, List<Team> teams);
+        IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IQueryable<Subcategory> subcategories, ICollection<Team> teams);
 
-        Task<List<Team>> GetSortedTeamAsync();
+        Task<IEnumerable<Team>> GetSortedTeamAsync();
     }
 }

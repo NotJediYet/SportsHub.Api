@@ -47,13 +47,8 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task<Guid> FindCategoryIdByCategoryNameAsync(string categoryName)
         {
-            var categories = await _context.Categories.ToListAsync();
-
-            Guid categoryId = (from category in categories
-                               where category.Name == categoryName
-                               select category.Id).FirstOrDefault();
-
-            return categoryId;
+            var category = await _context.Categories.FirstOrDefaultAsync(category => category.Name == categoryName);
+            return category.Id;
         }
     }
 }

@@ -99,22 +99,22 @@ namespace SportsHub.Business.Services
             return await _teamRepository.FindTeamIdBySubcategoryIdAsync(subcategoryId);
         }
 
-        public List<Team> GetTeamsFilteredByLocation(string location, List<Team> teams)
+        public IEnumerable<Team> GetTeamsFilteredByLocation(string location, ICollection<Team> teams)
         {
             return _teamRepository.GetTeamsFilteredByLocation(location, teams);
         }
 
-        public List<Team> GetTeamsFilteredBySubcategoryIds(List<Guid> subcategoryIds, List<Team> teams)
-        {
-            return _teamRepository.GetTeamsFilteredBySubcategoryIds(subcategoryIds, teams);
-        }
-
-        public List<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, List<Team> teams)
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams)
         {
             return _teamRepository.GetTeamsFilteredBySubcategoryId(subcategoryId, teams);
         }
 
-        public async Task<List<Team>> GetSortedTeamAsync()
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IQueryable<Subcategory> subcategories, ICollection<Team> teams)
+        {
+            return _teamRepository.GetTeamsFilteredBySubcategoryIds(subcategories, teams);
+        }
+
+        public async Task<IEnumerable<Team>> GetSortedTeamAsync()
         {
             return await _teamRepository.GetSortedTeamAsync();
         }
