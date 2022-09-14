@@ -142,9 +142,9 @@ namespace SportsHub.Web.Tests.Controllers
         {
             IEnumerable<Category> categories = new List<Category>
             {
-                new Category {Name = "Name1"},
-                new Category {Name = "Name2"},
-                new Category {Name = "Name3"},
+                new Category { Name = "Name1" },
+                new Category { Name = "Name2" },
+                new Category { Name = "Name3" },
             };
             return categories;
         }

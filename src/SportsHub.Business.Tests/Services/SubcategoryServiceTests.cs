@@ -43,7 +43,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedSubcategoryId = Guid.NewGuid();
 
-            var expectedSubcategory = new Subcategory {Name = "Name", CategoryId = Guid.NewGuid()};
+            var expectedSubcategory = new Subcategory { Name = "Name", CategoryId = Guid.NewGuid() };
             expectedSubcategory.Id = expectedSubcategoryId;
 
             _repository.Setup(repository => repository.GetSubcategoryByIdAsync(expectedSubcategoryId))
@@ -159,9 +159,9 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Subcategory> subcategories = new List<Subcategory>
             {
-                new Subcategory {Name = "Name1", CategoryId = Guid.NewGuid()},
-                new Subcategory {Name = "Name2", CategoryId = Guid.NewGuid()},
-                new Subcategory {Name = "Name3", CategoryId = Guid.NewGuid()},
+                new Subcategory { Name = "Name1", CategoryId = Guid.NewGuid() },
+                new Subcategory { Name = "Name2", CategoryId = Guid.NewGuid() },
+                new Subcategory { Name = "Name3", CategoryId = Guid.NewGuid() },
             };
 
             return subcategories;

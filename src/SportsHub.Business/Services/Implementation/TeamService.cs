@@ -63,7 +63,16 @@ namespace SportsHub.Business.Services
 
         public async Task<Guid> GetTeamIdByNameAsync(string teamName)
         {
-            return await _teamRepository.GetTeamIdByNameAsync(teamName);
+            var team = await _teamRepository.GetTeamByNameAsync(teamName);
+
+            if (team == null)
+            {
+                return Guid.Empty;
+            }
+            else
+            {
+                return team.Id;
+            }
         }
         
         public async Task EditTeamAsync(EditTeamModel editTeamModel)

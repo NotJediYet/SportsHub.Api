@@ -30,7 +30,16 @@ namespace SportsHub.Business.Services
 
         public async Task<Guid> GetSubcategoryIdByNameAsync(string subcategoryName)
         {
-            return await _subcategoryRepository.GetSubcategoryIdByNameAsync(subcategoryName);
+            var subcategory = await _subcategoryRepository.GetSubcategoryByNameAsync(subcategoryName);
+
+            if (subcategory == null)
+            {
+                return Guid.Empty;
+            }
+            else
+            {
+                return subcategory.Id;
+            }
         }
 
         public async Task EditSubcategoryAsync(EditSubcategoryModel editSubcategoryModel)

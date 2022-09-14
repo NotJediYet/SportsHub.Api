@@ -30,7 +30,16 @@ namespace SportsHub.Business.Services
 
         public async Task<Guid> GetCategoryIdByNameAsync(string categoryName)
         {
-            return await _categoryRepository.GetCategoryIdByNameAsync(categoryName);
+            var category = await _categoryRepository.GetCategoryByNameAsync(categoryName);
+
+            if (category == null)
+            {
+                return Guid.Empty;
+            }
+            else
+            {
+                return category.Id;
+            }
         }
 
         public async Task EditCategoryAsync(EditCategoryModel editCategoryModel)

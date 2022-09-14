@@ -43,7 +43,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedCategoryId = Guid.NewGuid();
 
-            var expectedCategory = new Category {Name = "Name"};
+            var expectedCategory = new Category { Name = "Name" };
             expectedCategory.Id = expectedCategoryId;
 
             _repository.Setup(repository => repository.GetCategoryByIdAsync(expectedCategoryId))
@@ -138,9 +138,9 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Category> categories = new List<Category>
             {
-                new Category {Name = "Name1"},
-                new Category {Name = "Name2"},
-                new Category {Name = "Name3"},
+                new Category { Name = "Name1" },
+                new Category { Name = "Name2" },
+                new Category { Name = "Name3" },
             };
 
             return categories;

@@ -8,9 +8,9 @@ namespace SportsHub.Business.Repositories
 
         Task<Subcategory> GetSubcategoryByIdAsync(Guid id);
 
-        Task AddSubcategoryAsync(Subcategory subcategory);
+        Task<Subcategory> GetSubcategoryByNameAsync(string subcategoryName);
 
-        Task<Guid> GetSubcategoryIdByNameAsync(string subcategoryName);
+        Task AddSubcategoryAsync(Subcategory subcategory);
 
         Task<bool> DoesSubcategoryAlreadyExistByNameAsync(string subcategoryName);
 

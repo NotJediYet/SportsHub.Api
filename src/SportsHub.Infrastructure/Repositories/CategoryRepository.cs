@@ -24,23 +24,16 @@ namespace SportsHub.Infrastructure.Repositories
             return await _context.Categories.FindAsync(id);
         }
 
+        public async Task<Category> GetCategoryByNameAsync(string categoryName)
+        {
+            return await _context.Categories.FirstOrDefaultAsync(category => category.Name == categoryName);
+        }
+
         public async Task AddCategoryAsync(Category category)
         {
             await _context.Categories.AddAsync(category);
 
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<Guid> GetCategoryIdByNameAsync(string categoryName)
-        {
-            var categories = await _context.Categories.ToListAsync();
-            var foundCategory = categories.Find(category => category.Name == categoryName);
-
-            if (foundCategory == null)
-            {
-                return Guid.Empty;
-            }
-            else return foundCategory.Id;
         }
 
         public async Task EditCategoryAsync(Category category)
