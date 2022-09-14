@@ -10,6 +10,7 @@ using SportsHub.Shared.Resources;
 using SportsHub.Web.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -43,12 +44,14 @@ namespace SportsHub.Web.Tests.Controllers
             var expectedCategoryTaskId = Task.FromResult(Guid.NewGuid());
             var expectedCategoryId = Guid.NewGuid();
             var expectedSubcategoryId = Guid.NewGuid();
-            var expectedSubcategoryIds = new List<Guid>
+            IEnumerable<Subcategory> subcategories = new List<Subcategory>
             {
-                Guid.NewGuid(),
-                Guid.NewGuid(),
-                Guid.NewGuid()
+                new Subcategory("Name1", Guid.NewGuid()),
+                new Subcategory("Name2", Guid.NewGuid()),
+                new Subcategory("Name3", Guid.NewGuid())
             };
+
+
             var expectedTeamLocation = "USA";
 
             var expectedTeams = GetTeams(expectedSubcategoryId);
@@ -59,7 +62,7 @@ namespace SportsHub.Web.Tests.Controllers
             _teamService.Setup(service => service.GetTeamsFilteredByLocation(expectedTeamLocation, expectedTeams))
                 .Returns(expectedTeams);
 
-            _teamService.Setup(service => service.GetTeamsFilteredBySubcategoryIds(expectedSubcategoryIds, expectedTeams))
+            _teamService.Setup(service => service.GetTeamsFilteredBySubcategoryIds(subcategories.AsQueryable(), expectedTeams))
                 .Returns(expectedTeams);
 
             _teamService.Setup(service => service.GetTeamsFilteredBySubcategoryId(expectedSubcategoryId, expectedTeams))

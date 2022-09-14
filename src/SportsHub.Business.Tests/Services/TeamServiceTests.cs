@@ -6,6 +6,7 @@ using SportsHub.Shared.Models;
 using System;
 using System.IO;
 using System.Text;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -192,18 +193,19 @@ namespace SportsHub.Business.Tests.Services
         {
             // Arrange
             var subcategoryId = Guid.NewGuid();
-            List<Guid> subcategoryIds = new List<Guid>
+            ICollection<Subcategory> subcategories = new List<Subcategory>
             {
-                Guid.NewGuid(),
-                Guid.NewGuid()
+                new Subcategory("Name1", Guid.NewGuid()),
+                new Subcategory("Name2", Guid.NewGuid()),
+                new Subcategory("Name3", Guid.NewGuid())
             };
             var expectedTeams = CreateTeams(subcategoryId);
 
-            _teamRepository.Setup(repository => repository.GetTeamsFilteredBySubcategoryIds(subcategoryIds, expectedTeams))
+            _teamRepository.Setup(repository => repository.GetTeamsFilteredBySubcategoryIds(subcategories.AsQueryable(), expectedTeams))
                 .Returns(expectedTeams);
 
             // Act
-            var actualTeams = _service.GetTeamsFilteredBySubcategoryIds(subcategoryIds, expectedTeams);
+            var actualTeams = _service.GetTeamsFilteredBySubcategoryIds(subcategories.AsQueryable(), expectedTeams);
 
             // Assert
             Assert.Equal(expectedTeams, actualTeams);
@@ -269,9 +271,9 @@ namespace SportsHub.Business.Tests.Services
             return teams;
         }
 
-        private List<Team> GetTeamList()
+        private IEnumerable<Team> GetTeamList()
         {
-            List<Team> teams = new List<Team>
+            IEnumerable<Team> teams = new List<Team>
             {
                 new Team()
                 {
