@@ -24,7 +24,7 @@ namespace SportsHub.Business.Services
 
         IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams);
 
-        IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IQueryable<Subcategory> subcategories, ICollection<Team> teams);
+        IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams);
 
         Task<IEnumerable<Team>> GetSortedTeamAsync();
     }

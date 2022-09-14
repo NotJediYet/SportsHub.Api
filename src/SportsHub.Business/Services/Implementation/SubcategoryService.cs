@@ -42,9 +42,9 @@ namespace SportsHub.Business.Services
             return await _subcategoryRepository.FindSubcategoryIdBySubcategoryNameAsync(subcategoryName);
         }
 
-        public IQueryable<Subcategory> GetSubcategoryIdByCategoryIdAsync(Guid categoryId)
+        public async Task<IEnumerable<Subcategory>> GetByCategoryIdAsync(Guid categoryId)
         {
-            return _subcategoryRepository.GetSubcategoryIdByCategoryIdAsync(categoryId);
+            return await _subcategoryRepository.GetByCategoryIdAsync(categoryId);
         }
     }
 }

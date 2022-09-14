@@ -1,5 +1,4 @@
 ﻿using SportsHub.Shared.Entities;
-using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Repositories
 {
@@ -23,7 +22,7 @@ namespace SportsHub.Business.Repositories
 
         IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams);
 
-        IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IQueryable<Subcategory> subcategories, ICollection<Team> teams);
+        IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams);
 
         Task<IEnumerable<Team>> GetSortedTeamAsync();
     }

@@ -1,17 +1,11 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
-using SportsHub.Shared.Models;
-using SportsHub.Shared.Resources;
 using SportsHub.Web.Controllers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -62,7 +56,7 @@ namespace SportsHub.Web.Tests.Controllers
             _teamService.Setup(service => service.GetTeamsFilteredByLocation(expectedTeamLocation, expectedTeams))
                 .Returns(expectedTeams);
 
-            _teamService.Setup(service => service.GetTeamsFilteredBySubcategoryIds(subcategories.AsQueryable(), expectedTeams))
+            _teamService.Setup(service => service.GetTeamsFilteredBySubcategoryIds(subcategories, expectedTeams))
                 .Returns(expectedTeams);
 
             _teamService.Setup(service => service.GetTeamsFilteredBySubcategoryId(expectedSubcategoryId, expectedTeams))

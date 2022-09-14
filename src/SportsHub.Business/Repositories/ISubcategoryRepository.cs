@@ -16,6 +16,6 @@ namespace SportsHub.Business.Repositories
 
         Task<Guid> FindSubcategoryIdBySubcategoryNameAsync(string subcategoryName);
 
-        IQueryable<Subcategory> GetSubcategoryIdByCategoryIdAsync(Guid categoryId);
+        Task<IEnumerable<Subcategory>> GetByCategoryIdAsync(Guid categoryId);
     }
 }

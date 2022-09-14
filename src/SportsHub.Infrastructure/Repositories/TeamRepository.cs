@@ -2,7 +2,6 @@
 using SportsHub.Business.Repositories;
 using SportsHub.Infrastructure.DBContext;
 using SportsHub.Shared.Entities;
-using SportsHub.Shared.Models;
 
 namespace SportsHub.Infrastructure.Repositories
 {
@@ -90,19 +89,18 @@ namespace SportsHub.Infrastructure.Repositories
             return teams.Where(teams => teams.SubcategoryId == subcategoryId).ToList();
         }
 
-        public IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IQueryable<Subcategory> subcategories, ICollection<Team> teams)
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams)
         {
-            var subcategoryIds = (from subcategory in subcategories
-                                  select subcategory.Id).ToList();
+            var subcategoryIds = subcategories.Select(subcategory => subcategory.Id);
             var newTeam = teams;
-            teams = newTeam.Where(team => team.SubcategoryId == subcategoryIds[0]).ToList();
+            teams = newTeam.Where(team => team.SubcategoryId == subcategoryIds.ToList()[0]).ToList();
 
-            for (int i = 1; i < subcategoryIds.Count; i++)
+            for (int i = 1; i < subcategoryIds.ToList().Count; i++)
             {
-                teams = teams.Concat(newTeam.Where(team => team.SubcategoryId == subcategoryIds[i]).ToList()).ToList();
+                teams = teams.Concat(newTeam.Where(team => team.SubcategoryId == subcategoryIds.ToList()[i]).ToList()).ToList();
             }
 
-            return teams.AsEnumerable();
+            return teams;
         }
 
         public async Task<IEnumerable<Team>> GetSortedTeamAsync()

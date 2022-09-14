@@ -6,7 +6,6 @@ using SportsHub.Shared.Models;
 using System;
 using System.IO;
 using System.Text;
-using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -201,11 +200,11 @@ namespace SportsHub.Business.Tests.Services
             };
             var expectedTeams = CreateTeams(subcategoryId);
 
-            _teamRepository.Setup(repository => repository.GetTeamsFilteredBySubcategoryIds(subcategories.AsQueryable(), expectedTeams))
+            _teamRepository.Setup(repository => repository.GetTeamsFilteredBySubcategoryIds(subcategories, expectedTeams))
                 .Returns(expectedTeams);
 
             // Act
-            var actualTeams = _service.GetTeamsFilteredBySubcategoryIds(subcategories.AsQueryable(), expectedTeams);
+            var actualTeams = _service.GetTeamsFilteredBySubcategoryIds(subcategories, expectedTeams);
 
             // Assert
             Assert.Equal(expectedTeams, actualTeams);
@@ -232,7 +231,7 @@ namespace SportsHub.Business.Tests.Services
         public async Task GetSortedTeamAsync_ReturnsSortedTeams()
         {
             // Arrange
-            var expectedTeams = GetTeamList();
+            var expectedTeams = GetTeams();
 
             _teamRepository.Setup(repository => repository.GetSortedTeamAsync())
                 .Returns(Task.FromResult(expectedTeams));
@@ -245,33 +244,6 @@ namespace SportsHub.Business.Tests.Services
         }
 
         private IEnumerable<Team> GetTeams()
-        {
-            IEnumerable<Team> teams = new List<Team>
-            {
-                new Team()
-                {
-                    Name = "Name1",
-                    SubcategoryId = Guid.NewGuid(),
-                    Location = "Location1"
-                },
-                new Team()
-                {
-                    Name = "Name2",
-                    SubcategoryId = Guid.NewGuid(),
-                    Location = "Location2"
-                },
-                new Team()
-                {
-                    Name = "Name3",
-                    SubcategoryId = Guid.NewGuid(),
-                    Location = "Location3"
-                }
-            };
-
-            return teams;
-        }
-
-        private IEnumerable<Team> GetTeamList()
         {
             IEnumerable<Team> teams = new List<Team>
             {

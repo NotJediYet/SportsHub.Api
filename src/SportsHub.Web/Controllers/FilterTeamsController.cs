@@ -37,7 +37,7 @@ namespace SportsHub.Web.Controllers
             if (categoryName != "All")
             {
                 var idCategory = await _categoryService.FindCategoryIdByCategoryNameAsync(categoryName);
-                var subcategories = _subcategoryService.GetSubcategoryIdByCategoryIdAsync(idCategory);
+                var subcategories = await _subcategoryService.GetByCategoryIdAsync(idCategory);
 
                 teams = _teamService.GetTeamsFilteredBySubcategoryIds(subcategories, teams.ToList());
             }

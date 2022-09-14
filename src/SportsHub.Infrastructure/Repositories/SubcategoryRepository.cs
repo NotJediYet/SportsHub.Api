@@ -50,9 +50,9 @@ namespace SportsHub.Infrastructure.Repositories
             return subcategory.Id;
         }
 
-        public IQueryable<Subcategory> GetSubcategoryIdByCategoryIdAsync(Guid categoryId)
+        public async Task<IEnumerable<Subcategory>> GetByCategoryIdAsync(Guid categoryId)
         {
-            return _context.Subcategories.Where(subcategory => subcategory.CategoryId == categoryId);
+            return await _context.Subcategories.Where(subcategory => subcategory.CategoryId == categoryId).ToListAsync();
         }
     }
 }

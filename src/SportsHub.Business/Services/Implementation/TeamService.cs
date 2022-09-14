@@ -109,7 +109,7 @@ namespace SportsHub.Business.Services
             return _teamRepository.GetTeamsFilteredBySubcategoryId(subcategoryId, teams);
         }
 
-        public IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IQueryable<Subcategory> subcategories, ICollection<Team> teams)
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams)
         {
             return _teamRepository.GetTeamsFilteredBySubcategoryIds(subcategories, teams);
         }
