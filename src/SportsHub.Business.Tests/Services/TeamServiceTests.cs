@@ -10,8 +10,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Text;
 
 namespace SportsHub.Business.Tests.Services
 {
@@ -210,6 +208,8 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeamName = "Name";
             var expectedSubcategoryId = Guid.NewGuid();
             var expectedLocation = "Location";
+            var expectedTeamIsHidden = true;
+            var expectedTeamOrderIndex = 1;
             var expectedByteArray = byteArray;
             var fileExtension = expectedTeamLogoExtension;
 
@@ -219,6 +219,8 @@ namespace SportsHub.Business.Tests.Services
                 Name = expectedTeamName,
                 Location = expectedLocation,
                 SubcategoryId = expectedSubcategoryId,
+                IsHidden = expectedTeamIsHidden,
+                OrderIndex = expectedTeamOrderIndex,
                 TeamLogo = expectedTeamLogo
             };
 
@@ -230,7 +232,9 @@ namespace SportsHub.Business.Tests.Services
                 (team.Id == expectedTeamId)
                 && (team.Name == expectedTeamName) 
                 && (team.Location == expectedLocation)
-                && (team.SubcategoryId == expectedSubcategoryId))));
+                && (team.SubcategoryId == expectedSubcategoryId)
+                && (team.IsHidden == expectedTeamIsHidden)
+                && (team.OrderIndex == expectedTeamOrderIndex))));
 
             _teamLogoRepository.Verify(repository => repository.EditTeamLogoAsync(It.Is<TeamLogo>(teamLogo =>
                 (byteArray == expectedByteArray)

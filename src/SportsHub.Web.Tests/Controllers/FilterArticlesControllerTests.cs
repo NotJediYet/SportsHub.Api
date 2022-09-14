@@ -41,10 +41,9 @@ namespace SportsHub.Web.Tests.Controllers
             // Arrange
             var expectedSubcategoryName = "SubcategoryName";
             var expectedTeamName = "Team2";
-            var expectedTeamLocation = "USA";
             var expectedStatus = "Published";
 
-            var expectedSubcategory = new Subcategory(expectedSubcategoryName, Guid.NewGuid());
+            var expectedSubcategory = new Subcategory { Name = expectedSubcategoryName, CategoryId = Guid.NewGuid() };
             var expectedSubcategoryId = expectedSubcategory.Id;
             var expectedTeam = new Team
             { 

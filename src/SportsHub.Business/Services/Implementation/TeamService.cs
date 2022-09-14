@@ -73,8 +73,11 @@ namespace SportsHub.Business.Services
                 Id = editTeamModel.Id,
                 Name = editTeamModel.Name,
                 SubcategoryId = editTeamModel.SubcategoryId,
-                Location = editTeamModel.Location
+                Location = editTeamModel.Location,
+                IsHidden = editTeamModel.IsHidden,
+                OrderIndex = editTeamModel.OrderIndex
             };
+
             await _teamRepository.EditTeamAsync(teamModel);
 
             if (editTeamModel.TeamLogo != null) {
@@ -84,7 +87,6 @@ namespace SportsHub.Business.Services
 
                 await _teamLogoRepository.EditTeamLogoAsync(teamLogo);
             }
-            
         }
 
         public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)

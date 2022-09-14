@@ -17,10 +17,8 @@ namespace SportsHub.Shared.Entities
         [Required(ErrorMessage = "Category id is required.")]
         public Guid CategoryId { get; set; }
 
-        public Subcategory(string name, Guid categoryId)
-        {
-            Name = name;
-            CategoryId = categoryId;
-        }
+        public bool IsHidden { get; set; } = false;
+
+        public int OrderIndex { get; set; }
     }
 }

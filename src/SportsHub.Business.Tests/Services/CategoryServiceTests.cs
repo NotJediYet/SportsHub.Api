@@ -2,6 +2,7 @@
 using SportsHub.Business.Repositories;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedCategoryId = Guid.NewGuid();
 
-            var expectedCategory = new Category(name: "Name");
+            var expectedCategory = new Category {Name = "Name"};
             expectedCategory.Id = expectedCategoryId;
 
             _repository.Setup(repository => repository.GetCategoryByIdAsync(expectedCategoryId))
@@ -137,12 +138,43 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Category> categories = new List<Category>
             {
-                new Category("Name1"),
-                new Category("Name2"),
-                new Category("Name3")
+                new Category {Name = "Name1"},
+                new Category {Name = "Name2"},
+                new Category {Name = "Name3"},
             };
 
             return categories;
+        }
+
+        [Fact]
+        public async Task EditCategoryAsync_CallsAppropriateRepositoryMethodWithParameters()
+        {
+            // Arrange
+            var expectedCategoryId = Guid.NewGuid();
+            var expectedCategoryName = "Name";
+            var expectedIsStatic = false;
+            var expectedCategoryIsHidden = true;
+            var expectedCategoryOrderIndex = 1;
+
+            EditCategoryModel categoryModel = new()
+            {
+                Id = expectedCategoryId,
+                Name = expectedCategoryName,
+                IsStatic = expectedIsStatic,
+                IsHidden = expectedCategoryIsHidden,
+                OrderIndex = expectedCategoryOrderIndex
+            };
+
+            // Act
+            await _service.EditCategoryAsync(categoryModel);
+
+            // Assert
+            _repository.Verify(repository => repository.EditCategoryAsync(It.Is<Category>(category =>
+                (category.Id == expectedCategoryId)
+                && (category.Name == expectedCategoryName)
+                && (category.IsStatic == expectedIsStatic)
+                && (category.IsHidden == expectedCategoryIsHidden)
+                && (category.OrderIndex == expectedCategoryOrderIndex))));
         }
     }
 }

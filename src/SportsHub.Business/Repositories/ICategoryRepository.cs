@@ -10,8 +10,12 @@ namespace SportsHub.Business.Repositories
 
         Task AddCategoryAsync(Category category);
 
+        Task<Guid> GetCategoryIdByNameAsync(string categoryName);
+
         Task<bool> DoesCategoryAlreadyExistByNameAsync(string categoryName);
 
         Task<bool> DoesCategoryAlreadyExistByIdAsync(Guid id);
+
+        Task EditCategoryAsync(Category category);
     }
 }
