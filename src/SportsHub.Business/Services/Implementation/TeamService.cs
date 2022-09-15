@@ -3,6 +3,8 @@ using SportsHub.Shared.Entities;
 using Microsoft.AspNetCore.Http;
 using SportsHub.Shared.Models;
 using SportsHub.Extensions;
+using System.Windows;
+using System.Globalization;
 
 namespace SportsHub.Business.Services
 {
@@ -44,9 +46,10 @@ namespace SportsHub.Business.Services
 
         public async Task CreateTeamAsync(CreateTeamModel сreateTeamModel)
         {
-            var newTeam = new Team { Name = сreateTeamModel.Name, 
-                SubcategoryId = сreateTeamModel.SubcategoryId, 
-                Location = сreateTeamModel.Location 
+            var newTeam = new Team { Name = сreateTeamModel.Name,
+                SubcategoryId = сreateTeamModel.SubcategoryId,
+                Location = сreateTeamModel.Location,
+                CreationDate = DateTime.Now.ToShortDateString()
             };
 
             await _teamRepository.AddTeamAsync(newTeam);
