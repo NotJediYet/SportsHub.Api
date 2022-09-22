@@ -66,7 +66,16 @@ namespace SportsHub.Business.Services
 
         public async Task<Guid> GetTeamIdByNameAsync(string teamName)
         {
-            return await _teamRepository.GetTeamIdByNameAsync(teamName);
+            var team = await _teamRepository.GetTeamByNameAsync(teamName);
+
+            if (team == null)
+            {
+                return Guid.Empty;
+            }
+            else
+            {
+                return team.Id;
+            }
         }
         
         public async Task EditTeamAsync(EditTeamModel editTeamModel)
@@ -76,8 +85,11 @@ namespace SportsHub.Business.Services
                 Id = editTeamModel.Id,
                 Name = editTeamModel.Name,
                 SubcategoryId = editTeamModel.SubcategoryId,
-                Location = editTeamModel.Location
+                Location = editTeamModel.Location,
+                IsHidden = editTeamModel.IsHidden,
+                OrderIndex = editTeamModel.OrderIndex
             };
+
             await _teamRepository.EditTeamAsync(teamModel);
 
             if (editTeamModel.TeamLogo != null) {
@@ -87,7 +99,6 @@ namespace SportsHub.Business.Services
 
                 await _teamLogoRepository.EditTeamLogoAsync(teamLogo);
             }
-            
         }
 
         public async Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id)

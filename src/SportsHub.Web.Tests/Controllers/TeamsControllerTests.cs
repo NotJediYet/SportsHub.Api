@@ -195,6 +195,8 @@ namespace SportsHub.Web.Tests.Controllers
                 Name = "Name",
                 Location = "Location",
                 SubcategoryId = Guid.NewGuid(),
+                IsHidden = true,
+                OrderIndex = 0,
                 TeamLogo = file
             };
             var validationResult = new ValidationResult();
@@ -232,6 +234,8 @@ namespace SportsHub.Web.Tests.Controllers
                 Name = String.Empty,
                 Location = String.Empty,
                 SubcategoryId = Guid.Empty,
+                IsHidden = true,
+                OrderIndex = 0,
                 TeamLogo = file
             };
 

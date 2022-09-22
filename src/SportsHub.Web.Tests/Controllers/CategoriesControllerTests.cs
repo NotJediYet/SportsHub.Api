@@ -19,15 +19,17 @@ namespace SportsHub.Web.Tests.Controllers
     public class CategoriesControllerTests
     {
         private readonly Mock<ICategoryService> _service;
-        private readonly Mock<IValidator<CreateCategoryModel>> _validator;
+        private readonly Mock<IValidator<CreateCategoryModel>> _createCategoryValidator;
+        private readonly Mock<IValidator<EditCategoryModel>> _editCategoryValidator;
         private readonly CategoriesController _controller;
 
         public CategoriesControllerTests()
         {
             _service = new Mock<ICategoryService>();
-            _validator = new Mock<IValidator<CreateCategoryModel>>();
+            _createCategoryValidator = new Mock<IValidator<CreateCategoryModel>>();
+            _editCategoryValidator = new Mock<IValidator<EditCategoryModel>>();
 
-            _controller = new CategoriesController(_service.Object, _validator.Object);
+            _controller = new CategoriesController(_service.Object, _createCategoryValidator.Object, _editCategoryValidator.Object);
         }
 
         [Fact]
@@ -40,7 +42,7 @@ namespace SportsHub.Web.Tests.Controllers
             };
             var validationResult = new ValidationResult();
 
-            _validator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+            _createCategoryValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(validationResult);
 
             // Act
@@ -63,7 +65,7 @@ namespace SportsHub.Web.Tests.Controllers
             var validationFailure = new ValidationFailure(nameof(model.Name), Errors.CategoryNameCannotBeEmpty);
             var validationResult = new ValidationResult(new[] { validationFailure });
 
-            _validator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+            _createCategoryValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(validationResult);
 
             // Act
@@ -118,7 +120,7 @@ namespace SportsHub.Web.Tests.Controllers
             // Arrange
             var expectedCategoryId = Guid.NewGuid();
 
-            var expectedCategory = new Category(name: "Name");
+            var expectedCategory = new Category { Name = "Name" };
             expectedCategory.Id = expectedCategoryId;
 
             _service.Setup(service => service.GetCategoryByIdAsync(expectedCategoryId))
@@ -140,11 +142,64 @@ namespace SportsHub.Web.Tests.Controllers
         {
             IEnumerable<Category> categories = new List<Category>
             {
-                new Category("Name1"),
-                new Category("Name2"),
-                new Category("Name3")
+                new Category { Name = "Name1" },
+                new Category { Name = "Name2" },
+                new Category { Name = "Name3" },
             };
             return categories;
+        }
+
+        [Fact]
+        public async Task EditCategory_WhenModelIsValid_ReturnsOkResult()
+        {
+            // Arrange
+            var model = new EditCategoryModel
+            {
+                Id = Guid.NewGuid(),
+                Name = "Name",
+                IsStatic = true,
+                IsHidden = false,
+                OrderIndex = 0,
+            };
+            var validationResult = new ValidationResult();
+
+            _editCategoryValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(validationResult);
+
+            // Act
+            var result = await _controller.EditCategory(model);
+
+            // Assert
+            var objectResult = Assert.IsType<OkResult>(result);
+            Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task EditCategory_WhenModelIsInvalid_ReturnsBadRequestResult()
+        {
+            // Arrange
+            var model = new EditCategoryModel
+            {
+                Id = Guid.NewGuid(),
+                Name = "Name",
+                IsStatic = true,
+                IsHidden = false,
+                OrderIndex = 0,
+            };
+
+            var validationFailure = new ValidationFailure(nameof(model.Name), Errors.SubcategoryNameCannotBeEmpty);
+            var validationResult = new ValidationResult(new[] { validationFailure });
+
+            _editCategoryValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(validationResult);
+
+            // Act
+            var result = await _controller.EditCategory(model);
+
+            // Assert
+            var objectResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, objectResult.StatusCode);
+            Assert.Equal(validationFailure.ErrorMessage, objectResult.Value);
         }
     }
 }

@@ -2,6 +2,7 @@
 using SportsHub.Business.Repositories;
 using SportsHub.Business.Services;
 using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedSubcategoryId = Guid.NewGuid();
 
-            var expectedSubcategory = new Subcategory(name: "Name", Guid.NewGuid());
+            var expectedSubcategory = new Subcategory { Name = "Name", CategoryId = Guid.NewGuid() };
             expectedSubcategory.Id = expectedSubcategoryId;
 
             _repository.Setup(repository => repository.GetSubcategoryByIdAsync(expectedSubcategoryId))
@@ -158,12 +159,43 @@ namespace SportsHub.Business.Tests.Services
         {
             IEnumerable<Subcategory> subcategories = new List<Subcategory>
             {
-                new Subcategory("Name1", Guid.NewGuid()),
-                new Subcategory("Name2", Guid.NewGuid()),
-                new Subcategory("Name3", Guid.NewGuid())
+                new Subcategory { Name = "Name1", CategoryId = Guid.NewGuid() },
+                new Subcategory { Name = "Name2", CategoryId = Guid.NewGuid() },
+                new Subcategory { Name = "Name3", CategoryId = Guid.NewGuid() },
             };
 
             return subcategories;
+        }
+
+        [Fact]
+        public async Task EditSubcategoryAsync_CallsAppropriateRepositoryMethodWithParameters()
+        {
+            // Arrange
+            var expectedSubcategoryId = Guid.NewGuid();
+            var expectedSubcategoryName = "Name";
+            var expectedCategoryId = Guid.NewGuid();
+            var expectedSubcategoryIsHidden = true;
+            var expectedSubcategoryOrderIndex = 1;
+
+            EditSubcategoryModel subcategoryModel = new()
+            {
+                Id = expectedSubcategoryId,
+                Name = expectedSubcategoryName,
+                CategoryId = expectedCategoryId,
+                IsHidden = expectedSubcategoryIsHidden,
+                OrderIndex = expectedSubcategoryOrderIndex
+            };
+
+            // Act
+            await _service.EditSubcategoryAsync(subcategoryModel);
+
+            // Assert
+            _repository.Verify(repository => repository.EditSubcategoryAsync(It.Is<Subcategory>(subcategory =>
+                (subcategory.Id == expectedSubcategoryId)
+                && (subcategory.Name == expectedSubcategoryName)
+                && (subcategory.CategoryId == expectedCategoryId)
+                && (subcategory.IsHidden == expectedSubcategoryIsHidden)
+                && (subcategory.OrderIndex == expectedSubcategoryOrderIndex))));
         }
     }
 }

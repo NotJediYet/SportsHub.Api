@@ -2,20 +2,16 @@
 
 namespace SportsHub.Shared.Models
 {
-    public class EditTeamModel
+    public class EditSubcategoryModel
     {
         public Guid Id { get; set; }
 
         public string Name { get; set; } = string.Empty;
 
-        public string Location { get; set; } = string.Empty;
-
-        public Guid SubcategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         public bool IsHidden { get; set; } = false;
 
         public int OrderIndex { get; set; }
-
-        public IFormFile TeamLogo { get; set; }
     }
 }

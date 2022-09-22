@@ -25,6 +25,10 @@ namespace SportsHub.Shared.Entities
         [Required(ErrorMessage = "Subcategory id is required.")]
         public Guid SubcategoryId { get; set; }
 
+        public bool IsHidden { get; set; } = false;
+
+        public int OrderIndex { get; set; }
+
         [FromForm]
         [NotMapped]
         public IFormFile TeamLogo { get; set; }

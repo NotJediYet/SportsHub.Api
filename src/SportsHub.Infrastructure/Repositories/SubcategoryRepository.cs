@@ -24,12 +24,30 @@ namespace SportsHub.Infrastructure.Repositories
             return await _context.Subcategories.FindAsync(id);
         }
 
+        public async Task<Subcategory> GetSubcategoryByNameAsync(string subcategoryName)
+        {
+            return await _context.Subcategories.FirstOrDefaultAsync(subcategory => subcategory.Name == subcategoryName);
+        }
+
         public async Task AddSubcategoryAsync(Subcategory subcategory)
         {
             await _context.Subcategories.AddAsync(subcategory);
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task EditSubcategoryAsync(Subcategory subcategory)
+        {
+            var oldSubcategory = await _context.Subcategories.FirstOrDefaultAsync(oldSubcategory => oldSubcategory.Id == subcategory.Id);
+
+            oldSubcategory.Name = subcategory.Name;
+            oldSubcategory.CategoryId = subcategory.CategoryId;
+            oldSubcategory.IsHidden = subcategory.IsHidden;
+            oldSubcategory.OrderIndex = subcategory.OrderIndex;
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<bool> DoesSubcategoryAlreadyExistByNameAsync(string subcategoryName)
         {
             var subcategories = await _context.Subcategories.AnyAsync(subcategory => subcategory.Name == subcategoryName);
