@@ -11,6 +11,7 @@ namespace SportsHub.Infrastructure.DBContext
         public DbSet<TeamLogo> TeamLogos => Set<TeamLogo>();
         public DbSet<Article> Articles => Set<Article>();
         public DbSet<ArticleImage> Images => Set<ArticleImage>();
+        public DbSet<Language> Languages => Set<Language>();
 
         public SportsHubDbContext(DbContextOptions<SportsHubDbContext> options) : base(options) { }
 
@@ -67,6 +68,15 @@ namespace SportsHub.Infrastructure.DBContext
                 .HasOne<Article>()
                 .WithOne()
                 .HasForeignKey<ArticleImage>(articleImage => articleImage.ArticleId);
+            modelBuilder.Entity<Language>()
+                .Property(language => language.IsDefault)
+                .HasDefaultValue(false);
+            modelBuilder.Entity<Language>()
+                .Property(language => language.IsHidden)
+                .HasDefaultValue(true);
+            modelBuilder.Entity<Language>()
+                .Property(language => language.IsAdded)
+                .HasDefaultValue(false);
         }
     }
 }
