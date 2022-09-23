@@ -141,6 +141,24 @@
   <data name="FileMustHaveAppropriateFormat" xml:space="preserve">
     <value>File must have appropriate format: png, jpg, svg</value>
   </data>
+  <data name="LanguageCodeCannotBeEmpty" xml:space="preserve">
+    <value>Language code cannot be empty</value>
+  </data>
+  <data name="LanguageCodeIsNotUnique" xml:space="preserve">
+    <value>Language code is not unique</value>
+  </data>
+  <data name="LanguageDoesNotExist" xml:space="preserve">
+    <value>Language does not exist</value>
+  </data>
+  <data name="LanguageIdCannotBeEmpty" xml:space="preserve">
+    <value>Language id cannot be empty</value>
+  </data>
+  <data name="LanguageNameCannotBeEmpty" xml:space="preserve">
+    <value>Language name cannot be empty</value>
+  </data>
+  <data name="LanguageNameIsNotUnique" xml:space="preserve">
+    <value>Language name is not unique</value>
+  </data>
   <data name="SubcategoryDoesNotExist" xml:space="preserve">
     <value>Subcategory does not exist</value>
   </data>
