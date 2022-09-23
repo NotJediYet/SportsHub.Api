@@ -23,6 +23,5 @@ namespace SportsHub.Business.Repositories
         Task<bool> DoesLanguageAlreadyExistByCodeAsync(string languageCode);
 
         Task<bool> DoesLanguageAlreadyExistByIdAsync(Guid id);
-
     }
 }

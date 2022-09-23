@@ -166,7 +166,6 @@ namespace SportsHub.Web.Tests.Validators
             Assert.Contains(result.Errors, error => error.ErrorMessage == expectedErrorMessage);
         }
 
-
         [Fact]
         public async void EditLanguageModel_WhenLanguageIsValid_ReturnsSuccessValidationResult()
         {
@@ -196,4 +195,3 @@ namespace SportsHub.Web.Tests.Validators
         }
     }
 }
-
