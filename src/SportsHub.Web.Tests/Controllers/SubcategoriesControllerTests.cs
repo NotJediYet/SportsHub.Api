@@ -19,15 +19,17 @@ namespace SportsHub.Web.Tests.Controllers
     public class SubcategoriesControllerTests
     {
         private readonly Mock<ISubcategoryService> _service;
-        private readonly Mock<IValidator<CreateSubcategoryModel>> _validator;
+        private readonly Mock<IValidator<CreateSubcategoryModel>> _createSubcategoryValidator;
+        private readonly Mock<IValidator<EditSubcategoryModel>> _editSubcategoryValidator;
         private readonly SubcategoriesController _controller;
 
         public SubcategoriesControllerTests()
         {
             _service = new Mock<ISubcategoryService>();
-            _validator = new Mock<IValidator<CreateSubcategoryModel>>();
+            _createSubcategoryValidator = new Mock<IValidator<CreateSubcategoryModel>>();
+            _editSubcategoryValidator = new Mock<IValidator<EditSubcategoryModel>>();
 
-            _controller = new SubcategoriesController(_service.Object, _validator.Object);
+            _controller = new SubcategoriesController(_service.Object, _createSubcategoryValidator.Object, _editSubcategoryValidator.Object);
         }
 
         [Fact]
@@ -41,7 +43,7 @@ namespace SportsHub.Web.Tests.Controllers
             };
             var validationResult = new ValidationResult();
 
-            _validator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+            _createSubcategoryValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(validationResult);
 
             // Act
@@ -65,7 +67,7 @@ namespace SportsHub.Web.Tests.Controllers
             var validationFailure = new ValidationFailure(nameof(model.Name), Errors.SubcategoryNameCannotBeEmpty);
             var validationResult = new ValidationResult(new[] { validationFailure });
 
-            _validator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+            _createSubcategoryValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(validationResult);
 
             // Act
@@ -120,7 +122,7 @@ namespace SportsHub.Web.Tests.Controllers
             // Arrange
             var expectedSubcategoryId = Guid.NewGuid();
 
-            var expectedSubcategory = new Subcategory(name: "Name", categoryId: Guid.NewGuid());
+            var expectedSubcategory = new Subcategory { Name = "Name", CategoryId = Guid.NewGuid() };
             expectedSubcategory.Id = expectedSubcategoryId;
 
             _service.Setup(service => service.GetSubcategoryByIdAsync(expectedSubcategoryId))
@@ -143,11 +145,63 @@ namespace SportsHub.Web.Tests.Controllers
         {
             IEnumerable<Subcategory> subcategories = new List<Subcategory>
             {
-                new Subcategory("Name1", Guid.NewGuid()),
-                new Subcategory("Name2", Guid.NewGuid()),
-                new Subcategory("Name3", Guid.NewGuid())
+                new Subcategory { Name = "Name1", CategoryId = Guid.NewGuid() },
+                new Subcategory { Name = "Name2", CategoryId = Guid.NewGuid() },
+                new Subcategory { Name = "Name3", CategoryId = Guid.NewGuid() },
             };
             return subcategories;
+        }
+
+        [Fact]
+        public async Task EditSubcategory_WhenModelIsValid_ReturnsOkResult()
+        {
+            // Arrange
+            var model = new EditSubcategoryModel
+            {
+                Id = Guid.NewGuid(),
+                Name = "Name",
+                CategoryId = Guid.NewGuid(),
+                IsHidden = false,
+                OrderIndex = 0,
+            };
+            var validationResult = new ValidationResult();
+
+            _editSubcategoryValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(validationResult);
+
+            // Act
+            var result = await _controller.EditSubcategory(model);
+
+            // Assert
+            var objectResult = Assert.IsType<OkResult>(result);
+            Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task EditSubcategory_WhenModelIsInvalid_ReturnsBadRequestResult()
+        {
+            var model = new EditSubcategoryModel
+            {
+                Id = Guid.NewGuid(),
+                Name = "",
+                CategoryId = Guid.NewGuid(),
+                IsHidden = false,
+                OrderIndex = 0,
+            };
+
+            var validationFailure = new ValidationFailure(nameof(model.Name), Errors.SubcategoryNameCannotBeEmpty);
+            var validationResult = new ValidationResult(new[] { validationFailure });
+
+            _editSubcategoryValidator.Setup(validator => validator.ValidateAsync(model, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(validationResult);
+
+            // Act
+            var result = await _controller.EditSubcategory(model);
+
+            // Assert
+            var objectResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, objectResult.StatusCode);
+            Assert.Equal(validationFailure.ErrorMessage, objectResult.Value);
         }
     }
 }

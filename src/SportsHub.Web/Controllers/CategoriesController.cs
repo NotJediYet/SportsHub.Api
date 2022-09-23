@@ -13,12 +13,15 @@ namespace SportsHub.Web.Controllers
     {
         private readonly ICategoryService _categoryService;
         private IValidator<CreateCategoryModel> _createCategoryModelValidator;
+        private IValidator<EditCategoryModel> _editCategoryModelValidator;
         public CategoriesController(
             ICategoryService categoryService,
-            IValidator<CreateCategoryModel> createCategoryModelValidator)
+            IValidator<CreateCategoryModel> createCategoryModelValidator,
+            IValidator<EditCategoryModel> editCategoryModelValidator)
         {
             _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
             _createCategoryModelValidator = createCategoryModelValidator ?? throw new ArgumentNullException(nameof(createCategoryModelValidator));
+            _editCategoryModelValidator = editCategoryModelValidator ?? throw new ArgumentNullException(nameof(editCategoryModelValidator));
         }
 
         [HttpGet]
@@ -48,7 +51,8 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policies.Admin)]
+        /*[Authorize(Policies.Admin)]*/
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -62,6 +66,25 @@ namespace SportsHub.Web.Controllers
             }
 
             await _categoryService.CreateCategoryAsync(сreateCategoryModel.Name);
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Authorize(Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> EditCategory(EditCategoryModel editCategoryModel)
+        {
+            var validationResult = await _editCategoryModelValidator.ValidateAsync(editCategoryModel);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors.Select(error => error.ErrorMessage).First());
+            }
+
+            await _categoryService.EditCategoryAsync(editCategoryModel);
 
             return Ok();
         }

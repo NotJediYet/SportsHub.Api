@@ -2,7 +2,6 @@
 using SportsHub.Business.Services;
 using SportsHub.Shared.Models;
 using SportsHub.Shared.Resources;
-using SportsHub.Shared.Entities;
 
 namespace SportsHub.Web.Validators
 {
@@ -49,7 +48,6 @@ namespace SportsHub.Web.Validators
             }
             else if (result == Id) { return true; }
             else return false;
-            
         }
     }
 }

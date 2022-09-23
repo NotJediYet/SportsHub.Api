@@ -8,9 +8,9 @@ namespace SportsHub.Business.Repositories
 
         Task<Team> GetTeamByIdAsync(Guid id);
 
-        Task AddTeamAsync(Team team);
+        Task<Team> GetTeamByNameAsync(string teamName);
 
-        Task<Guid> GetTeamIdByNameAsync(string teamName);
+        Task AddTeamAsync(Team team);
 
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
 

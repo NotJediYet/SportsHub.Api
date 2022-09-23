@@ -1,5 +1,6 @@
 ﻿using SportsHub.Business.Repositories;
 using SportsHub.Shared.Entities;
+using SportsHub.Shared.Models;
 
 namespace SportsHub.Business.Services
 {
@@ -24,9 +25,35 @@ namespace SportsHub.Business.Services
 
         public async Task CreateCategoryAsync(string categoryName)
         {
-            var category = new Category(categoryName);
+            await _categoryRepository.AddCategoryAsync(new Category { Name = categoryName });
+        }
 
-            await _categoryRepository.AddCategoryAsync(category);
+        public async Task<Guid> GetCategoryIdByNameAsync(string categoryName)
+        {
+            var category = await _categoryRepository.GetCategoryByNameAsync(categoryName);
+
+            if (category == null)
+            {
+                return Guid.Empty;
+            }
+            else
+            {
+                return category.Id;
+            }
+        }
+
+        public async Task EditCategoryAsync(EditCategoryModel editCategoryModel)
+        {
+            var categoryModel = new Category
+            {
+                Id = editCategoryModel.Id,
+                Name = editCategoryModel.Name,
+                IsStatic = editCategoryModel.IsStatic,
+                IsHidden = editCategoryModel.IsHidden,
+                OrderIndex = editCategoryModel.OrderIndex
+            };
+
+            await _categoryRepository.EditCategoryAsync(categoryModel);
         }
 
         public async Task<bool> DoesCategoryAlreadyExistByNameAsync(string categoryName)

@@ -18,8 +18,16 @@ namespace SportsHub.Shared.Entities
 
         public string Location { get; set; } = string.Empty;
 
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        public string CreationDate { get; set; }
+
         [Required(ErrorMessage = "Subcategory id is required.")]
         public Guid SubcategoryId { get; set; }
+
+        public bool IsHidden { get; set; } = false;
+
+        public int OrderIndex { get; set; }
 
         [FromForm]
         [NotMapped]

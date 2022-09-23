@@ -24,12 +24,30 @@ namespace SportsHub.Infrastructure.Repositories
             return await _context.Subcategories.FindAsync(id);
         }
 
+        public async Task<Subcategory> GetSubcategoryByNameAsync(string subcategoryName)
+        {
+            return await _context.Subcategories.FirstOrDefaultAsync(subcategory => subcategory.Name == subcategoryName);
+        }
+
         public async Task AddSubcategoryAsync(Subcategory subcategory)
         {
             await _context.Subcategories.AddAsync(subcategory);
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task EditSubcategoryAsync(Subcategory subcategory)
+        {
+            var oldSubcategory = await _context.Subcategories.FirstOrDefaultAsync(oldSubcategory => oldSubcategory.Id == subcategory.Id);
+
+            oldSubcategory.Name = subcategory.Name;
+            oldSubcategory.CategoryId = subcategory.CategoryId;
+            oldSubcategory.IsHidden = subcategory.IsHidden;
+            oldSubcategory.OrderIndex = subcategory.OrderIndex;
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<bool> DoesSubcategoryAlreadyExistByNameAsync(string subcategoryName)
         {
             var subcategories = await _context.Subcategories.AnyAsync(subcategory => subcategory.Name == subcategoryName);
@@ -46,8 +64,13 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task<Guid> FindSubcategoryIdBySubcategoryNameAsync(string subcategoryName)
         {
-            var subcategory = await _context.Subcategories.FirstOrDefaultAsync(subcategory => subcategory.Name == subcategoryName);
-            return subcategory.Id;
+            var subcategories = await _context.Subcategories.ToListAsync();
+
+            Guid subcategoryId = (from subcategory in subcategories
+                                  where subcategory.Name == subcategoryName
+                                  select subcategory.Id).FirstOrDefault();
+
+            return subcategoryId;
         }
 
         public async Task<IEnumerable<Subcategory>> GetByCategoryIdAsync(Guid categoryId)

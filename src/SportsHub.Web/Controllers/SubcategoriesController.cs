@@ -13,13 +13,16 @@ namespace SportsHub.Web.Controllers
     {
         private readonly ISubcategoryService _subcategoryService;
         private IValidator<CreateSubcategoryModel> _createSubcategoryModelValidator;
+        private IValidator<EditSubcategoryModel> _editSubcategoryModelValidator;
 
         public SubcategoriesController(
             ISubcategoryService subcategoryService,
-            IValidator<CreateSubcategoryModel> createSubcategoryModelValidator)
+            IValidator<CreateSubcategoryModel> createSubcategoryModelValidator,
+            IValidator<EditSubcategoryModel> editSubcategoryModelValidator)
         {
             _subcategoryService = subcategoryService ?? throw new ArgumentNullException(nameof(subcategoryService));
             _createSubcategoryModelValidator = createSubcategoryModelValidator ?? throw new ArgumentNullException(nameof(createSubcategoryModelValidator));
+            _editSubcategoryModelValidator = editSubcategoryModelValidator ?? throw new ArgumentNullException(nameof(editSubcategoryModelValidator));
         }
 
         [HttpGet]
@@ -51,7 +54,8 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policies.Admin)]
+        /*[Authorize(Policies.Admin)]*/
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -65,6 +69,25 @@ namespace SportsHub.Web.Controllers
             }
 
             await _subcategoryService.CreateSubcategoryAsync(сreateSubcategoryModel.Name, сreateSubcategoryModel.CategoryId);
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Authorize(Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> EditSubcategory(EditSubcategoryModel editSubcategoryModel)
+        {
+            var validationResult = await _editSubcategoryModelValidator.ValidateAsync(editSubcategoryModel);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors.Select(error => error.ErrorMessage).First());
+            }
+
+            await _subcategoryService.EditSubcategoryAsync(editSubcategoryModel);
 
             return Ok();
         }

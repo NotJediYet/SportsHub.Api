@@ -6,6 +6,7 @@ using SportsHub.Shared.Models;
 using System;
 using System.IO;
 using System.Text;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -106,33 +107,44 @@ namespace SportsHub.Business.Tests.Services
                 )));
         }
         [Fact]
-        public async Task DoesTeamAlreadyExistByNameAsync_WhenTeamExists_ReturnsTrue()
+        public async Task GetTeamByNameAsync_WhenTeamExists_ReturnsTeamId()
         {
             // Arrange
-            var teamName = "Name";
+            var expectedId = Guid.NewGuid();
 
-            _teamRepository.Setup(repository => repository.GetTeamIdByNameAsync(teamName))
-            .ReturnsAsync(Guid.Empty);
+            var team = new Team()
+            {
+                Id = expectedId,
+                Name = "Name1",
+                SubcategoryId = Guid.NewGuid(),
+                Location = "Location1"
+            };
+
+            _teamRepository.Setup(repository => repository.GetTeamByNameAsync(team.Name))
+            .ReturnsAsync(team);
+
             // Act
-            var result = await _service.GetTeamIdByNameAsync(teamName);
+            var actualId = await _service.GetTeamIdByNameAsync(team.Name);
 
             // Assert
-            Assert.Equal(Guid.Empty, result);
+            Assert.Equal(expectedId, actualId);
         }
 
         [Fact]
-        public async Task DoesTeamAlreadyExistByNameAsync_WhenTeamDoesNotExist_ReturnsFalse()
+        public async Task GetTeamByNameAsync_WhenTeamDoesNotExists_ReturnsEmptyId()
         {
             // Arrange
             var teamName = "Name";
+            Team team = null;
 
-            _teamRepository.Setup(repository => repository.GetTeamIdByNameAsync(teamName))
-            .ReturnsAsync(Guid.Empty);
+            _teamRepository.Setup(repository => repository.GetTeamByNameAsync(teamName))
+            .ReturnsAsync(team);
+
             // Act
-            var result = await _service.GetTeamIdByNameAsync(teamName);
+            var actualId = await _service.GetTeamIdByNameAsync(teamName);
 
             // Assert
-            Assert.Equal(Guid.Empty, result);
+            Assert.Equal(Guid.Empty, actualId);
         }
 
         [Fact]
@@ -140,13 +152,20 @@ namespace SportsHub.Business.Tests.Services
         {
             // Arrange
             var expectedTeamId = Guid.NewGuid();
-            var expectedTeamName = "Name";
 
-            _teamRepository.Setup(repository => repository.GetTeamIdByNameAsync(expectedTeamName))
-                .ReturnsAsync(expectedTeamId);
+            var team = new Team()
+            {
+                Id = expectedTeamId,
+                Name = "Name1",
+                SubcategoryId = Guid.NewGuid(),
+                Location = "Location1"
+            };
+
+            _teamRepository.Setup(repository => repository.GetTeamByNameAsync(team.Name))
+                .ReturnsAsync(team);
 
             // Act
-            var actualTeamId = await _service.GetTeamIdByNameAsync(expectedTeamName);
+            var actualTeamId = await _service.GetTeamIdByNameAsync(team.Name);
 
             // Assert
             Assert.Equal(expectedTeamId, actualTeamId);
@@ -174,7 +193,7 @@ namespace SportsHub.Business.Tests.Services
         {
             // Arrange
             var subcategoryId = Guid.NewGuid();
-            var expectedTeams = CreateTeams(subcategoryId);
+            var expectedTeams = GetTeams().ToList();
             var expectedLocation = "USA";
 
             _teamRepository.Setup(repository => repository.GetTeamsFilteredByLocation(expectedLocation, expectedTeams))
@@ -194,11 +213,11 @@ namespace SportsHub.Business.Tests.Services
             var subcategoryId = Guid.NewGuid();
             ICollection<Subcategory> subcategories = new List<Subcategory>
             {
-                new Subcategory("Name1", Guid.NewGuid()),
-                new Subcategory("Name2", Guid.NewGuid()),
-                new Subcategory("Name3", Guid.NewGuid())
-            };
-            var expectedTeams = CreateTeams(subcategoryId);
+                new Subcategory { Name = "Name", CategoryId = Guid.NewGuid() },
+                new Subcategory { Name = "Name", CategoryId = Guid.NewGuid() },
+                new Subcategory { Name = "Name", CategoryId = Guid.NewGuid() }
+    };
+            var expectedTeams = GetTeams().ToList();
 
             _teamRepository.Setup(repository => repository.GetTeamsFilteredBySubcategoryIds(subcategories, expectedTeams))
                 .Returns(expectedTeams);
@@ -215,7 +234,7 @@ namespace SportsHub.Business.Tests.Services
         {
             // Arrange
             var subcategoryId = Guid.NewGuid();
-            var expectedTeams = CreateTeams(subcategoryId);
+            var expectedTeams = GetTeams().ToList();
 
             _teamRepository.Setup(repository => repository.GetTeamsFilteredBySubcategoryId(subcategoryId, expectedTeams))
                 .Returns(expectedTeams);
@@ -242,6 +261,7 @@ namespace SportsHub.Business.Tests.Services
             // Assert
             Assert.Equal(expectedTeams, actualTeams);
         }
+
 
         private IEnumerable<Team> GetTeams()
         {
@@ -270,33 +290,6 @@ namespace SportsHub.Business.Tests.Services
             return teams;
         }
 
-        private List<Team> CreateTeams(Guid subcategoryId)
-        {
-            List<Team> teams = new List<Team>
-            {
-                new Team()
-                {
-                    Name = "Name1",
-                    SubcategoryId = subcategoryId,
-                    Location = "Location1"
-                },
-                new Team()
-                {
-                    Name = "Name2",
-                    SubcategoryId = subcategoryId,
-                    Location = "Location2"
-                },
-                new Team()
-                {
-                    Name = "Name3",
-                    SubcategoryId = subcategoryId,
-                    Location = "Location3"
-                }
-            };
-
-            return teams;
-        }
-
         [Fact]
         public async Task EditTeamAsync_CallsAppropriateRepositoryMethodWithParameters()
         {
@@ -309,6 +302,8 @@ namespace SportsHub.Business.Tests.Services
             var expectedTeamName = "Name";
             var expectedSubcategoryId = Guid.NewGuid();
             var expectedLocation = "Location";
+            var expectedTeamIsHidden = true;
+            var expectedTeamOrderIndex = 1;
             var expectedByteArray = byteArray;
             var fileExtension = expectedTeamLogoExtension;
 
@@ -318,6 +313,8 @@ namespace SportsHub.Business.Tests.Services
                 Name = expectedTeamName,
                 Location = expectedLocation,
                 SubcategoryId = expectedSubcategoryId,
+                IsHidden = expectedTeamIsHidden,
+                OrderIndex = expectedTeamOrderIndex,
                 TeamLogo = expectedTeamLogo
             };
 
@@ -329,7 +326,9 @@ namespace SportsHub.Business.Tests.Services
                 (team.Id == expectedTeamId)
                 && (team.Name == expectedTeamName) 
                 && (team.Location == expectedLocation)
-                && (team.SubcategoryId == expectedSubcategoryId))));
+                && (team.SubcategoryId == expectedSubcategoryId)
+                && (team.IsHidden == expectedTeamIsHidden)
+                && (team.OrderIndex == expectedTeamOrderIndex))));
 
             _teamLogoRepository.Verify(repository => repository.EditTeamLogoAsync(It.Is<TeamLogo>(teamLogo =>
                 (byteArray == expectedByteArray)

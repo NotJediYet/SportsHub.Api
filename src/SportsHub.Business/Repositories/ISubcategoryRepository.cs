@@ -8,6 +8,8 @@ namespace SportsHub.Business.Repositories
 
         Task<Subcategory> GetSubcategoryByIdAsync(Guid id);
 
+        Task<Subcategory> GetSubcategoryByNameAsync(string subcategoryName);
+
         Task AddSubcategoryAsync(Subcategory subcategory);
 
         Task<bool> DoesSubcategoryAlreadyExistByNameAsync(string subcategoryName);
@@ -15,6 +17,8 @@ namespace SportsHub.Business.Repositories
         Task<bool> DoesSubcategoryAlreadyExistByIdAsync(Guid id);
 
         Task<Guid> FindSubcategoryIdBySubcategoryNameAsync(string subcategoryName);
+
+        Task EditSubcategoryAsync(Subcategory subcategory);
 
         Task<IEnumerable<Subcategory>> GetByCategoryIdAsync(Guid categoryId);
     }

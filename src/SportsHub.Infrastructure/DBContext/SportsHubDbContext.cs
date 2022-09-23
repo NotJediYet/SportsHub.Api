@@ -16,35 +16,57 @@ namespace SportsHub.Infrastructure.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasSequence<int>("CategoryOrderIndexes");
+            modelBuilder.HasSequence<int>("SubcategoryOrderIndexes");
+            modelBuilder.HasSequence<int>("TeamOrderIndexes");
+
             modelBuilder.Entity<Category>()
-                .Property(c => c.IsStatic)
+                .Property(category => category.IsStatic)
                 .HasDefaultValue(false);
+            modelBuilder.Entity<Category>()
+                .Property(category => category.IsHidden)
+                .HasDefaultValue(false);
+            modelBuilder.Entity<Category>()
+                .Property(category => category.OrderIndex)
+                .HasDefaultValueSql("NEXT VALUE FOR CategoryOrderIndexes");
             modelBuilder.Entity<Subcategory>()
                 .HasOne<Category>()
                 .WithMany()
-                .HasForeignKey(s => s.CategoryId);
+                .HasForeignKey(subcategory => subcategory.CategoryId);
+            modelBuilder.Entity<Subcategory>()
+                .Property(subcategory => subcategory.IsHidden)
+                .HasDefaultValue(false);
+            modelBuilder.Entity<Subcategory>()
+                .Property(subcategory => subcategory.OrderIndex)
+                .HasDefaultValueSql("NEXT VALUE FOR SubcategoryOrderIndexes");
             modelBuilder.Entity<Team>()
                 .HasOne<Subcategory>()
                 .WithMany()
-                .HasForeignKey(t => t.SubcategoryId);
+                .HasForeignKey(team => team.SubcategoryId);
+            modelBuilder.Entity<Team>()
+                .Property(team => team.IsHidden)
+                .HasDefaultValue(false);
+            modelBuilder.Entity<Team>()
+                .Property(team => team.OrderIndex)
+                .HasDefaultValueSql("NEXT VALUE FOR TeamOrderIndexes");
             modelBuilder.Entity<TeamLogo>()
                 .HasOne<Team>()
                 .WithOne()
-                .HasForeignKey<TeamLogo>(t => t.TeamId);
+                .HasForeignKey<TeamLogo>(teamLogo => teamLogo.TeamId);
             modelBuilder.Entity<Article>()
                 .HasOne<Team>()
                 .WithMany()
-                .HasForeignKey(a => a.TeamId);
+                .HasForeignKey(article => article.TeamId);
             modelBuilder.Entity<Article>()
-                .Property(a => a.IsPublished)
+                .Property(article => article.IsPublished)
                 .HasDefaultValue(false);
             modelBuilder.Entity<Article>()
-                .Property(a => a.IsShowComments)
+                .Property(article => article.IsShowComments)
                 .HasDefaultValue(false);
             modelBuilder.Entity<ArticleImage>()
                 .HasOne<Article>()
                 .WithOne()
-                .HasForeignKey<ArticleImage>(a => a.ArticleId);
+                .HasForeignKey<ArticleImage>(articleImage => articleImage.ArticleId);
         }
     }
 }

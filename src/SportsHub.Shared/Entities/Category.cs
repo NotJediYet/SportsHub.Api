@@ -16,9 +16,8 @@ namespace SportsHub.Shared.Entities
 
         public bool IsStatic { get; set; } = false;
 
-        public Category(string name)
-        {
-            Name = name;
-        }
+        public bool IsHidden { get; set; } = false;
+
+        public int OrderIndex { get; set; }
     }
 }
