@@ -9,7 +9,7 @@ namespace SportsHub.Business.Services
 
         Task<Language> GetLanguageByIdAsync(Guid id);
 
-        Task CreateLanguageAsync(string languageName, string languageCode);
+        Task CreateLanguageAsync(CreateLanguageModel createLanguageModel);
 
         Task EditLanguageAsync(EditLanguageModel editLanguageModel);
         

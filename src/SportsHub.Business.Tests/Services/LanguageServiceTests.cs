@@ -64,9 +64,10 @@ namespace SportsHub.Business.Tests.Services
             // Arrange
             var expectedLanguageName = "Name";
             var expectedLanguageCode = "Code";
+            var languageModel = new CreateLanguageModel{ Name = expectedLanguageName, Code = expectedLanguageCode };
 
             // Act
-            await _service.CreateLanguageAsync(expectedLanguageName, expectedLanguageCode);
+            await _service.CreateLanguageAsync(languageModel);
 
             // Assert
             _repository.Verify(repository => repository.AddLanguageAsync(It.Is<Language>(language => language.Name == expectedLanguageName && language.Code == expectedLanguageCode)));

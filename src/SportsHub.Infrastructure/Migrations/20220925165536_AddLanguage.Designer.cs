@@ -12,7 +12,7 @@ using SportsHub.Infrastructure.DBContext;
 namespace SportsHub.Infrastructure.Migrations
 {
     [DbContext(typeof(SportsHubDbContext))]
-    [Migration("20220923103814_AddLanguage")]
+    [Migration("20220925165536_AddLanguage")]
     partial class AddLanguage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,17 +136,17 @@ namespace SportsHub.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("IsAdded")
+                    b.Property<bool?>("IsAdded")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsDefault")
+                    b.Property<bool?>("IsDefault")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsHidden")
+                    b.Property<bool?>("IsHidden")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);

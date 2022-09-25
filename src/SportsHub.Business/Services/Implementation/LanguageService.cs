@@ -23,9 +23,18 @@ namespace SportsHub.Business.Services
             return await _languageRepository.GetLanguageByIdAsync(id);
         }
 
-        public async Task CreateLanguageAsync(string languageName, string languageCode)
+        public async Task CreateLanguageAsync(CreateLanguageModel createLanguageModel)
         {
-            await _languageRepository.AddLanguageAsync(new Language { Name = languageName, Code = languageCode });
+            var languageModel = new Language
+            {
+                Name = createLanguageModel.Name,
+                Code = createLanguageModel.Code,
+                IsDefault = createLanguageModel.IsDefault,
+                IsHidden = createLanguageModel.IsHidden,
+                IsAdded = createLanguageModel.IsAdded
+            };
+
+            await _languageRepository.AddLanguageAsync(languageModel);
         }
 
         public async Task EditLanguageAsync(EditLanguageModel editLanguageModel)

@@ -18,10 +18,10 @@ namespace SportsHub.Shared.Entities
         [Required(ErrorMessage = "Language code is required.")]
         public string Code { get; set; } = string.Empty;
 
-        public bool IsDefault { get; set; } = false;
+        public bool? IsDefault { get; set; } = false;
 
-        public bool IsHidden { get; set; } = true;
+        public bool? IsHidden { get; set; } = true;
 
-        public bool IsAdded { get; set; } = false;
+        public bool? IsAdded { get; set; } = false;
     }
 }

@@ -64,7 +64,7 @@ namespace SportsHub.Web.Controllers
                 return BadRequest(validationResult.ToString());
             }
 
-            await _languageService.CreateLanguageAsync(сreateLanguageModel.Name, сreateLanguageModel.Code);
+            await _languageService.CreateLanguageAsync(сreateLanguageModel);
 
             return Ok();
         }

@@ -16,9 +16,9 @@ namespace SportsHub.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IsDefault = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    IsHidden = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    IsAdded = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    IsDefault = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
+                    IsHidden = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    IsAdded = table.Column<bool>(type: "bit", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
