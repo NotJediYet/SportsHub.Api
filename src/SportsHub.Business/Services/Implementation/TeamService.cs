@@ -113,7 +113,7 @@ namespace SportsHub.Business.Services
             return await _teamRepository.FindTeamIdBySubcategoryIdAsync(subcategoryId);
         }
 
-        public TeamLogo ConvertTeamLogo(TeamLogo logo)
+        private TeamLogo ConvertTeamLogo(TeamLogo logo)
         {
             if (logo != null)
             {
