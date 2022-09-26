@@ -41,7 +41,15 @@ namespace SportsHub.Infrastructure.Repositories
 
         public async Task EditTeamLogoAsync(TeamLogo teamLogo)
         {
-            _context.TeamLogos.Update(teamLogo);
+            var oldTeamLogo = await _context.TeamLogos.FirstOrDefaultAsync(oldTeamLogo => oldTeamLogo.TeamId == teamLogo.TeamId);
+
+            if (oldTeamLogo == null)
+                await _context.Set<TeamLogo>().AddAsync(teamLogo);
+            else
+            {
+                oldTeamLogo.Bytes = teamLogo.Bytes;
+                oldTeamLogo.FileExtension = teamLogo.FileExtension;
+            }
 
             await _context.SaveChangesAsync();
         }

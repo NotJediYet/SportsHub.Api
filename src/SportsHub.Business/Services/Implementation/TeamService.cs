@@ -113,17 +113,13 @@ namespace SportsHub.Business.Services
             return await _teamRepository.FindTeamIdBySubcategoryIdAsync(subcategoryId);
         }
 
-        public IFormFile ConvertTeamLogo(TeamLogo logo)
+        public TeamLogo ConvertTeamLogo(TeamLogo logo)
         {
             if (logo != null)
             {
                 var fileStream = new MemoryStream(logo.Bytes);
 
-                IFormFile newFile = new FormFile(fileStream, 0, fileStream.Length, logo.TeamId.ToString(), logo.TeamId.ToString() + logo.FileExtension)
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = "teamLogo/" + logo.FileExtension.TrimStart('.'),
-                };
+                TeamLogo newFile = new TeamLogo(logo.Bytes, "teamLogo/" + logo.FileExtension.TrimStart('.'), logo.TeamId);
 
                 return newFile;
             }
