@@ -41,8 +41,14 @@ namespace SportsHub.Web.Validators
             {
                 return true;
             }
-            else if (result == Id) { return true; }
-            else return false;
+            else if (result == Id)
+            {
+                return true;
+            }
+            else
+            { 
+                return false;
+            }
         }
 
         private async Task<bool> DoesLanguageCodeIsUniqueAsync(string languageCode, Guid Id)
@@ -53,8 +59,14 @@ namespace SportsHub.Web.Validators
             {
                 return true;
             }
-            else if (result == Id) { return true; }
-            else return false;
+            else if (result == Id)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
