@@ -117,10 +117,7 @@ namespace SportsHub.Business.Services
         {
             if (logo != null)
             {
-                var fileStream = new MemoryStream(logo.Bytes);
-
                 TeamLogo newFile = new TeamLogo(logo.Bytes, "teamLogo/" + logo.FileExtension.TrimStart('.'), logo.TeamId);
-
                 return newFile;
             }
 
