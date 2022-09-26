@@ -20,6 +20,7 @@ namespace SportsHub.Extensions
             services.AddScoped<ITeamLogoRepository, TeamLogoRepository>();
             services.AddScoped<IArticleRepository, ArticleRepository>();
             services.AddScoped<IArticleImageRepository, ArticleImageRepository>();
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
 
             return services;
         }
