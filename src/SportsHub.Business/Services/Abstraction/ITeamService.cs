@@ -19,5 +19,9 @@ namespace SportsHub.Business.Services
         Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId);
 
         Task EditTeamAsync(EditTeamModel editTeamModel);
+
+        IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams);
+
+        IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams);
     }
 }

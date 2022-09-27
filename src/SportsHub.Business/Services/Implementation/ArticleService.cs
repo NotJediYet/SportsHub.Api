@@ -85,6 +85,11 @@ namespace SportsHub.Business.Services
             return _articleRepository.GetArticlesFilteredByTeamId(teamId, articles);
         }
 
+        public IEnumerable<Article> GetArticlesFilteredByTeamsId(IEnumerable<Article> articles, ICollection<Team> teams)
+        {
+            return _articleRepository.GetArticlesFilteredByTeamsId(articles, teams);
+        }
+
         public IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles)
         {
             return _articleRepository.GetArticlesFilteredByStatus(status, articles);
