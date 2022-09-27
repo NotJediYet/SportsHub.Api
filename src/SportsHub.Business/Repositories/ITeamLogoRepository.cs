@@ -1,5 +1,4 @@
 ﻿using SportsHub.Shared.Entities;
-using Microsoft.AspNetCore.Http;
 
 namespace SportsHub.Business.Repositories
 {

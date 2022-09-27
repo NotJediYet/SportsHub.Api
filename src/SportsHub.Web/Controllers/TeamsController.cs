@@ -12,15 +12,21 @@ namespace SportsHub.Web.Controllers
     public class TeamsController : ControllerBase
     {
         private readonly ITeamService _teamService;
+        private readonly ISubcategoryService _subcategoryService;
+        private readonly ICategoryService _categoryService;
         private IValidator<CreateTeamModel> _createTeamModelValidator;
         private IValidator<EditTeamModel> _editTeamModelValidator;
 
         public TeamsController(
             ITeamService teamService,
+            ISubcategoryService subcategoryService,
+            ICategoryService categoryService,
             IValidator<CreateTeamModel> createTeamModelValidator,
             IValidator<EditTeamModel> editTeamModelValidator)
         {
             _teamService = teamService ?? throw new ArgumentNullException(nameof(teamService));
+            _subcategoryService = subcategoryService ?? throw new ArgumentNullException(nameof(subcategoryService));
+            _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
             _createTeamModelValidator = createTeamModelValidator ?? throw new ArgumentNullException(nameof(createTeamModelValidator));
             _editTeamModelValidator = editTeamModelValidator ?? throw new ArgumentNullException(nameof(editTeamModelValidator));
         }
@@ -51,7 +57,8 @@ namespace SportsHub.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policies.Admin)]
+        /*[Authorize(Policies.Admin)]*/
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -86,6 +93,43 @@ namespace SportsHub.Web.Controllers
             await _teamService.EditTeamAsync(editTeamModel);
 
             return Ok();
+        }
+
+        [HttpGet("{location}/{categoryName}/{subcategoryName}")]
+        /*[Authorize(Policies.Admin)]*/
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+
+        public async Task<IActionResult> GetFilteredTeams(string location, string categoryName, string subcategoryName)
+        {
+            var teams = await _teamService.GetSortedTeamAsync();
+
+            if (categoryName != "All")
+            {
+                var idCategory = await _categoryService.FindCategoryIdByCategoryNameAsync(categoryName);
+                var subcategories = await _subcategoryService.GetByCategoryIdAsync(idCategory);
+
+                teams = _teamService.GetTeamsFilteredBySubcategoryIds(subcategories, teams.ToList());
+            }
+
+            if (location != "All")
+            {
+                teams = _teamService.GetTeamsFilteredByLocation(location, teams.ToList());
+            }
+
+            if (subcategoryName != "All")
+            {
+                var idSubcategory = await _subcategoryService.FindSubcategoryIdBySubcategoryNameAsync(subcategoryName);
+
+                teams = _teamService.GetTeamsFilteredBySubcategoryId(idSubcategory, teams.ToList());
+            }
+
+            return teams != null
+                ? Ok(teams)
+                : NotFound();
         }
     }
 }

@@ -2,7 +2,6 @@
 using SportsHub.Business.Repositories;
 using SportsHub.Infrastructure.DBContext;
 using SportsHub.Shared.Entities;
-using SportsHub.Shared.Models;
 
 namespace SportsHub.Infrastructure.Repositories
 {
@@ -73,6 +72,35 @@ namespace SportsHub.Infrastructure.Repositories
             var teams = await _context.Set<Team>().ToListAsync();
 
             return teams.Any(team => team.Id == id);
+        }
+
+        public IEnumerable<Team> GetTeamsFilteredByLocation(string location, ICollection<Team> teams)
+        {
+            return teams.Where(teams => teams.Location == location).ToList();
+        }
+
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams)
+        {
+            return teams.Where(teams => teams.SubcategoryId == subcategoryId).ToList();
+        }
+
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams)
+        {
+            var subcategoryIds = subcategories.Select(subcategory => subcategory.Id);
+            var newTeam = teams;
+            teams = newTeam.Where(team => team.SubcategoryId == subcategoryIds.ToList()[0]).ToList();
+
+            for (int i = 1; i < subcategoryIds.ToList().Count; i++)
+            {
+                teams = teams.Concat(newTeam.Where(team => team.SubcategoryId == subcategoryIds.ToList()[i]).ToList()).ToList();
+            }
+
+            return teams;
+        }
+
+        public async Task<IEnumerable<Team>> GetSortedTeamAsync()
+        {
+            return await _context.Teams.OrderBy(teams => teams.Name).ToListAsync();
         }
     }
 }

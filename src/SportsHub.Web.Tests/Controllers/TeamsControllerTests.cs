@@ -9,6 +9,7 @@ using SportsHub.Shared.Models;
 using SportsHub.Shared.Resources;
 using SportsHub.Web.Controllers;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,18 +20,22 @@ namespace SportsHub.Web.Tests.Controllers
 {
     public class TeamsControllerTests
     {
-        private readonly Mock<ITeamService> _service;
+        private readonly Mock<ITeamService> _teamService;
+        private readonly Mock<ICategoryService> _categoryService;
+        private readonly Mock<ISubcategoryService> _subcategoryService;
         private readonly Mock<IValidator<CreateTeamModel>> _createTeamModelValidator;
         private readonly Mock<IValidator<EditTeamModel>> _editTeamModelvalidator;
         private readonly TeamsController _controller;
 
         public TeamsControllerTests()
         {
-            _service = new Mock<ITeamService>();
+            _teamService = new Mock<ITeamService>();
+            _categoryService = new Mock<ICategoryService>();
+            _subcategoryService = new Mock<ISubcategoryService>();
             _createTeamModelValidator = new Mock<IValidator<CreateTeamModel>>();
             _editTeamModelvalidator = new Mock<IValidator<EditTeamModel>>();
 
-            _controller = new TeamsController(_service.Object, _createTeamModelValidator.Object, _editTeamModelvalidator.Object);
+            _controller = new TeamsController(_teamService.Object, _subcategoryService.Object, _categoryService.Object, _createTeamModelValidator.Object, _editTeamModelvalidator.Object);
         }
 
         [Fact]
@@ -86,7 +91,7 @@ namespace SportsHub.Web.Tests.Controllers
             // Arrange
             var expectedTeams = GetTeams();
 
-            _service.Setup(service => service.GetTeamsAsync())
+            _teamService.Setup(service => service.GetTeamsAsync())
                 .ReturnsAsync(expectedTeams);
 
             // Act
@@ -106,7 +111,7 @@ namespace SportsHub.Web.Tests.Controllers
             // Arrange
             var teamId = Guid.NewGuid();
 
-            _service.Setup(service => service.GetTeamByIdAsync(teamId))
+            _teamService.Setup(service => service.GetTeamByIdAsync(teamId))
                 .ReturnsAsync((Team)null);
 
             // Act
@@ -131,7 +136,7 @@ namespace SportsHub.Web.Tests.Controllers
             };
             expectedTeam.Id = expectedTeamId;
 
-            _service.Setup(service => service.GetTeamByIdAsync(expectedTeamId))
+            _teamService.Setup(service => service.GetTeamByIdAsync(expectedTeamId))
                .ReturnsAsync(expectedTeam);
 
             // Act
@@ -145,6 +150,52 @@ namespace SportsHub.Web.Tests.Controllers
             Assert.Equal(expectedTeam.Name, actualCategory.Name);
             Assert.Equal(expectedTeam.Id, actualCategory.Id);
             Assert.Equal(expectedTeam.SubcategoryId, expectedTeam.SubcategoryId);
+        }
+
+        [Fact]
+        public async Task GetFilteredTeams_WhenTeamsExists_ReturnsOkObjectResultWithTeams()
+        {
+            // Arrange
+            var expectedCategoryName = "CategoryName";
+            var expectedCategoryTaskId = Task.FromResult(Guid.NewGuid());
+            var expectedCategoryId = Guid.NewGuid();
+            var expectedSubcategoryId = Guid.NewGuid();
+            IEnumerable<Subcategory> subcategories = new List<Subcategory>
+            {
+                new Subcategory { Name = "Name", CategoryId = Guid.NewGuid() },
+                new Subcategory { Name = "Name", CategoryId = Guid.NewGuid() },
+                new Subcategory { Name = "Name", CategoryId = Guid.NewGuid() }
+            };
+
+
+            var expectedTeamLocation = "USA";
+
+            var expectedTeams = GetTeams().ToList();
+
+            _teamService.Setup(service => service.GetSortedTeamAsync())
+                .ReturnsAsync(expectedTeams);
+
+            _teamService.Setup(service => service.GetTeamsFilteredByLocation(expectedTeamLocation, expectedTeams))
+                .Returns(expectedTeams);
+
+            _teamService.Setup(service => service.GetTeamsFilteredBySubcategoryIds(subcategories, expectedTeams))
+                .Returns(expectedTeams);
+
+            _teamService.Setup(service => service.GetTeamsFilteredBySubcategoryId(expectedSubcategoryId, expectedTeams))
+                .Returns(expectedTeams);
+
+            _categoryService.Setup(service => service.FindCategoryIdByCategoryNameAsync(expectedCategoryName))
+                .Returns(expectedCategoryTaskId);
+
+            // Act
+            var result = await _controller.GetFilteredTeams("All", "All", "All");
+
+            // Assert
+            var objectResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+
+            var actualTeams = Assert.IsAssignableFrom<List<Team>>(objectResult.Value);
+            Assert.Equal(expectedTeams, actualTeams);
         }
 
         private IEnumerable<Team> GetTeams()
