@@ -9,7 +9,7 @@ namespace SportsHub.Business.Repositories
 
         Task<IEnumerable<ArticleImage>> GetImagesAsync();
 
-        Task AddImageAsync(IFormFile articleImage, Guid id);
+        Task AddImageAsync(ArticleImage articleImage);
 
         Task<bool> DoesImageAlreadyExistByArticleIdAsync(Guid ArticleId);
     }
