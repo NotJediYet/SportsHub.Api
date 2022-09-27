@@ -55,7 +55,7 @@ namespace SportsHub.Business.Services
 
             await _articleRepository.AddArticleAsync(articleModel);
 
-            if (articleModel.Image != null)
+            if (сreateArticleModel.ArticleImage != null)
             {
                 var fileBytes = сreateArticleModel.ArticleImage.ToByteArray();
                 var fileExtension = Path.GetExtension(сreateArticleModel.ArticleImage.FileName);
