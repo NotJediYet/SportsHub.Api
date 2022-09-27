@@ -26,9 +26,9 @@ namespace SportsHub.Business.Services
 
             foreach (var team in teams)
             {
-                var logo = teamLogos.FirstOrDefault(logo => logo.TeamId == team.Id);
+                var teamLogo = teamLogos.FirstOrDefault(logo => logo.TeamId == team.Id);
 
-                team.TeamLogo = ConvertTeamLogo(logo);
+                team.TeamLogo = teamLogo;
             }
 
             return teams;
@@ -39,7 +39,7 @@ namespace SportsHub.Business.Services
             var team = await _teamRepository.GetTeamByIdAsync(id);
             var teamLogo = await _teamLogoRepository.GetTeamLogoByTeamIdAsync(id);
 
-            team.TeamLogo = ConvertTeamLogo(teamLogo);
+            team.TeamLogo = teamLogo;
 
             return team;
         }
@@ -111,17 +111,6 @@ namespace SportsHub.Business.Services
         public async Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId)
         {
             return await _teamRepository.FindTeamIdBySubcategoryIdAsync(subcategoryId);
-        }
-
-        private TeamLogo ConvertTeamLogo(TeamLogo logo)
-        {
-            if (logo != null)
-            {
-                TeamLogo newFile = new TeamLogo(logo.Bytes, "teamLogo/" + logo.FileExtension.TrimStart('.'), logo.TeamId);
-                return newFile;
-            }
-
-            else return null;
         }
     }
 }
