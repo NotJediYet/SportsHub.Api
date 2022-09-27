@@ -31,6 +31,6 @@ namespace SportsHub.Shared.Entities
 
         [FromForm]
         [NotMapped]
-        public IFormFile TeamLogo { get; set; }
+        public TeamLogo TeamLogo { get; set; }
     }
 }
