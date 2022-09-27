@@ -52,7 +52,7 @@ namespace SportsHub.Business.Services
                 сreateArticleModel.Caption,
                 сreateArticleModel.Content,
                 сreateArticleModel.IsShowComments);
-         
+
             await _articleRepository.AddArticleAsync(articleModel);
 
             if (сreateArticleModel.ArticleImage != null)
