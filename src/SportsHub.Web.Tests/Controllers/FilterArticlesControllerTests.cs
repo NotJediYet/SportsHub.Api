@@ -20,6 +20,7 @@ namespace SportsHub.Web.Tests.Controllers
     {
         private readonly Mock<IArticleService> _articleService;
         private readonly Mock<ITeamService> _teamService;
+        private readonly Mock<ICategoryService> _categoryService;
         private readonly Mock<ISubcategoryService> _subcategoryService;
         private readonly FilterArticlesController _controller;
 
@@ -29,9 +30,11 @@ namespace SportsHub.Web.Tests.Controllers
 
             _teamService = new Mock<ITeamService>();
 
+            _categoryService = new Mock<ICategoryService>();
+
             _subcategoryService = new Mock<ISubcategoryService>();
 
-            _controller = new FilterArticlesController(_articleService.Object, _teamService.Object, _subcategoryService.Object);
+            _controller = new FilterArticlesController(_articleService.Object, _teamService.Object, _subcategoryService.Object, _categoryService.Object);
         }
 
         [Fact]
@@ -39,11 +42,12 @@ namespace SportsHub.Web.Tests.Controllers
         public async Task GetFilteredArticles_WhenArticlesExists_ReturnsOkObjectResultWithArticles()
         {
             // Arrange
+            var expectedCategoryName = "CategoryName";
+            var expectedCategoryId = Guid.NewGuid();
             var expectedSubcategoryName = "SubcategoryName";
             var expectedTeamName = "Team2";
             var expectedStatus = "Published";
-
-            var expectedSubcategory = new Subcategory { Name = expectedSubcategoryName, CategoryId = Guid.NewGuid() };
+            var expectedSubcategory = new Subcategory { Name = expectedSubcategoryName, CategoryId = expectedCategoryId };
             var expectedSubcategoryId = expectedSubcategory.Id;
             var expectedTeam = new Team
             { 
@@ -54,11 +58,23 @@ namespace SportsHub.Web.Tests.Controllers
 
             var expectedArticles = GetArticles(expectedTeamId);
 
-            _articleService.Setup(service => service.GetSortedArticlesAsync())
+            _articleService.Setup(service => service.GetArticlesAsync())
             .ReturnsAsync(expectedArticles);
+
+            _categoryService.Setup(service => service.FindCategoryIdByCategoryNameAsync(expectedCategoryName))
+           .ReturnsAsync(expectedCategoryId);
+
+            _subcategoryService.Setup(service => service.FindSubcategoryIdBySubcategoryNameAsync(expectedSubcategoryName))
+            .ReturnsAsync(expectedSubcategoryId);
+
+            _subcategoryService.Setup(service => service.GetSubcategoryByIdAsync(expectedSubcategoryId))
+            .ReturnsAsync(expectedSubcategory);
 
             _teamService.Setup(service => service.GetTeamIdByNameAsync(expectedTeamName))
              .ReturnsAsync(expectedTeamId);
+
+            _teamService.Setup(service => service.GetTeamByIdAsync(expectedTeamId))
+             .ReturnsAsync(expectedTeam);
 
             _articleService.Setup(service => service.GetArticlesFilteredByTeamId(expectedTeamId, expectedArticles))
             .Returns(expectedArticles);
@@ -66,14 +82,9 @@ namespace SportsHub.Web.Tests.Controllers
             _articleService.Setup(service => service.GetArticlesFilteredByStatus(expectedStatus, expectedArticles))
             .Returns(expectedArticles);
 
-            _subcategoryService.Setup(service => service.FindSubcategoryIdBySubcategoryNameAsync(expectedSubcategoryName))
-            .ReturnsAsync(expectedSubcategoryId);
-
-            _teamService.Setup(service => service.FindTeamIdBySubcategoryIdAsync(expectedSubcategoryId))
-            .ReturnsAsync(expectedTeamId);
-
+           
             // Act
-            var result = await _controller.GetFilteredArticles(expectedSubcategoryName, expectedTeamName, expectedStatus);
+            var result = await _controller.GetFilteredArticles(expectedCategoryName, expectedSubcategoryName, expectedTeamName, expectedStatus);
 
             // Assert
             var objectResult = Assert.IsType<OkObjectResult>(result);

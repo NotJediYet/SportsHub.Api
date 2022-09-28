@@ -37,7 +37,8 @@ namespace SportsHub.Web.Controllers
 
         public async Task<IActionResult> GetFilteredArticles(string categoryName, string subcategoryName, string teamName, string status)
         {
-            var articles = await _articleService.GetSortedArticlesAsync();
+            var articles = await _articleService.GetArticlesAsync();
+          
             var categoryId = await _categoryService.FindCategoryIdByCategoryNameAsync(categoryName);
 
             if (subcategoryName != "All Subcategories")
@@ -101,7 +102,7 @@ namespace SportsHub.Web.Controllers
             {
                 articles = _articleService.GetArticlesFilteredByStatus(status, articles);
             }
-
+           
             return articles != null
                 ? Ok(articles)
                 : NotFound();

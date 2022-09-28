@@ -94,10 +94,5 @@ namespace SportsHub.Business.Services
         {
             return _articleRepository.GetArticlesFilteredByStatus(status, articles);
         }
-
-        public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
-        {
-            return await _articleRepository.GetSortedArticlesAsync();
-        }
     }
 }

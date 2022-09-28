@@ -89,14 +89,5 @@ namespace SportsHub.Infrastructure.Repositories
 
             return articles;
         }
-
-        public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
-        {
-            var articles = await _context.Articles
-                .OrderBy(articles => articles.Headline)
-                .ToListAsync();
-       
-            return articles;
-        }
     }
 }
