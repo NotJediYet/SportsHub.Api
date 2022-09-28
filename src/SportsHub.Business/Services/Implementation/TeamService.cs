@@ -112,5 +112,15 @@ namespace SportsHub.Business.Services
         {
             return await _teamRepository.FindTeamIdBySubcategoryIdAsync(subcategoryId);
         }
+
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams)
+        {
+            return _teamRepository.GetTeamsFilteredBySubcategoryId(subcategoryId, teams);
+        }
+
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams)
+        {
+            return _teamRepository.GetTeamsFilteredBySubcategoryIds(subcategories, teams);
+        }
     }
 }

@@ -297,22 +297,6 @@ namespace SportsHub.Business.Tests.Services
             Assert.Equal(expectedArticles, actualArticles);
         }
 
-        [Fact]
-        public async Task GetSortedArticlesAsync_ReturnsSortedArticles()
-        {
-            // Arrange
-            var expectedArticles = GetArticles();
-
-            _articleRepository.Setup(repository => repository.GetSortedArticlesAsync())
-            .ReturnsAsync(expectedArticles);
-
-            // Act
-            var actualArticles = await _service.GetSortedArticlesAsync();
-
-            // Assert
-            Assert.Equal(expectedArticles, actualArticles);
-        }
-
         private IEnumerable<Article> GetArticles()
         {
             IEnumerable<Article> articles = new List<Article>

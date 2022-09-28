@@ -70,5 +70,10 @@ namespace SportsHub.Business.Services
         {
             return await _subcategoryRepository.FindSubcategoryIdBySubcategoryNameAsync(subcategoryName);
         }
+
+        public async Task<IEnumerable<Subcategory>> GetSubcategoriesByCategoryIdAsync(Guid categoryId)
+        {
+            return await _subcategoryRepository.GetSubcategoriesByCategoryIdAsync(categoryId);
+        }
     }
 }

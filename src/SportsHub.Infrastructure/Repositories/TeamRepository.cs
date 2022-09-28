@@ -74,5 +74,24 @@ namespace SportsHub.Infrastructure.Repositories
 
             return teams.Any(team => team.Id == id);
         }
+
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams)
+        {
+            return teams.Where(teams => teams.SubcategoryId == subcategoryId).ToList();
+        }
+
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams)
+        {
+            var subcategoryIds = subcategories.Select(subcategory => subcategory.Id);
+            var newTeam = teams;
+            teams = newTeam.Where(team => team.SubcategoryId == subcategoryIds.ToList()[0]).ToList();
+
+            for (int i = 1; i < subcategoryIds.ToList().Count; i++)
+            {
+                teams = teams.Concat(newTeam.Where(team => team.SubcategoryId == subcategoryIds.ToList()[i]).ToList()).ToList();
+            }
+
+            return teams;
+        }
     }
 }
