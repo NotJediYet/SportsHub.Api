@@ -63,6 +63,10 @@ namespace SportsHub.Business.Services
                 await _teamLogoRepository.AddTeamLogoAsync(newTeamLogo);
             }
         }
+        public async Task<Team> DeleteTeamAsync(Guid id)
+        {
+            return await _teamRepository.DeleteTeamAsync(id);
+        }
 
         public async Task<Guid> GetTeamIdByNameAsync(string teamName)
         {

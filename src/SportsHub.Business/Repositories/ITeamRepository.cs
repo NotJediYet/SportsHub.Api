@@ -13,6 +13,8 @@ namespace SportsHub.Business.Repositories
 
         Task AddTeamAsync(Team team);
 
+        Task<Team> DeleteTeamAsync(Guid id);
+
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
 
         Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId);
