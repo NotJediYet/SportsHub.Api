@@ -201,45 +201,5 @@ namespace SportsHub.Web.Tests.Controllers
             Assert.Equal(StatusCodes.Status400BadRequest, objectResult.StatusCode);
             Assert.Equal(validationFailure.ErrorMessage, objectResult.Value);
         }
-
-        [Fact]
-        public async Task DeleteCategory_WhenCategoryDoesNotExist_ReturnsNotFoundResult()
-        {
-            // Arrange
-            var categoryID = Guid.NewGuid();
-
-            _service.Setup(service => service.DeleteCategoryAsync(categoryID))
-                .ReturnsAsync((Category)null);
-
-            // Act
-            var result = await _controller.DeleteCategory(categoryID);
-
-            // Assert
-            var objectResult = Assert.IsType<NotFoundResult>(result);
-            Assert.Equal(StatusCodes.Status404NotFound, objectResult.StatusCode);
-        }
-
-        [Fact]
-        public async Task DeleteCategory_WhenCategoryExists_ReturnsOkObjectResultWithArticle()
-        {
-            // Arrange
-            var categoryID = Guid.NewGuid();
-
-            var expectedCategory = new Category { Name = "Name" };
-            expectedCategory.Id = categoryID;
-
-            _service.Setup(service => service.DeleteCategoryAsync(categoryID))
-               .ReturnsAsync(expectedCategory);
-
-            // Act
-            var result = await _controller.DeleteCategory(categoryID);
-
-            // Assert
-            var objectResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
-
-            var actualCategory = Assert.IsType<Category>(objectResult.Value);
-            Assert.Equal(expectedCategory.Name, actualCategory.Name);
-        }
     }
 }
