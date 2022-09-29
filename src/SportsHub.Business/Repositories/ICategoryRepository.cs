@@ -19,5 +19,7 @@ namespace SportsHub.Business.Repositories
         Task EditCategoryAsync(Category category);
 
         Task<Category> DeleteCategoryAsync(Guid id);
+
+        Task<Guid> FindCategoryIdByCategoryNameAsync(string categoryName);
     }
 }

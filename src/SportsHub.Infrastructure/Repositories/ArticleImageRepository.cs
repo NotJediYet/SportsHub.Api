@@ -25,24 +25,12 @@ namespace SportsHub.Infrastructure.Repositories
             return await _context.Images.FindAsync(id);
         }
 
-        public async Task AddImageAsync(IFormFile articleImageFile, Guid articleId)
+        public async Task AddImageAsync(ArticleImage articleImageFile)
         {
-            var memoryStream = new MemoryStream();
+            await _context.Set<ArticleImage>().AddAsync(articleImageFile);
 
-            await articleImageFile.CopyToAsync(memoryStream);
-            
-            var bytes = memoryStream.ToArray();
-            var imageExtension = Path.GetExtension(articleImageFile.FileName);
-
-            ArticleImage newArticleImage = new ArticleImage(bytes, imageExtension, articleId);
-
-            await articleImageFile.CopyToAsync(memoryStream);
-            
-            await _context.Images.AddAsync(newArticleImage);
-            
             await _context.SaveChangesAsync();
         }
-
         public async Task<bool> DoesImageAlreadyExistByArticleIdAsync(Guid articleId)
         {
             return await _context.Images.AnyAsync(image => image.ArticleId == articleId);

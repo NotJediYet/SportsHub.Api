@@ -13,10 +13,16 @@ namespace SportsHub.Business.Repositories
 
         Task AddTeamAsync(Team team);
 
+        Task<Team> DeleteTeamAsync(Guid id);
+
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
 
         Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId);
 
         Task EditTeamAsync(Team team);
+
+        IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams);
+
+        IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams);
     }
 }

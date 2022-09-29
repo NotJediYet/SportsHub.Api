@@ -26,9 +26,9 @@ namespace SportsHub.Business.Services
 
             foreach (var team in teams)
             {
-                var logo = teamLogos.FirstOrDefault(logo => logo.TeamId == team.Id);
+                var teamLogo = teamLogos.FirstOrDefault(logo => logo.TeamId == team.Id);
 
-                team.TeamLogo = ConvertTeamLogo(logo);
+                team.TeamLogo = teamLogo;
             }
 
             return teams;
@@ -39,7 +39,7 @@ namespace SportsHub.Business.Services
             var team = await _teamRepository.GetTeamByIdAsync(id);
             var teamLogo = await _teamLogoRepository.GetTeamLogoByTeamIdAsync(id);
 
-            team.TeamLogo = ConvertTeamLogo(teamLogo);
+            team.TeamLogo = teamLogo;
 
             return team;
         }
@@ -62,6 +62,10 @@ namespace SportsHub.Business.Services
 
                 await _teamLogoRepository.AddTeamLogoAsync(newTeamLogo);
             }
+        }
+        public async Task<Team> DeleteTeamAsync(Guid id)
+        {
+            return await _teamRepository.DeleteTeamAsync(id);
         }
 
         public async Task<Guid> GetTeamIdByNameAsync(string teamName)
@@ -113,22 +117,14 @@ namespace SportsHub.Business.Services
             return await _teamRepository.FindTeamIdBySubcategoryIdAsync(subcategoryId);
         }
 
-        public IFormFile ConvertTeamLogo(TeamLogo logo)
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams)
         {
-            if (logo != null)
-            {
-                var fileStream = new MemoryStream(logo.Bytes);
+            return _teamRepository.GetTeamsFilteredBySubcategoryId(subcategoryId, teams);
+        }
 
-                IFormFile newFile = new FormFile(fileStream, 0, fileStream.Length, logo.TeamId.ToString(), logo.TeamId.ToString() + logo.FileExtension)
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = "teamLogo/" + logo.FileExtension.TrimStart('.'),
-                };
-
-                return newFile;
-            }
-
-            else return null;
+        public IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams)
+        {
+            return _teamRepository.GetTeamsFilteredBySubcategoryIds(subcategories, teams);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SportsHub.Business.Repositories;
+using SportsHub.Extensions;
 using SportsHub.Shared.Entities;
 using SportsHub.Shared.Models;
 
@@ -25,7 +26,7 @@ namespace SportsHub.Business.Services
             {
                 var image = images.FirstOrDefault(image => image.ArticleId == article.Id);
 
-                article.Image = ConvertImage(image);        
+                article.Image = image;        
             }
 
            return articles;
@@ -36,7 +37,7 @@ namespace SportsHub.Business.Services
          var article = await _articleRepository.GetArticleByIdAsync(id);
          var image = await _articleImageRepository.GetImageByIdAsync(id);
 
-         article.Image = ConvertImage(image);
+         article.Image = image;
             
          return article;
         }
@@ -52,13 +53,15 @@ namespace SportsHub.Business.Services
                 сreateArticleModel.Content,
                 сreateArticleModel.IsShowComments);
 
-            articleModel.Image=сreateArticleModel.ArticleImage;
-
             await _articleRepository.AddArticleAsync(articleModel);
 
-            if (articleModel.Image != null)
+            if (сreateArticleModel.ArticleImage != null)
             {
-                await _articleImageRepository.AddImageAsync(articleModel.Image, articleModel.Id);
+                var fileBytes = сreateArticleModel.ArticleImage.ToByteArray();
+                var fileExtension = Path.GetExtension(сreateArticleModel.ArticleImage.FileName);
+                var newAricleImage = new ArticleImage(fileBytes, fileExtension, articleModel.Id);
+
+                await _articleImageRepository.AddImageAsync(newAricleImage);
             }
         }
 
@@ -82,32 +85,14 @@ namespace SportsHub.Business.Services
             return _articleRepository.GetArticlesFilteredByTeamId(teamId, articles);
         }
 
+        public IEnumerable<Article> GetArticlesFilteredByTeamsId(IEnumerable<Article> articles, ICollection<Team> teams)
+        {
+            return _articleRepository.GetArticlesFilteredByTeamsId(articles, teams);
+        }
+
         public IEnumerable<Article> GetArticlesFilteredByStatus(string status, IEnumerable<Article> articles)
         {
             return _articleRepository.GetArticlesFilteredByStatus(status, articles);
-        }
-
-        public async Task<IEnumerable<Article>> GetSortedArticlesAsync()
-        {
-            return await _articleRepository.GetSortedArticlesAsync();
-        }
-
-        public IFormFile ConvertImage(ArticleImage image)
-        {
-            if (image != null)
-            {
-                var imageStream = new MemoryStream(image.Bytes);
-
-                IFormFile imageFile = new FormFile(imageStream, 0, imageStream.Length, image.ArticleId.ToString(), image.ArticleId.ToString() + image.FileExtension)
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = "image/" + image.FileExtension.TrimStart('.'),
-                };
-
-                return imageFile;
-            }
-
-            else return null;
         }
     }
 }

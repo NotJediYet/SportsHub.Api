@@ -21,5 +21,7 @@ namespace SportsHub.Business.Repositories
         Task EditSubcategoryAsync(Subcategory subcategory);
 
         Task<Subcategory> DeleteSubcategoryAsync(Guid id);
+
+        Task<IEnumerable<Subcategory>> GetSubcategoriesByCategoryIdAsync(Guid categoryId);
     }
 }

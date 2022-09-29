@@ -75,11 +75,6 @@ namespace SportsHub.Business.Tests.Services
                 ContentType = "image/jpeg",
             };
 
-           foreach(var expectedArticle in expectedArticles )
-            {
-                expectedArticle.Image = expectedArticleImage;
-            }
-
             _articleRepository.Setup(repository => repository.GetArticlesAsync())
             .ReturnsAsync(expectedArticles);
 
@@ -106,8 +101,6 @@ namespace SportsHub.Business.Tests.Services
                 Headers = new HeaderDictionary(),
                 ContentType = "image/jpeg",
             };
-
-            expectedArticle.Image = expectedArticleImage;
 
             _articleRepository.Setup(repo => repo.GetArticleByIdAsync(expectedArticleId))
             .ReturnsAsync(expectedArticle);
@@ -299,22 +292,6 @@ namespace SportsHub.Business.Tests.Services
 
             // Act
             var actualArticles = _service.GetArticlesFilteredByStatus(expectedStatus, expectedArticles);
-
-            // Assert
-            Assert.Equal(expectedArticles, actualArticles);
-        }
-
-        [Fact]
-        public async Task GetSortedArticlesAsync_ReturnsSortedArticles()
-        {
-            // Arrange
-            var expectedArticles = GetArticles();
-
-            _articleRepository.Setup(repository => repository.GetSortedArticlesAsync())
-            .ReturnsAsync(expectedArticles);
-
-            // Act
-            var actualArticles = await _service.GetSortedArticlesAsync();
 
             // Assert
             Assert.Equal(expectedArticles, actualArticles);

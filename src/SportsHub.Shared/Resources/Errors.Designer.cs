@@ -133,6 +133,60 @@ namespace SportsHub.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language code cannot be empty.
+        /// </summary>
+        public static string LanguageCodeCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("LanguageCodeCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language code is not unique.
+        /// </summary>
+        public static string LanguageCodeIsNotUnique {
+            get {
+                return ResourceManager.GetString("LanguageCodeIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language does not exist.
+        /// </summary>
+        public static string LanguageDoesNotExist {
+            get {
+                return ResourceManager.GetString("LanguageDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language id cannot be empty.
+        /// </summary>
+        public static string LanguageIdCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("LanguageIdCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language name cannot be empty.
+        /// </summary>
+        public static string LanguageNameCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("LanguageNameCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language name is not unique.
+        /// </summary>
+        public static string LanguageNameIsNotUnique {
+            get {
+                return ResourceManager.GetString("LanguageNameIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Subcategory does not exist.
         /// </summary>
         public static string SubcategoryDoesNotExist {

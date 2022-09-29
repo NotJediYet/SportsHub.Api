@@ -14,10 +14,16 @@ namespace SportsHub.Business.Services
 
         Task<Guid> GetTeamIdByNameAsync(string teamName);
 
+        Task<Team> DeleteTeamAsync(Guid id);
+
         Task<bool> DoesTeamAlreadyExistByIdAsync(Guid id);
 
         Task<Guid> FindTeamIdBySubcategoryIdAsync(Guid subcategoryId);
 
         Task EditTeamAsync(EditTeamModel editTeamModel);
+
+        IEnumerable<Team> GetTeamsFilteredBySubcategoryId(Guid subcategoryId, ICollection<Team> teams);
+
+        IEnumerable<Team> GetTeamsFilteredBySubcategoryIds(IEnumerable<Subcategory> subcategories, ICollection<Team> teams);
     }
 }
