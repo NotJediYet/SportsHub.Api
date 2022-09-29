@@ -73,6 +73,18 @@ namespace SportsHub.Infrastructure.Repositories
             return subcategoryId;
         }
 
+        public async Task<Subcategory> DeleteSubcategoryAsync(Guid id)
+        {
+            var subcategory = _context.Subcategories.Find(id);
+            if (subcategory != null)
+            {
+                _context.Subcategories.Remove(subcategory);
+                await _context.SaveChangesAsync();
+            }
+
+            return subcategory;
+        }
+        
         public async Task<IEnumerable<Subcategory>> GetSubcategoriesByCategoryIdAsync(Guid categoryId)
         {
             return await _context.Subcategories.Where(subcategory => subcategory.CategoryId == categoryId).ToListAsync();

@@ -203,5 +203,45 @@ namespace SportsHub.Web.Tests.Controllers
             Assert.Equal(StatusCodes.Status400BadRequest, objectResult.StatusCode);
             Assert.Equal(validationFailure.ErrorMessage, objectResult.Value);
         }
+
+        [Fact]
+        public async Task DeleteSubcategory_WhenSubcategoryDoesNotExist_ReturnsNotFoundResult()
+        {
+            // Arrange
+            var subcategoryID = Guid.NewGuid();
+
+            _service.Setup(service => service.DeleteSubcategoryAsync(subcategoryID))
+                .ReturnsAsync((Subcategory)null);
+
+            // Act
+            var result = await _controller.DeleteSubcategory(subcategoryID);
+
+            // Assert
+            var objectResult = Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(StatusCodes.Status404NotFound, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteSubcategory_WhenSubcategoryExists_ReturnsOkObjectResultWithArticle()
+        {
+            // Arrange
+            var subcategoryID = Guid.NewGuid();
+
+            var expectedSubcategory = new Subcategory { Name = "Name" };
+            expectedSubcategory.Id = subcategoryID;
+
+            _service.Setup(service => service.DeleteSubcategoryAsync(subcategoryID))
+               .ReturnsAsync(expectedSubcategory);
+
+            // Act
+            var result = await _controller.DeleteSubcategory(subcategoryID);
+
+            // Assert
+            var objectResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(StatusCodes.Status200OK, objectResult.StatusCode);
+
+            var actualCategory = Assert.IsType<Subcategory>(objectResult.Value);
+            Assert.Equal(expectedSubcategory.Name, actualCategory.Name);
+        }
     }
 }

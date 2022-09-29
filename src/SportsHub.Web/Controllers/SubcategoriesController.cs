@@ -90,5 +90,20 @@ namespace SportsHub.Web.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        [Authorize(Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> DeleteSubcategory(Guid id)
+        {
+            var subcategory = await _subcategoryService.DeleteSubcategoryAsync(id);
+
+            return subcategory != null
+                ? Ok(subcategory)
+                : NotFound();
+        }
     }
 }

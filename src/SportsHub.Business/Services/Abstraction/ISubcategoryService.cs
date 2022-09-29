@@ -20,6 +20,8 @@ namespace SportsHub.Business.Services
         Task<Guid> FindSubcategoryIdBySubcategoryNameAsync(string subcategoryName);
 
         Task EditSubcategoryAsync(EditSubcategoryModel editSubcategoryModel);
+
+        Task<Subcategory> DeleteSubcategoryAsync(Guid Id);
         
         Task<IEnumerable<Subcategory>> GetSubcategoriesByCategoryIdAsync(Guid categoryId);
     }

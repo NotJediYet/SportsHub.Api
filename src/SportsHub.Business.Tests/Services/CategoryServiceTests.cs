@@ -176,5 +176,24 @@ namespace SportsHub.Business.Tests.Services
                 && (category.IsHidden == expectedCategoryIsHidden)
                 && (category.OrderIndex == expectedCategoryOrderIndex))));
         }
+
+        [Fact]
+        public async Task DeleteCategoryAsync_WhenIdIsValid_ReturnsExpectedSubcategory()
+        {
+            // Arrange
+            var expectedCategoryId = Guid.NewGuid();
+
+            var expectedCategory = new Category { Name = "Name" };
+            expectedCategory.Id = expectedCategoryId;
+
+            _repository.Setup(repository => repository.DeleteCategoryAsync(expectedCategoryId))
+                .ReturnsAsync(expectedCategory);
+
+            // Act
+            var actualCategory = await _service.DeleteCategoryAsync(expectedCategoryId);
+
+            // Assert
+            Assert.Equal(expectedCategory.Name, actualCategory.Name);
+        }
     }
 }
