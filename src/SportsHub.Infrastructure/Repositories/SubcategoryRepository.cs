@@ -72,5 +72,17 @@ namespace SportsHub.Infrastructure.Repositories
 
             return subcategoryId;
         }
+
+        public async Task<Subcategory> DeleteSubcategoryAsync(Guid id)
+        {
+            var subcategory = _context.Subcategories.Find(id);
+            if (subcategory != null)
+            {
+                _context.Subcategories.Remove(subcategory);
+                await _context.SaveChangesAsync();
+            }
+
+            return subcategory;
+        }
     }
 }
