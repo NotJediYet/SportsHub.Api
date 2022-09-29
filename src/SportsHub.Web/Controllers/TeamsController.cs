@@ -68,7 +68,22 @@ namespace SportsHub.Web.Controllers
 
             return Ok();
         }
-        
+
+        [HttpDelete("{id}")]
+        [Authorize(Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> DeleteTeam(Guid id)
+        {
+            var team = await _teamService.DeleteTeamAsync(id);
+
+            return team != null
+                ? Ok(team)
+                : NotFound();
+        }
+
         [HttpPut]
         [Authorize(Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
