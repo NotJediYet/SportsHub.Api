@@ -75,7 +75,7 @@ namespace SportsHub.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> EditLanguage([FromForm]EditLanguageModel editLanguageModel)
+        public async Task<IActionResult> EditLanguage(EditLanguageModel editLanguageModel)
         {
             var validationResult = await _editLanguageModelValidator.ValidateAsync(editLanguageModel);
             if (!validationResult.IsValid)
